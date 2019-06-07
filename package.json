@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/jswny/j1.io-v2/issues"
   },
-  "homepage": "https://github.com/jswny/j1.io-v2#readme"
+  "homepage": "https://github.com/jswny/j1.io-v2#readme",
+  "dependencies": {
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^5.2.1",
+    "source-map-loader": "^0.2.4",
+    "typescript": "^3.5.1"
+  }
 }
