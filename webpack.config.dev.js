@@ -1,4 +1,6 @@
 module.exports = {
+  mode: "development",
+
   entry: "./src/index.tsx",
   output: {
     filename: "bundle.js",
@@ -7,6 +9,10 @@ module.exports = {
 
   // Enable sourcemaps for debugging webpack's output.
   devtool: "source-map",
+
+  devServer: {
+    publicPath: '/assets/',
+  },
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
