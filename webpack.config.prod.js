@@ -24,6 +24,15 @@ module.exports = {
           }
         } 
       },
+
+      // Load all CSS files and allow importing styles in JavaScript files.
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader"
+        ]
+      }
     ]
   },
 };

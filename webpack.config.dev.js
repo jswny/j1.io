@@ -1,10 +1,12 @@
+const path = require('path');
+
 module.exports = {
   mode: "development",
 
-  entry: "./src/index.tsx",
+  entry: "./src/components/index.tsx",
   output: {
     filename: "bundle.js",
-    path: __dirname + "/dist"
+    path: path.resolve(__dirname, "dist")
   },
 
   // Enable sourcemaps for debugging webpack's output.
@@ -33,7 +35,22 @@ module.exports = {
       },
 
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+      { 
+        enforce: "pre", 
+        test: /\.js$/, 
+        use: {
+          loader: "source-map-loader"
+        }
+      },
+
+      // Load all CSS files and allow importing styles in JavaScript files.
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader"
+        ]
+      }
     ]
   },
 };
