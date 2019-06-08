@@ -2,6 +2,7 @@
   "name": "j1.io",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "build:prod": "webpack --config webpack.config.prod.js",
