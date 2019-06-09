@@ -2,6 +2,8 @@ import * as React from "react";
 import { Shell } from "../Shell";
 import { TerminalInput } from "./TerminalInput";
 
+import "../../css/terminal.css";
+
 export interface TerminalProps { prompt: string; }
 
 export class Terminal extends React.Component<TerminalProps, {}> {

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Shell } from "../Shell";
 
-import "../css/terminal.css";
+import "../../css/terminal-input.css";
 
 interface TerminalInputState { text: string; }
 
@@ -15,9 +15,8 @@ export class TerminalInput extends React.Component<{}, TerminalInputState> {
     if (e.key === "Enter") {
       // process the command
     } else {
-      this.setState({ text: e.currentTarget.value });
+      this.setState({ text: e.currentTarget.value }, () => console.log(this.state.text));
     }
-    console.log(this.state.text)
   }
 
   render() {

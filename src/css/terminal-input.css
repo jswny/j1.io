@@ -1,0 +1,9 @@
+.terminal-input {
+  background-color: black;
+  caret-color: white;
+  color: white;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+}

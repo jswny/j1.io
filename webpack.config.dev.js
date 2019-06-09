@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   mode: "development",
 
-  entry: "./src/components/index.tsx",
+  entry: "./src/ts/components/index.tsx",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist")
@@ -20,10 +20,6 @@ module.exports = {
 
   // Enable sourcemaps for debugging webpack's output.
   devtool: "source-map",
-
-  devServer: {
-    publicPath: '/assets/',
-  },
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
