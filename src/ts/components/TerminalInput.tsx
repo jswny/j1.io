@@ -3,25 +3,16 @@ import { Shell } from "../Shell";
 
 import "../../css/terminal-input.css";
 
-interface TerminalInputState { text: string; }
+interface TerminalInputProps { text: string; }
 
-export class TerminalInput extends React.Component<{}, TerminalInputState> {
-  constructor(props: {}) {
+export class TerminalInput extends React.Component<TerminalInputProps, {}> {
+  constructor(props: TerminalInputProps) {
     super(props);
-    this.state = { text: "" };
-  }
-
-  handleOnKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      // process the command
-    } else {
-      this.setState({ text: e.currentTarget.value }, () => console.log(this.state.text));
-    }
   }
 
   render() {
     return (
-      <input className="terminal-input" type="text" onKeyPress={this.handleOnKeyPress}></input>
+      <span className="terminal-input">{this.props.text}</span>
     )
   }
 }
