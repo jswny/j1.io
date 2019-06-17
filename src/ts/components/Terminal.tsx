@@ -34,7 +34,6 @@ export class Terminal extends React.Component<TerminalProps, TerminalState> {
 
   private getCurrentDirectoryCopy() {
     const shellCopy = {...this.shell};
-    console.log(this.shell === shellCopy);
     return shellCopy.currentDirectory;
   }
 
