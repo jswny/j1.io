@@ -6,7 +6,7 @@ import { TerminalInput } from "./TerminalInput";
 import "../../css/terminal.css";
 
 export interface TerminalProps { prompt: string; }
-interface Line { input: string; output: string; }
+interface Line { input: string; output: string; directory: string; }
 interface TerminalState { 
   currentText: string; 
   lines: Array<Line> 
@@ -17,11 +17,11 @@ export class Terminal extends React.Component<TerminalProps, TerminalState> {
 
   constructor(props: TerminalProps) {
     super(props);
+    this.shell = new Shell();
     this.state = { 
       currentText: "", 
       lines: [this.newLine()] 
     };
-    this.shell = new Shell();
   }
 
   componentDidMount() {
@@ -32,8 +32,15 @@ export class Terminal extends React.Component<TerminalProps, TerminalState> {
     document.removeEventListener("keydown", this.handleOnKeyDown);
   }
 
+  private getCurrentDirectoryCopy() {
+    const shellCopy = {...this.shell};
+    console.log(this.shell === shellCopy);
+    return shellCopy.currentDirectory;
+  }
+
   private newLine() {
-    const line: Line = { input: "", output: "" };
+    const directory = this.getCurrentDirectoryCopy();
+    const line: Line = { input: "", output: "", directory: directory };
     return line;
   }
 
@@ -52,7 +59,6 @@ export class Terminal extends React.Component<TerminalProps, TerminalState> {
 
   private handleEnter() {
     let lines = this.state.lines;
-    let newLine = this.newLine();
     let currentLine = this.getCurrentLine();
     console.debug(`Terminal sending input "${currentLine.input}" for processing`);
     try {
@@ -64,6 +70,7 @@ export class Terminal extends React.Component<TerminalProps, TerminalState> {
         throw e;
       }
     }
+    let newLine = this.newLine();
     lines.push(newLine)
     this.setState({ lines: lines });
   }
@@ -89,7 +96,7 @@ export class Terminal extends React.Component<TerminalProps, TerminalState> {
     for (let i = 0; i < this.state.lines.length; i++) {
       lines.push(
         <div key={i} className="terminal-line">
-          <span className="terminal-prompt">{this.props.prompt}</span>
+          <span className="terminal-prompt">{this.state.lines[i].directory} {this.props.prompt}</span>
           <TerminalInput text={this.state.lines[i].input} />
           <div className="terminal-output">{this.state.lines[i].output}</div>
         </div>
