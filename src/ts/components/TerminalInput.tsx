@@ -11,7 +11,7 @@ export class TerminalInput extends React.Component<TerminalInputProps, {}> {
 
   render() {
     return (
-      <span className="terminal-input">{this.props.text}</span>
+      <input readOnly={true} className="terminal-input" value = {this.props.text} />
     )
   }
 }
