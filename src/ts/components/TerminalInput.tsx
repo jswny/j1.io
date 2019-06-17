@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Shell } from "../Shell";
 
 import "../../css/terminal-input.css";
 

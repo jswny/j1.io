@@ -1,4 +1,5 @@
 import { Program } from "./Program";
+import { ProgramNotFoundError } from "./ProgramNotFoundError";
 import { Cd } from "./programs/Cd"
 
 export class Shell {
@@ -15,7 +16,7 @@ export class Shell {
     return this.runCommand(parsedCommand[0], parsedCommand.slice(1))
   }
 
-  parseCommand(command: string): string[] {
+  private parseCommand(command: string): string[] {
     const parsed = command
       .trim()
       .split(" ");
@@ -23,13 +24,14 @@ export class Shell {
     return parsed;
   }
 
-  runCommand(programName: string, args: string[]) {
+  private runCommand(programName: string, args: string[]) {
     let found = false;
     let program = null;
-    for (let i = 0; i++; i < this.programs.length) {
+    for (let i = 0; i < this.programs.length; i++) {
       program = this.programs[i];
       if (program.name === programName) {
         found = true;
+        console.debug(`Shell found matching program: "${program.name}"`);
         break;
       }
     }
@@ -37,7 +39,7 @@ export class Shell {
     if (found) {
       return program.run(this, args);
     } else {
-      throw new Error("Could not find program " + programName);
+      throw new ProgramNotFoundError(`Could not find program "${programName}"`);
     }
   }
 }

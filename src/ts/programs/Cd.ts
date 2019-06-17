@@ -11,6 +11,7 @@ export class Cd implements Program {
   run(shell: Shell, args: string[]) {
     const newDirectory = args[0];
     shell.currentDirectory = newDirectory;
+    console.debug(`cd changed current directory to "${newDirectory}"`);
     return "";
   }
 }
