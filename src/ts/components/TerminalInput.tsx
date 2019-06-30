@@ -23,7 +23,16 @@ export class TerminalInput extends React.Component<TerminalInputProps, TerminalI
 
   render() {
     return (
-      <input spellCheck={false} autoFocus={this.props.autofocus} readOnly={this.state.readonly} className="terminal-input" onKeyDown={this.handleOnKeyDown} />
+      <input 
+        spellCheck={false}
+        autoCapitalize="off"
+        autoComplete="off"
+        autoCorrect="off"
+        autoFocus={this.props.autofocus} 
+        readOnly={this.state.readonly} 
+        className="terminal-input" 
+        onKeyDown={this.handleOnKeyDown} 
+      />
     )
   }
 }
