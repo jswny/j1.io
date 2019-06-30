@@ -2,12 +2,11 @@
   "name": "j1.io-v2",
   "image": "node:12",
   "appPort": 8080,
-  // "extensions": [
-  //   "dbaeumer.vscode-eslint"
-  // ],
+  "extensions": [
+    "ms-vscode.vscode-typescript-tslint-plugin"
+  ],
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
   },
   "postCreateCommand": "npm install",
-  // "overrideCommand": false,
 }
