@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "../../css/terminal-input.css";
 
-interface TerminalInputProps { text: string; handleSubmitFunction: (input: string) => void; autofocus: boolean; }
+interface TerminalInputProps { handleSubmitFunction: (input: string) => void; autofocus: boolean; }
 interface TerminalInputState { readonly: boolean; }
 
 export class TerminalInput extends React.Component<TerminalInputProps, TerminalInputState> {
@@ -22,9 +22,6 @@ export class TerminalInput extends React.Component<TerminalInputProps, TerminalI
   }
 
   render() {
-    // return (
-    //   <span contentEditable={true} className="terminal-input" onKeyDown={this.handleOnKeyDown} />
-    // )
     return (
       <input spellCheck={false} autoFocus={this.props.autofocus} readOnly={this.state.readonly} className="terminal-input" onKeyDown={this.handleOnKeyDown} />
     )
