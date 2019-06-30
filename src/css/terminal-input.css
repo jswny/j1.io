@@ -6,4 +6,11 @@
   outline: none;
   font-family: inherit;
   font-size: inherit;
+  width: 45rem;
+}
+
+@media (max-width: 600px) {
+  .terminal-input {
+    width: 15rem;
+  }
 }
