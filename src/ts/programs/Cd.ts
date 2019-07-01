@@ -1,7 +1,7 @@
-import { Program } from "../Program";
+import { IProgram } from "../IProgram";
 import { Shell } from "../Shell";
 
-export class Cd implements Program {
+export class Cd implements IProgram {
   public name: string;
 
   constructor() {

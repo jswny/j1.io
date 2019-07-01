@@ -1,4 +1,4 @@
-import { IProgram } from "./Program";
+import { IProgram } from "./IProgram";
 import { ProgramNotFoundError } from "./ProgramNotFoundError";
 import { Cd } from "./programs/Cd";
 
