@@ -56,7 +56,7 @@ export class Terminal extends React.Component<TerminalProps, TerminalState> {
       }
     }
     let newLine = this.newLine();
-    lines.push(newLine)
+    lines.push(newLine);
     this.setState({ lines: lines });
   }
 
