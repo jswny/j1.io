@@ -1,7 +1,7 @@
 import { Shell } from "./Shell";
 
-export interface Program {
+export interface IProgram {
   name: string;
-  
-  run(shell: Shell, args: Array<string>): string
+
+  run(shell: Shell, args: string[]): string;
 }

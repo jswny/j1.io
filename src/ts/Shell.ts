@@ -1,19 +1,19 @@
-import { Program } from "./Program";
+import { IProgram } from "./Program";
 import { ProgramNotFoundError } from "./ProgramNotFoundError";
-import { Cd } from "./programs/Cd"
+import { Cd } from "./programs/Cd";
 
 export class Shell {
-  currentDirectory: string;
-  programs: Array<Program>;
+  public currentDirectory: string;
+  private programs: IProgram[];
 
   constructor() {
     this.currentDirectory = "/";
     this.programs = [new Cd()];
   }
 
-  command(command: string) {
+  public command(command: string) {
     const parsedCommand = this.parseCommand(command);
-    return this.runCommand(parsedCommand[0], parsedCommand.slice(1))
+    return this.runCommand(parsedCommand[0], parsedCommand.slice(1));
   }
 
   private parseCommand(command: string): string[] {
@@ -27,8 +27,7 @@ export class Shell {
   private runCommand(programName: string, args: string[]) {
     let found = false;
     let program = null;
-    for (let i = 0; i < this.programs.length; i++) {
-      program = this.programs[i];
+    for (program of this.programs) {
       if (program.name === programName) {
         found = true;
         console.debug(`Shell found matching program: "${program.name}"`);
