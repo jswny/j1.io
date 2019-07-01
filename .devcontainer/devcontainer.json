@@ -3,7 +3,8 @@
   "image": "node:12",
   "appPort": 8080,
   "extensions": [
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "eamodio.gitlens",
   ],
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"

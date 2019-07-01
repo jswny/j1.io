@@ -5,7 +5,7 @@ import { Cd } from "./programs/Cd"
 export class Shell {
   currentDirectory: string;
   programs: Array<Program>;
-  
+
   constructor() {
     this.currentDirectory = "/";
     this.programs = [new Cd()];
