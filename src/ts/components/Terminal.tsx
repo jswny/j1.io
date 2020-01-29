@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ProgramNotFoundError } from "../ProgramNotFoundError";
+import { ProgramNotFoundError } from "../program/ProgramNotFoundError";
 import { Shell } from "../Shell";
 import { TerminalInput } from "./TerminalInput";
 

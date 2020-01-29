@@ -1,6 +1,6 @@
-import { IProgram } from "./IProgram";
-import { ProgramNotFoundError } from "./ProgramNotFoundError";
-import { Cd } from "./programs/Cd";
+import { Cd } from "./program/Cd";
+import { IProgram } from "./program/IProgram";
+import { ProgramNotFoundError } from "./program/ProgramNotFoundError";
 
 export class Shell {
   public currentDirectory: string;
