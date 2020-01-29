@@ -1,51 +1,62 @@
 import * as fs from "fs";
 import * as path from "path";
+import { Directory } from "../src/ts/filesystem/Directory";
+import { File } from "../src/ts/filesystem/File";
+import { FileType } from "../src/ts/filesystem/FileType";
+import { INode } from "../src/ts/filesystem/INode";
 
 const manifest: any = {};
 
 const root = path.join(__dirname, "../files");
 manifest.root = root;
 
-function parseFileType(fileName: string) {
+function parseFileType(fileName: string): FileType {
   const split = fileName.split(".");
   const extension = split[split.length - 1];
-  return extension;
-}
 
-function readDirRecursive(dirPath: string): any[] {
-  const children: any[] = [];
+  let type: FileType;
 
-  const items = fs.readdirSync(dirPath);
-
-  for (const item of items) {
-    const itemPath: string = dirPath + "/" + item;
-
-    const stats: fs.Stats = fs.statSync(itemPath);
-
-    if (stats.isDirectory()) {
-      const dir: any = {};
-      dir.isDirectory = true;
-      dir.name = item;
-      dir.children = readDirRecursive(itemPath);
-      children.push(dir);
-    } else {
-      const file: any = {};
-      file.isDirectory = false;
-      file.name = item;
-      file.type = parseFileType(item);
-
-      const contents: string = fs.readFileSync(itemPath).toString();
-      file.contents = contents;
-      children.push(file);
+  switch (extension) {
+    case "md": {
+      type = FileType.Markdown;
+      break;
+    }
+    default: {
+      throw new Error("Unrecognized file extension: " + extension);
     }
   }
 
-  return children;
+  return type;
+}
+
+function readDirRecursive(dirPath: string): Directory {
+  const splitPath = dirPath.split("/");
+  const name = splitPath[splitPath.length - 1];
+
+  const dir = new Directory(name);
+  const items = fs.readdirSync(dirPath);
+
+  for (const item of items) {
+    console.debug(item);
+    const itemPath: string = dirPath + "/" + item;
+    const stats: fs.Stats = fs.statSync(itemPath);
+
+    if (stats.isDirectory()) {
+      const dirNode: Directory = readDirRecursive(itemPath);
+      dir.addChild(dirNode);
+    } else {
+      const content: string = fs.readFileSync(itemPath).toString();
+      const file: File = new File(item, parseFileType(item), content);
+      dir.addChild(file);
+    }
+  }
+
+  return dir;
 }
 
 const result: any = {};
 result.root = readDirRecursive(root);
-console.debug(result);
+console.debug(result.root);
 
 const json: string = JSON.stringify(result);
 console.debug(json);

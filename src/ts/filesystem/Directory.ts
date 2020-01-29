@@ -6,6 +6,7 @@ export class Directory implements INode {
 
   constructor(name: string) {
     this.name = name;
+    this.children = [];
   }
 
   public addChild(child: INode): number {
