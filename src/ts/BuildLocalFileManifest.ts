@@ -1,14 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Directory } from "../src/ts/filesystem/Directory";
-import { File } from "../src/ts/filesystem/File";
-import { FileType } from "../src/ts/filesystem/FileType";
-import { INode } from "../src/ts/filesystem/INode";
+import { Directory } from "./filesystem/Directory";
+import { File } from "./filesystem/File";
+import { FileType } from "./filesystem/FileType";
+import { INode } from "./filesystem/INode";
 
-const manifest: any = {};
-
-const root = path.join(__dirname, "../files");
-manifest.root = root;
+const root = path.join(__dirname, "../../files");
 
 function parseFileType(fileName: string): FileType {
   const split = fileName.split(".");
@@ -37,7 +34,6 @@ function readDirRecursive(dirPath: string): Directory {
   const items = fs.readdirSync(dirPath);
 
   for (const item of items) {
-    console.debug(item);
     const itemPath: string = dirPath + "/" + item;
     const stats: fs.Stats = fs.statSync(itemPath);
 
@@ -54,11 +50,10 @@ function readDirRecursive(dirPath: string): Directory {
   return dir;
 }
 
-const result: any = {};
-result.root = readDirRecursive(root);
-console.debug(result.root);
+const result: Directory = readDirRecursive(root);
+console.debug("Writing local file manifest:")
+console.debug(result);
 
 const json: string = JSON.stringify(result);
-console.debug(json);
 
-fs.writeFileSync(path.join(__dirname, "../dist/LocalFSManifest.json"), json);
+fs.writeFileSync(path.join(__dirname, "../LocalFileManifest.json"), json);

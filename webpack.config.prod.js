@@ -12,7 +12,9 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!LocalFileManifest.json'],
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src", "html", "index.html")
     })
