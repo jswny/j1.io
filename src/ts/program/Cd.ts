@@ -23,6 +23,8 @@ export class Cd implements IProgram {
       fullPath = shell.currentDirectory + "/" + newDirectory;
     }
 
+    fullPath = this.trimTrailingSlashes(fullPath);
+
     console.debug(`Attempting to validate requested directory change to "${fullPath}"`);
 
     const node = fs.stat(fullPath);
@@ -35,5 +37,9 @@ export class Cd implements IProgram {
     }
 
     return "";
+  }
+
+  private trimTrailingSlashes(path: string): string {
+    return path.replace(new RegExp("/*$"), "");
   }
 }
