@@ -15,8 +15,9 @@ export class LocalFS implements IFS {
     console.debug(manifest);
 
     this.root = this.build(manifest);
+    this.root.name = "/";
 
-    console.debug("Successfully loaded filesystem manifest:");
+    console.debug("Successfully loaded filesystem:");
     console.debug(this.root);
 
     const programsToLoad = [
@@ -35,7 +36,32 @@ export class LocalFS implements IFS {
   }
 
   public stat(path: string): boolean {
-    throw new Error("Method not implemented.");
+    let currNode: Directory = this.root;
+
+    const split = path
+      .split("/")
+      .filter((elem) => elem !== "");
+
+    const result: boolean = true;
+
+    for (const pathPart of split) {
+      let foundPathPart: boolean = false;
+
+      for (const searchNode of currNode.children) {
+        console.debug(`Searching for path part ${pathPart} in ${searchNode.name}`);
+
+        if (searchNode instanceof Directory && searchNode.name === pathPart) {
+          foundPathPart = true;
+          currNode = searchNode;
+        }
+      }
+
+      if (!foundPathPart) {
+        return false;
+      }
+    }
+
+    return result;
   }
 
   public getPrograms(): IProgram[] {

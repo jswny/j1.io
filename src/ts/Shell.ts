@@ -6,12 +6,10 @@ import { ProgramNotFoundError } from "./program/ProgramNotFoundError";
 
 export class Shell {
   public currentDirectory: string;
-  private programs: IProgram[];
   private fs: IFS;
 
   constructor() {
     this.currentDirectory = "/";
-    this.programs = [new Cd()];
     this.fs = new LocalFS();
   }
 
@@ -31,16 +29,16 @@ export class Shell {
   private runCommand(programName: string, args: string[]) {
     let found = false;
     let program = null;
-    for (program of this.programs) {
+    for (program of this.fs.getPrograms()) {
       if (program.name === programName) {
         found = true;
-        console.debug(`Shell found matching program: "${program.name}"`);
         break;
       }
     }
 
     if (found) {
-      return program.run(this, args);
+      console.debug(`Found matching program: "${program.name}"`);
+      return program.run(this, this.fs, args);
     } else {
       throw new ProgramNotFoundError(`Could not find program "${programName}"`);
     }
