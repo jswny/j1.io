@@ -50,7 +50,7 @@ export class LocalFS implements IFS {
     if (node instanceof File) {
       const file: File = node;
       if (file.type === FileType.Markdown) {
-        console.debug("Found compatible file to read: ")
+        console.debug("Found compatible file to read: ");
         console.debug(file);
 
         output = file.content;

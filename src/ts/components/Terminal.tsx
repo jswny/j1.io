@@ -52,12 +52,26 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     this.setState({ lines });
   }
 
+  private renderCommandOutput(output: string): string {
+    console.debug(output.split("\n"));
+    const split = output.split("\n");
+    if (split.length > 1) {
+      output = split
+        .map((item, i) => `<p key=${i}>${item}</p>`)
+        .join("");
+    }
+
+    return output;
+  }
+
   private handleSubmitInput(input: string) {
     const lines = this.state.lines;
     const currentLine = this.getCurrentLine();
     console.debug(`Terminal sending input "${input}" for processing`);
     try {
-      currentLine.output = this.shell.command(input);
+      const output = this.shell.command(input);
+      const renderedOutput = this.renderCommandOutput(output);
+      currentLine.output = renderedOutput;
     } catch (e) {
       if (
         e instanceof ProgramNotFoundError
@@ -88,7 +102,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
             autofocus={autofocus}
             handleSubmitFunction={(input: string) => this.handleSubmitInput(input)}
           />
-          <div className="terminal-output">{this.state.lines[i].output}</div>
+          <div className="terminal-output" dangerouslySetInnerHTML={{__html: this.state.lines[i].output }}></div>
         </div>
       );
     }
