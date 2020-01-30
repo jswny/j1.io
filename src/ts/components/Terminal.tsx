@@ -5,20 +5,15 @@ import { TerminalInput } from "./TerminalInput";
 
 import "../../css/terminal.css";
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
+import { FileNotFoundError } from "../filesystem/FileNotFoundError";
 import { InvalidPathError } from "../filesystem/InvalidPathError";
+import { Path } from "../filesystem/Path";
 
 export interface ITerminalProps { prompt: string; }
 interface ILine { output: string; directory: string; }
 interface ITerminalState { lines: ILine[]; }
 
 export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
-  public static renderPath(path: string[]) {
-    const result = path
-      .join("/")
-      .replace("root", "/")
-      .replace("//", "/");
-    return result;
-  }
   private shell: Shell;
 
   constructor(props: ITerminalProps) {
@@ -35,7 +30,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
   private getCurrentDirectoryCopy() {
     const shellCopy = {...this.shell};
-    return Terminal.renderPath(shellCopy.currentDirectory);
+    return Path.render(shellCopy.currentDirectory);
   }
 
   private newLine() {
@@ -64,7 +59,12 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     try {
       currentLine.output = this.shell.command(input);
     } catch (e) {
-      if (e instanceof ProgramNotFoundError || e instanceof DirectoryNotFoundError || e instanceof InvalidPathError) {
+      if (
+        e instanceof ProgramNotFoundError
+        || e instanceof DirectoryNotFoundError
+        || e instanceof InvalidPathError
+        || e instanceof FileNotFoundError
+      ) {
         currentLine.output = e.message;
         // throw e;
       } else {

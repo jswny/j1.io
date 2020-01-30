@@ -1,19 +1,20 @@
 import * as manifest from "../../../dist/LocalFileManifest.json";
-import { Terminal } from "../components/Terminal";
+import { Cat } from "../program/Cat";
 import { Cd } from "../program/Cd";
 import { IProgram } from "../program/IProgram";
 import { Ls } from "../program/Ls";
 import { Directory } from "./Directory";
 import { DirectoryNotFoundError } from "./DirectoryNotFoundError";
 import { File } from "./File";
+import { FileNotFoundError } from "./FileNotFoundError";
 import { FileType } from "./FileType";
 import { IFS } from "./IFS";
 import { INode } from "./INode";
 import { InvalidPathError } from "./InvalidPathError";
+import { Path } from "./Path";
 
 export class LocalFS implements IFS {
-
-  private root: Directory;
+  public root: Directory;
   private programs: IProgram[];
 
   constructor() {
@@ -29,6 +30,7 @@ export class LocalFS implements IFS {
     const programsToLoad = [
       new Cd(),
       new Ls(),
+      new Cat(),
     ];
     this.loadPrograms(programsToLoad);
 
@@ -39,16 +41,39 @@ export class LocalFS implements IFS {
   }
 
   public read(path: string[]): string {
-    throw new Error("Method not implemented.");
+    console.debug("Read requested for path:");
+    console.debug(path);
+
+    const node = this.stat(path);
+    let output: string;
+
+    if (node instanceof File) {
+      const file: File = node;
+      if (file.type === FileType.Markdown) {
+        console.debug("Found compatible file to read: ")
+        console.debug(file);
+
+        output = file.content;
+      } else {
+        throw new FileNotFoundError(`The node at "${Path.render(path)}" is not a readable file`);
+      }
+    } else {
+      throw new FileNotFoundError(`The node at "${Path.render(path)}" is not a file`);
+    }
+
+    return output;
   }
 
   public list(path: string[]): INode[] {
+    console.debug("List requested for path:");
+    console.debug(path);
+
     const node: INode = this.stat(path);
 
     if (node instanceof Directory) {
       return (node as Directory).children;
     } else {
-      throw new DirectoryNotFoundError(`The node at "${path}" is not a directory`);
+      throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
     }
   }
 
@@ -77,7 +102,7 @@ export class LocalFS implements IFS {
 
       if (!foundPathPart) {
         path.unshift("root");
-        throw new InvalidPathError(`The path "${Terminal.renderPath(path)}" is invalid`);
+        throw new InvalidPathError(`The path "${Path.render(path)}" is invalid`);
       }
     }
 
@@ -100,7 +125,7 @@ export class LocalFS implements IFS {
     }
 
     path.unshift("root");
-    throw new InvalidPathError(`The path "${Terminal.renderPath(path)}" is invalid`);
+    throw new InvalidPathError(`The path "${Path.render(path)}" is invalid`);
   }
 
   public getPrograms(): IProgram[] {
@@ -129,7 +154,7 @@ export class LocalFS implements IFS {
 
     for (const program of programs) {
       const programFile = new File(program.name, FileType.Executable, "");
-      bin.addChild(program);
+      bin.addChild(programFile);
     }
 
     this.root.addChild(bin);

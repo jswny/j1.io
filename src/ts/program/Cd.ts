@@ -2,7 +2,7 @@ import { Terminal } from "../components/Terminal";
 import { Directory } from "../filesystem/Directory";
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { IFS } from "../filesystem/IFS";
-import { LocalFS } from "../filesystem/LocalFS";
+import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
 import { IProgram } from "./IProgram";
 
@@ -21,15 +21,7 @@ export class Cd implements IProgram {
     if (newDirectory === "..") {
       path = path.slice(0, path.length - 1);
     } else {
-      const split: string[] = newDirectory.split("/");
-      if (newDirectory === "/") {
-        path = ["/"];
-      } else if (newDirectory.charAt(0) === "/") {
-        split[0] = "root";
-        path = split;
-      } else {
-        path = path.concat(split);
-      }
+      path = Path.parseAndAdd(path, newDirectory);
     }
 
     console.debug("Attempting to validate requested directory change to:");
@@ -42,7 +34,7 @@ export class Cd implements IProgram {
       console.debug("Changed current directory to:");
       console.debug(path);
     } else {
-      throw new DirectoryNotFoundError(`The node at "${Terminal.renderPath(path)}" is not a directory`);
+      throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
     }
 
     return "";

@@ -9,8 +9,8 @@ export class Shell {
   private fs: IFS;
 
   constructor() {
-    this.currentDirectory = ["root"];
     this.fs = new LocalFS();
+    this.currentDirectory = [this.fs.root.name];
   }
 
   public command(command: string): string {
