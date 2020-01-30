@@ -1,6 +1,8 @@
+import { Terminal } from "../components/Terminal";
 import { Directory } from "../filesystem/Directory";
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { IFS } from "../filesystem/IFS";
+import { LocalFS } from "../filesystem/LocalFS";
 import { Shell } from "../Shell";
 import { IProgram } from "./IProgram";
 
@@ -12,34 +14,45 @@ export class Cd implements IProgram {
   }
 
   public run(shell: Shell, fs: IFS, args: string[]): string {
-    const newDirectory = args[0];
+    let newDirectory = args[0];
+    newDirectory = this.trimTrailingSlashes(newDirectory);
 
-    let fullPath: string;
-    if (newDirectory.charAt(0) === "/") {
-      fullPath = newDirectory;
-    } else if (shell.currentDirectory === "/") {
-      fullPath = shell.currentDirectory + newDirectory;
+    let path: string[] = shell.currentDirectory;
+    if (newDirectory === "..") {
+      path = path.slice(0, path.length - 1);
     } else {
-      fullPath = shell.currentDirectory + "/" + newDirectory;
+      const split: string[] = newDirectory.split("/");
+      if (newDirectory === "/") {
+        path = ["/"];
+      } else if (newDirectory.charAt(0) === "/") {
+        split[0] = "root";
+        path = split;
+      } else {
+        path = path.concat(split);
+      }
     }
 
-    fullPath = this.trimTrailingSlashes(fullPath);
+    console.debug("Attempting to validate requested directory change to:");
+    console.debug(path);
 
-    console.debug(`Attempting to validate requested directory change to "${fullPath}"`);
-
-    const node = fs.stat(fullPath);
+    const node = fs.stat(path);
 
     if (node instanceof Directory) {
-      shell.currentDirectory = fullPath;
-      console.debug(`Changed current directory to "${fullPath}"`);
+      shell.currentDirectory = path;
+      console.debug("Changed current directory to:");
+      console.debug(path);
     } else {
-      throw new DirectoryNotFoundError(`The node at "${fullPath}" is not a directory`);
+      throw new DirectoryNotFoundError(`The node at "${Terminal.renderPath(path)}" is not a directory`);
     }
 
     return "";
   }
 
   private trimTrailingSlashes(path: string): string {
-    return path.replace(new RegExp("/*$"), "");
+    if (path === "/") {
+      return path;
+    } else {
+      return path.replace(new RegExp("/*$"), "");
+    }
   }
 }

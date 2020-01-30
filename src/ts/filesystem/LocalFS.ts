@@ -1,4 +1,5 @@
 import * as manifest from "../../../dist/LocalFileManifest.json";
+import { Terminal } from "../components/Terminal";
 import { Cd } from "../program/Cd";
 import { IProgram } from "../program/IProgram";
 import { Ls } from "../program/Ls";
@@ -11,6 +12,7 @@ import { INode } from "./INode";
 import { InvalidPathError } from "./InvalidPathError";
 
 export class LocalFS implements IFS {
+
   private root: Directory;
   private programs: IProgram[];
 
@@ -19,7 +21,7 @@ export class LocalFS implements IFS {
     console.debug(manifest);
 
     this.root = this.build(manifest);
-    this.root.name = "/";
+    this.root.name = "root";
 
     console.debug("Successfully loaded filesystem:");
     console.debug(this.root);
@@ -36,11 +38,11 @@ export class LocalFS implements IFS {
     console.debug(this.root);
   }
 
-  public read(path: string): string {
+  public read(path: string[]): string {
     throw new Error("Method not implemented.");
   }
 
-  public list(path: string): INode[] {
+  public list(path: string[]): INode[] {
     const node: INode = this.stat(path);
 
     if (node instanceof Directory) {
@@ -50,21 +52,21 @@ export class LocalFS implements IFS {
     }
   }
 
-  public stat(path: string): INode {
+  public stat(path: string[]): INode {
     let currNode: Directory = this.root;
+    path = path.slice(1, path.length);
 
-    const split = path
-      .split("/")
-      .filter((elem) => elem !== "");
+    console.debug("Stat requested for path:");
+    console.debug(path);
 
-    for (let i = 0; i < split.length; i++) {
-      const pathPart = split[i];
+    for (let i = 0; i < path.length; i++) {
+      const pathPart = path[i];
       let foundPathPart: boolean = false;
 
       for (const searchNode of currNode.children) {
         console.debug(`Searching for path part ${pathPart} in ${searchNode.name}`);
 
-        if (i === split.length - 1 && searchNode.name === pathPart) {
+        if (i === path.length - 1 && searchNode.name === pathPart) {
           foundPathPart = true;
           return searchNode;
         } else if (searchNode instanceof Directory && searchNode.name === pathPart) {
@@ -74,11 +76,31 @@ export class LocalFS implements IFS {
       }
 
       if (!foundPathPart) {
-        throw new InvalidPathError(`The path "${path}" is invalid`);
+        path.unshift("root");
+        throw new InvalidPathError(`The path "${Terminal.renderPath(path)}" is invalid`);
       }
     }
 
     return currNode;
+  }
+
+  public getParent(path: string[]): Directory {
+    let currNode: Directory = this.root;
+
+    for (let i = 0; i < path.length; i++) {
+      const pathPart = path[i];
+
+      for (const searchNode of currNode.children) {
+        if (i === path.length - 1 && searchNode.name === pathPart) {
+          return currNode;
+        } else if (searchNode instanceof Directory && searchNode.name === pathPart) {
+          currNode = searchNode;
+        }
+      }
+    }
+
+    path.unshift("root");
+    throw new InvalidPathError(`The path "${Terminal.renderPath(path)}" is invalid`);
   }
 
   public getPrograms(): IProgram[] {

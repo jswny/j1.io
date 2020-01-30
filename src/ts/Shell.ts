@@ -5,15 +5,15 @@ import { IProgram } from "./program/IProgram";
 import { ProgramNotFoundError } from "./program/ProgramNotFoundError";
 
 export class Shell {
-  public currentDirectory: string;
+  public currentDirectory: string[];
   private fs: IFS;
 
   constructor() {
-    this.currentDirectory = "/";
+    this.currentDirectory = ["root"];
     this.fs = new LocalFS();
   }
 
-  public command(command: string) {
+  public command(command: string): string {
     const parsedCommand = this.parseCommand(command);
     return this.runCommand(parsedCommand[0], parsedCommand.slice(1));
   }

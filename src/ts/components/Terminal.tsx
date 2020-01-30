@@ -12,6 +12,13 @@ interface ILine { output: string; directory: string; }
 interface ITerminalState { lines: ILine[]; }
 
 export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
+  public static renderPath(path: string[]) {
+    const result = path
+      .join("/")
+      .replace("root", "/")
+      .replace("//", "/");
+    return result;
+  }
   private shell: Shell;
 
   constructor(props: ITerminalProps) {
@@ -28,7 +35,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
   private getCurrentDirectoryCopy() {
     const shellCopy = {...this.shell};
-    return shellCopy.currentDirectory;
+    return Terminal.renderPath(shellCopy.currentDirectory);
   }
 
   private newLine() {
