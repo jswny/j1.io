@@ -53,7 +53,6 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   }
 
   private renderCommandOutput(output: string): string {
-    console.debug(output.split("\n"));
     const split = output.split("\n");
     if (split.length > 1) {
       output = split
