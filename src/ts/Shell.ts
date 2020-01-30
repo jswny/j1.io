@@ -1,8 +1,8 @@
+import { IFS } from "./filesystem/IFS";
+import { LocalFS } from "./filesystem/LocalFS";
 import { Cd } from "./program/Cd";
 import { IProgram } from "./program/IProgram";
 import { ProgramNotFoundError } from "./program/ProgramNotFoundError";
-import { IFS } from "./filesystem/IFS";
-import { LocalFS } from "./filesystem/LocalFS";
 
 export class Shell {
   public currentDirectory: string;

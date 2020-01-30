@@ -3,9 +3,6 @@ import * as path from "path";
 import { Directory } from "./filesystem/Directory";
 import { File } from "./filesystem/File";
 import { FileType } from "./filesystem/FileType";
-import { INode } from "./filesystem/INode";
-
-const root = path.join(__dirname, "../../files");
 
 function parseFileType(fileName: string): FileType {
   const split = fileName.split(".");
@@ -49,6 +46,8 @@ function readDirRecursive(dirPath: string): Directory {
 
   return dir;
 }
+
+const root = path.join(__dirname, "../../files");
 
 const result: Directory = readDirRecursive(root);
 console.debug("Writing local file manifest:")
