@@ -1,7 +1,7 @@
-export class DirectoryNotFoundError extends Error {
+export class InvalidPathError extends Error {
   constructor(message?: string) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
-    this.name = DirectoryNotFoundError.name;
+    this.name = InvalidPathError.name;
   }
 }

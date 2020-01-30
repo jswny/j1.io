@@ -1,3 +1,4 @@
+import { Directory } from "../filesystem/Directory";
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { IFS } from "../filesystem/IFS";
 import { Shell } from "../Shell";
@@ -24,13 +25,13 @@ export class Cd implements IProgram {
 
     console.debug(`Attempting to validate requested directory change to "${fullPath}"`);
 
-    const result: boolean = fs.stat(fullPath);
+    const node = fs.stat(fullPath);
 
-    if (result) {
+    if (node instanceof Directory) {
       shell.currentDirectory = fullPath;
       console.debug(`Changed current directory to "${fullPath}"`);
     } else {
-      throw new DirectoryNotFoundError(`The directory "${fullPath}" does not exist`);
+      throw new DirectoryNotFoundError(`The node at "${fullPath}" is not a directory`);
     }
 
     return "";

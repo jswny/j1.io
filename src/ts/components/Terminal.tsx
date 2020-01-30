@@ -5,6 +5,7 @@ import { TerminalInput } from "./TerminalInput";
 
 import "../../css/terminal.css";
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
+import { InvalidPathError } from "../filesystem/InvalidPathError";
 
 export interface ITerminalProps { prompt: string; }
 interface ILine { output: string; directory: string; }
@@ -56,8 +57,9 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     try {
       currentLine.output = this.shell.command(input);
     } catch (e) {
-      if (e instanceof ProgramNotFoundError || e instanceof DirectoryNotFoundError) {
+      if (e instanceof ProgramNotFoundError || e instanceof DirectoryNotFoundError || e instanceof InvalidPathError) {
         currentLine.output = e.message;
+        // throw e;
       } else {
         throw e;
       }

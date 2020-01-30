@@ -1,10 +1,12 @@
-import { Directory } from "./Directory";
 import { IProgram } from "../program/IProgram";
+import { INode } from "./INode";
 
 export interface IFS {
-  read(path: string): void;
+  read(path: string): string;
 
-  stat(path: string): boolean;
+  list(path: string): INode[];
+
+  stat(path: string): INode;
 
   getPrograms(): IProgram[];
 }

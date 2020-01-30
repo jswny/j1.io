@@ -1,10 +1,14 @@
 import * as manifest from "../../../dist/LocalFileManifest.json";
 import { Cd } from "../program/Cd";
 import { IProgram } from "../program/IProgram";
+import { Ls } from "../program/Ls";
 import { Directory } from "./Directory";
+import { DirectoryNotFoundError } from "./DirectoryNotFoundError";
 import { File } from "./File";
 import { FileType } from "./FileType";
 import { IFS } from "./IFS";
+import { INode } from "./INode";
+import { InvalidPathError } from "./InvalidPathError";
 
 export class LocalFS implements IFS {
   private root: Directory;
@@ -22,6 +26,7 @@ export class LocalFS implements IFS {
 
     const programsToLoad = [
       new Cd(),
+      new Ls(),
     ];
     this.loadPrograms(programsToLoad);
 
@@ -31,37 +36,49 @@ export class LocalFS implements IFS {
     console.debug(this.root);
   }
 
-  public read(path: string): void {
+  public read(path: string): string {
     throw new Error("Method not implemented.");
   }
 
-  public stat(path: string): boolean {
+  public list(path: string): INode[] {
+    const node: INode = this.stat(path);
+
+    if (node instanceof Directory) {
+      return (node as Directory).children;
+    } else {
+      throw new DirectoryNotFoundError(`The node at "${path}" is not a directory`);
+    }
+  }
+
+  public stat(path: string): INode {
     let currNode: Directory = this.root;
 
     const split = path
       .split("/")
       .filter((elem) => elem !== "");
 
-    const result: boolean = true;
-
-    for (const pathPart of split) {
+    for (let i = 0; i < split.length; i++) {
+      const pathPart = split[i];
       let foundPathPart: boolean = false;
 
       for (const searchNode of currNode.children) {
         console.debug(`Searching for path part ${pathPart} in ${searchNode.name}`);
 
-        if (searchNode instanceof Directory && searchNode.name === pathPart) {
+        if (i === split.length - 1 && searchNode.name === pathPart) {
+          foundPathPart = true;
+          return searchNode;
+        } else if (searchNode instanceof Directory && searchNode.name === pathPart) {
           foundPathPart = true;
           currNode = searchNode;
         }
       }
 
       if (!foundPathPart) {
-        return false;
+        throw new InvalidPathError(`The path "${path}" is invalid`);
       }
     }
 
-    return result;
+    return currNode;
   }
 
   public getPrograms(): IProgram[] {
