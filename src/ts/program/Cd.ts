@@ -14,14 +14,22 @@ export class Cd implements IProgram {
   }
 
   public run(shell: Shell, fs: IFS, args: string[]): string {
-    let newDirectory = args[0];
-    newDirectory = this.trimTrailingSlashes(newDirectory);
-
     let path: string[] = shell.currentDirectory;
-    if (newDirectory === "..") {
-      path = path.slice(0, path.length - 1);
+    if (args.length === 0) {
+      path = ["root"];
     } else {
-      path = Path.parseAndAdd(path, newDirectory);
+      let newDirectory = args[0];
+      newDirectory = this.trimTrailingSlashes(newDirectory);
+
+      if (newDirectory === "..") {
+        path = path.slice(0, path.length - 1);
+
+        if (path.length === 0) {
+          path = ["root"];
+        }
+      } else {
+        path = Path.parseAndAdd(path, newDirectory);
+      }
     }
 
     console.debug("Attempting to validate requested directory change to:");
