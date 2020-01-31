@@ -109,25 +109,6 @@ export class LocalFS implements IFS {
     return currNode;
   }
 
-  public getParent(path: string[]): Directory {
-    let currNode: Directory = this.root;
-
-    for (let i = 0; i < path.length; i++) {
-      const pathPart = path[i];
-
-      for (const searchNode of currNode.children) {
-        if (i === path.length - 1 && searchNode.name === pathPart) {
-          return currNode;
-        } else if (searchNode instanceof Directory && searchNode.name === pathPart) {
-          currNode = searchNode;
-        }
-      }
-    }
-
-    path.unshift("root");
-    throw new InvalidPathError(`The path "${Path.render(path)}" is invalid`);
-  }
-
   public getPrograms(): IProgram[] {
     return this.programs;
   }

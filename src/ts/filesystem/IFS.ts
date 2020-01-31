@@ -11,7 +11,5 @@ export interface IFS {
 
   stat(path: string[]): INode;
 
-  getParent(path: string[]): Directory;
-
   getPrograms(): IProgram[];
 }

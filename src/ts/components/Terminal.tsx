@@ -45,13 +45,6 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     return currentLine;
   }
 
-  private updateCurrentLine(transformFunction: (line: ILine) => ILine) {
-    const lines = this.state.lines;
-    const currentLine = this.getCurrentLine();
-    transformFunction(currentLine);
-    this.setState({ lines });
-  }
-
   private renderCommandOutput(output: string): string {
     const split = output.split("\n");
     if (split.length > 1) {
@@ -101,7 +94,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
             autofocus={autofocus}
             handleSubmitFunction={(input: string) => this.handleSubmitInput(input)}
           />
-          <div className="terminal-output" dangerouslySetInnerHTML={{__html: this.state.lines[i].output }}></div>
+          <div className="terminal-output" dangerouslySetInnerHTML={{ __html: this.state.lines[i].output }}></div>
         </div>
       );
     }
