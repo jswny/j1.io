@@ -16,7 +16,7 @@ export class Cd implements IProgram {
   public run(shell: Shell, fs: IFS, args: string[]): string {
     let path: string[] = shell.currentDirectory;
     if (args.length === 0) {
-      path = ["root"];
+      path = [fs.root.name];
     } else {
       let newDirectory = args[0];
       newDirectory = this.trimTrailingSlashes(newDirectory);
@@ -25,7 +25,7 @@ export class Cd implements IProgram {
         path = path.slice(0, path.length - 1);
 
         if (path.length === 0) {
-          path = ["root"];
+          path = [fs.root.name];
         }
       } else {
         path = Path.parseAndAdd(path, newDirectory);
