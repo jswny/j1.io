@@ -1,63 +1,17 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const config = require("./webpack.config.common.js");
 
-module.exports = {
-  mode: "development",
+config.mode = "development";
+config.devtool = "source-map";
 
-  entry: "./src/ts/components/index.tsx",
-  output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "dist")
-  },
+// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.	
+let sourceMapLoader = 
+{ 	
+  enforce: "pre", 	
+  test: /\.js$/, 	
+  use: {	
+    loader: "source-map-loader"	
+  }
+}
+config.module.rules.push(sourceMapLoader);
 
-  plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!LocalFileManifest.json'],
-    }),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "src", "html", "index.html")
-    })
-  ],
-
-  // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
-
-  resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".json"]
-  },
-
-  module: {
-    rules: [
-      // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { 
-        test: /\.tsx?$/, 
-        use: {
-          loader: "awesome-typescript-loader",
-          options: {
-            configFileName: "tsconfig.dev.json"
-          }
-        } 
-      },
-
-      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { 
-        enforce: "pre", 
-        test: /\.js$/, 
-        use: {
-          loader: "source-map-loader"
-        }
-      },
-
-      // Load all CSS files and allow importing styles in JavaScript files.
-      {
-        test: /\.css$/,
-        use: [
-          "style-loader",
-          "css-loader"
-        ]
-      }
-    ]
-  },
-};
+module.exports = config;
