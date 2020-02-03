@@ -26,7 +26,8 @@ module.exports = {
     rules: [
       // Handle Typescript files with Babel first, then ts-loader
       { 
-        test: /\.tsx?$/, 
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: 'babel-loader',
