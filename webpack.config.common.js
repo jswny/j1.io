@@ -19,24 +19,34 @@ module.exports = {
   ],
 
   resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: [".ts", ".tsx", ".js", ".json"]
   },
 
   module: {
     rules: [
-      // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
+      // Handle Typescript files with Babel first, then ts-loader
       { 
         test: /\.tsx?$/, 
-        use: {
-          loader: "ts-loader",
-          options: {
-            configFile: "tsconfig.dev.json"
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                '@babel/preset-react',
+                '@babel/preset-env'
+              ]
+            }
+          },
+          {
+            loader: "ts-loader",
+            options: {
+              configFile: "tsconfig.dev.json"
+            }
           }
-        } 
+        ]
       },
 
-      // Load all CSS files and allow importing styles in JavaScript files.
+      // Resolve all imports with css-loader, and apply them to the files that require those styles with the style-loader
       {
         test: /\.css$/,
         use: [
