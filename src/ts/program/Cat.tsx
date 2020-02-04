@@ -1,9 +1,13 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
+import { File } from "../filesystem/File";
+import { FileType } from "../filesystem/FileType";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
 import { IProgram } from "./IProgram";
+
+import "../../css/cat.css";
 
 export class Cat implements IProgram {
   public name: string;
@@ -16,9 +20,19 @@ export class Cat implements IProgram {
     const argPath = args[0];
     const path: string[] = Path.parseAndAdd(shell.currentDirectory, argPath);
     const output = fs.read(path);
+    const file: File = fs.stat(path) as File;
 
-    return (
-      <ReactMarkdown source={output} />
-    );
+    let result: JSX.Element;
+    switch (file.type) {
+      case FileType.Markdown: {
+        result = <ReactMarkdown className="output-markdown" source={output} />;
+        break;
+      }
+      default: {
+        result = <div>{ output }</div>;
+      }
+    }
+
+    return result;
   }
 }

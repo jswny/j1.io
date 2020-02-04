@@ -3,3 +3,7 @@ body {
   background-color: black;
   font-size: 2rem;
 }
+
+ol {
+  padding-left: 1rem;
+}
