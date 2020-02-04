@@ -1,10 +1,10 @@
 import * as React from "react";
 
+import { ExecutableNotFoundError } from "../executable/ExecutableNotFoundError";
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { FileNotFoundError } from "../filesystem/FileNotFoundError";
 import { InvalidPathError } from "../filesystem/InvalidPathError";
 import { Path } from "../filesystem/Path";
-import { ExecutableNotFoundError } from "../executable/ExecutableNotFoundError";
 import { Shell } from "../Shell";
 import { TerminalInput } from "./TerminalInput";
 

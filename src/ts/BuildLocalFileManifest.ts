@@ -50,9 +50,8 @@ function readDirRecursive(dirPath: string): Directory {
 const root = path.join(__dirname, "../../files");
 
 const result: Directory = readDirRecursive(root);
-console.debug("Writing local file manifest:");
-console.debug(result);
 
 const json: string = JSON.stringify(result);
 
 fs.writeFileSync(path.join(__dirname, "../LocalFileManifest.json"), json);
+console.debug("Wrote local file manifest!");
