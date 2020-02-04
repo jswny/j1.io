@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Directory } from "../filesystem/Directory";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
@@ -11,7 +12,7 @@ export class Ls implements IProgram {
     this.name = "ls";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): string {
+  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
     let output: string = "";
 
     let path: string[];
@@ -29,6 +30,8 @@ export class Ls implements IProgram {
 
     output = output.trim();
 
-    return output;
+    return (
+      <div>{ output }</div>
+    );
   }
 }

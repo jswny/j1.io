@@ -1,3 +1,4 @@
+import * as React from "react";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
@@ -10,11 +11,15 @@ export class Cat implements IProgram {
     this.name = "cat";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): string {
+  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
     const argPath = args[0];
     const path: string[] = Path.parseAndAdd(shell.currentDirectory, argPath);
     const output = fs.read(path);
 
-    return output;
+    return (
+      <p>{ output }</p>
+    );
+
+    // return output;
   }
 }

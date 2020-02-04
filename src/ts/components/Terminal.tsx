@@ -10,7 +10,7 @@ import { InvalidPathError } from "../filesystem/InvalidPathError";
 import { Path } from "../filesystem/Path";
 
 export interface ITerminalProps { prompt: string; }
-interface ILine { output: string; directory: string; }
+interface ILine { output: JSX.Element; directory: string; }
 interface ITerminalState { lines: ILine[]; }
 
 export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
@@ -22,24 +22,24 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     this.state = { lines: [this.newLine()] };
   }
 
-  public render() {
+  public render(): JSX.Element {
     return (
       <div id="terminal">{this.renderLines()}</div>
     );
   }
 
-  private getCurrentDirectoryCopy() {
+  private getCurrentDirectoryCopy(): string {
     const shellCopy = {...this.shell};
     return Path.render(shellCopy.currentDirectory);
   }
 
-  private newLine() {
+  private newLine(): ILine {
     const directory = this.getCurrentDirectoryCopy();
-    const line: ILine = { output: "", directory };
+    const line: ILine = { output: <div></div>, directory };
     return line;
   }
 
-  private getCurrentLine() {
+  private getCurrentLine(): ILine {
     const lines = this.state.lines;
     const currentLine = lines[lines.length - 1];
     return currentLine;
@@ -56,13 +56,14 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     return output;
   }
 
-  private handleSubmitInput(input: string) {
+  private handleSubmitInput(input: string): void {
     const lines = this.state.lines;
     const currentLine = this.getCurrentLine();
     console.debug(`Terminal sending input "${input}" for processing`);
     try {
       const output = this.shell.command(input);
-      const renderedOutput = this.renderCommandOutput(output);
+      // const renderedOutput = this.renderCommandOutput(output);
+      const renderedOutput = output;
       currentLine.output = renderedOutput;
     } catch (e) {
       if (
@@ -71,7 +72,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         || e instanceof InvalidPathError
         || e instanceof FileNotFoundError
       ) {
-        currentLine.output = e.message;
+        currentLine.output = <div>{ e.message }</div>;
         // throw e;
       } else {
         throw e;
@@ -82,7 +83,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     this.setState({ lines });
   }
 
-  private renderLines() {
+  private renderLines(): JSX.Element[] {
     const lines = [];
     let autofocus = false;
     for (let i = 0; i < this.state.lines.length; i++) {
@@ -94,7 +95,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
             autofocus={autofocus}
             handleSubmitFunction={(input: string) => this.handleSubmitInput(input)}
           />
-          <div className="terminal-output" dangerouslySetInnerHTML={{ __html: this.state.lines[i].output }}></div>
+          <div className="terminal-output"> { this.state.lines[i].output }</div>
         </div>
       );
     }

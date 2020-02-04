@@ -1,4 +1,4 @@
-import { Terminal } from "../components/Terminal";
+import * as React from "react";
 import { Directory } from "../filesystem/Directory";
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { IFS } from "../filesystem/IFS";
@@ -13,7 +13,7 @@ export class Cd implements IProgram {
     this.name = "cd";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): string {
+  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
     let path: string[] = shell.currentDirectory;
     if (args.length === 0) {
       path = [fs.root.name];
@@ -45,7 +45,7 @@ export class Cd implements IProgram {
       throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
     }
 
-    return "";
+    return <div></div>;
   }
 
   private trimTrailingSlashes(path: string): string {

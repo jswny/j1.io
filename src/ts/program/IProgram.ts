@@ -4,5 +4,5 @@ import { Shell } from "../Shell";
 export interface IProgram {
   name: string;
 
-  run(shell: Shell, fs: IFS, args: string[]): string;
+  run(shell: Shell, fs: IFS, args: string[]): JSX.Element;
 }

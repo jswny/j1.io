@@ -11,7 +11,7 @@ export class Shell {
     this.currentDirectory = [this.fs.root.name];
   }
 
-  public command(command: string): string {
+  public command(command: string): JSX.Element {
     const parsedCommand = this.parseCommand(command);
     return this.runCommand(parsedCommand[0], parsedCommand.slice(1));
   }
