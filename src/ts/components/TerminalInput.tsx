@@ -11,10 +11,6 @@ export class TerminalInput extends React.Component<ITerminalInputProps, ITermina
     this.state = { readonly: false };
   }
 
-  componentWillUnmount() {
-    console.debug("unmounting...")
-  }
-
   public render() {
     return (
       <input

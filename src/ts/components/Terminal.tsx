@@ -1,17 +1,16 @@
 import * as React from "react";
-import { ProgramNotFoundError } from "../program/ProgramNotFoundError";
-import { Shell } from "../Shell";
-import { TerminalInput } from "./TerminalInput";
-
 import "../../css/terminal.css";
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { FileNotFoundError } from "../filesystem/FileNotFoundError";
 import { InvalidPathError } from "../filesystem/InvalidPathError";
 import { Path } from "../filesystem/Path";
+import { ProgramNotFoundError } from "../program/ProgramNotFoundError";
+import { Shell } from "../Shell";
+import { TerminalInput } from "./TerminalInput";
 
 export interface ITerminalProps { prompt: string; }
 interface ILine { output: JSX.Element; directory: string; }
-interface ITerminalState { lines: ILine[]; }
+interface ITerminalState { lines: ILine[]; keyBase: number; }
 
 export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   private shell: Shell;
@@ -19,7 +18,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   constructor(props: ITerminalProps) {
     super(props);
     this.shell = new Shell();
-    this.state = { lines: [this.newLine()] };
+    this.state = { lines: [this.newLine()], keyBase: 0 };
   }
 
   public render(): JSX.Element {
@@ -48,7 +47,8 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   private clear(): void {
     console.debug("Clearing terminal...");
     const lines: ILine[] = [this.newLine()];
-    this.setState({ lines });
+    const keyBase = this.state.keyBase + this.state.lines.length;
+    this.setState({ lines, keyBase });
   }
 
   private handleSubmitInput(input: string): void {
@@ -84,11 +84,10 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
   private renderLines(): JSX.Element[] {
     const lines = [];
-    let autofocus = false;
     for (let i = 0; i < this.state.lines.length; i++) {
-      autofocus = i === this.state.lines.length - 1 ? true : false;
+      const autofocus = i === this.state.lines.length - 1 ? true : false;
       lines.push(
-        <div key={i} className="terminal-line">
+        <div key={this.state.keyBase + i} className="terminal-line">
           <span className="terminal-prompt">{this.state.lines[i].directory} {this.props.prompt}</span>
           <TerminalInput
             autofocus={autofocus}
@@ -98,7 +97,6 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         </div>
       );
     }
-    console.debug(lines);
     return lines;
   }
 }
