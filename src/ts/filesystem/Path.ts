@@ -17,6 +17,8 @@ export class Path {
       result = existingPath.concat(split);
     }
 
+    result = result.filter((e) => e !== "");
+
     return result;
   }
 
