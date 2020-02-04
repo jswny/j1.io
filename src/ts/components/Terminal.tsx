@@ -45,15 +45,10 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     return currentLine;
   }
 
-  private renderCommandOutput(output: string): string {
-    const split = output.split("\n");
-    if (split.length > 1) {
-      output = split
-        .map((item, i) => `<p key=${i}>${item}</p>`)
-        .join("");
-    }
-
-    return output;
+  private clear(): void {
+    console.debug("Clearing terminal...");
+    const lines: ILine[] = [this.newLine()];
+    this.setState({ lines });
   }
 
   private handleSubmitInput(input: string): void {
@@ -61,10 +56,14 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     const currentLine = this.getCurrentLine();
     console.debug(`Terminal sending input "${input}" for processing`);
     try {
-      const output = this.shell.command(input);
-      // const renderedOutput = this.renderCommandOutput(output);
-      const renderedOutput = output;
-      currentLine.output = renderedOutput;
+      if (input.trim() === "clear") {
+        this.clear();
+        return;
+      } else {
+        const output = this.shell.command(input);
+        const renderedOutput = output;
+        currentLine.output = renderedOutput;
+      }
     } catch (e) {
       if (
         e instanceof ProgramNotFoundError
@@ -99,6 +98,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         </div>
       );
     }
+    console.debug(lines);
     return lines;
   }
 }

@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactMarkdown from "react-markdown";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
@@ -17,9 +18,7 @@ export class Cat implements IProgram {
     const output = fs.read(path);
 
     return (
-      <p>{ output }</p>
+      <ReactMarkdown source={output} />
     );
-
-    // return output;
   }
 }
