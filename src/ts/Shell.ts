@@ -1,4 +1,4 @@
-import { ExecutableNotFoundError } from "./executable/ExecutableNotFoundError";
+import { ExecutableNotFoundError } from "./errors/ExecutableNotFoundError";
 import { IFS } from "./filesystem/IFS";
 import { LocalFS } from "./filesystem/LocalFS";
 

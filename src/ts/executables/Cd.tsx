@@ -1,6 +1,6 @@
 import * as React from "react";
+import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
 import { Directory } from "../filesystem/Directory";
-import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";

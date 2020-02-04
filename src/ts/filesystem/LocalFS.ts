@@ -1,16 +1,16 @@
 import * as manifest from "../../../dist/LocalFileManifest.json";
-import { Cat } from "../executable/Cat";
-import { Cd } from "../executable/Cd";
-import { IExecutable } from "../executable/IExecutable";
-import { Ls } from "../executable/Ls";
+import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
+import { FileNotFoundError } from "../errors/FileNotFoundError";
+import { InvalidPathError } from "../errors/InvalidPathError";
+import { Cat } from "../executables/Cat";
+import { Cd } from "../executables/Cd";
+import { IExecutable } from "../executables/IExecutable";
+import { Ls } from "../executables/Ls";
 import { Directory } from "./Directory";
-import { DirectoryNotFoundError } from "./DirectoryNotFoundError";
 import { File } from "./File";
-import { FileNotFoundError } from "./FileNotFoundError";
 import { FileType } from "./FileType";
 import { IFS } from "./IFS";
 import { INode } from "./INode";
-import { InvalidPathError } from "./InvalidPathError";
 import { Path } from "./Path";
 
 export class LocalFS implements IFS {

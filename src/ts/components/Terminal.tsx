@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { ExecutableNotFoundError } from "../executable/ExecutableNotFoundError";
-import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
-import { FileNotFoundError } from "../filesystem/FileNotFoundError";
-import { InvalidPathError } from "../filesystem/InvalidPathError";
+import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
+import { ExecutableNotFoundError } from "../errors/ExecutableNotFoundError";
+import { FileNotFoundError } from "../errors/FileNotFoundError";
+import { InvalidPathError } from "../errors/InvalidPathError";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
 import { TerminalLine } from "./TerminalLine";

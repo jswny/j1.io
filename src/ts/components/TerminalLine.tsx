@@ -24,6 +24,6 @@ export class TerminalLine extends React.Component<ITerminalLineProps> {
         />
         <div className="terminal-output"> { this.props.output }</div>
       </div>
-    )
+    );
   }
 }

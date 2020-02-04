@@ -1,4 +1,4 @@
-import { IExecutable } from "../executable/IExecutable";
+import { IExecutable } from "../executables/IExecutable";
 import { Directory } from "./Directory";
 import { INode } from "./INode";
 
