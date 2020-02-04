@@ -5,6 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "lint": "tslint --project tsconfig.prod.json",
     "build:localFileManifest": "tsc src/ts/BuildLocalFileManifest.ts --outDir dist/localFileManifest && node dist/localFileManifest/BuildLocalFileManifest.js",
     "build:prod": "webpack --config webpack.config.prod.js",
     "build:dev": "webpack --config webpack.config.dev.js",
