@@ -1,5 +1,7 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
+
+import { CodeBlock } from "../components/CodeBlock";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
 import { IFS } from "../filesystem/IFS";
@@ -25,7 +27,13 @@ export class Cat implements IProgram {
     let result: JSX.Element;
     switch (file.type) {
       case FileType.Markdown: {
-        result = <ReactMarkdown className="output-markdown" source={output} />;
+        result = (
+          <ReactMarkdown
+            className="output-markdown"
+            source={ output }
+            renderers={{code: CodeBlock}}
+          />
+        );
         break;
       }
       default: {

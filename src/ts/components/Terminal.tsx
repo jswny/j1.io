@@ -1,5 +1,5 @@
 import * as React from "react";
-import "../../css/terminal.css";
+
 import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { FileNotFoundError } from "../filesystem/FileNotFoundError";
 import { InvalidPathError } from "../filesystem/InvalidPathError";
@@ -7,6 +7,8 @@ import { Path } from "../filesystem/Path";
 import { ProgramNotFoundError } from "../program/ProgramNotFoundError";
 import { Shell } from "../Shell";
 import { TerminalInput } from "./TerminalInput";
+
+import "../../css/terminal.css";
 
 export interface ITerminalProps { prompt: string; }
 interface ILine { output: JSX.Element; directory: string; }
