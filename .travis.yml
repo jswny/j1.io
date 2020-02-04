@@ -1,6 +1,9 @@
 language: node_js
 node_js: "12.1.0"
-script: "NODE_ENV=production npm run build:prod"
+before_script:
+  - "export NODE_ENV=production"
+  - "yarn run build:localFileManifest"
+script: "yarn run build:prod"
 deploy:
   provider: pages
   skip_cleanup: true

@@ -6,10 +6,9 @@
   "main": "index.js",
   "scripts": {
     "build:localFileManifest": "tsc src/ts/BuildLocalFileManifest.ts --outDir dist/localFileManifest && node dist/localFileManifest/BuildLocalFileManifest.js",
-    "build:prod": "tsc src/ts/BuildLocalFileManifest.ts --outDir dist/localFileManifest && node dist/localFileManifest/BuildLocalFileManifest.js && webpack --config webpack.config.prod.js",
-    "build:dev": "tsc src/ts/BuildLocalFileManifest.ts --outDir dist/localFileManifest && node dist/localFileManifest/BuildLocalFileManifest.js && webpack --config webpack.config.dev.js",
-    "start:dev": "tsc src/ts/BuildLocalFileManifest.ts --outDir dist/localFileManifest && node dist/localFileManifest/BuildLocalFileManifest.js && webpack-dev-server --config webpack.config.dev.js --mode development --open",
-    "start:dev:container": "tsc src/ts/BuildLocalFileManifest.ts --outDir dist/localFileManifest && node dist/localFileManifest/BuildLocalFileManifest.js && webpack-dev-server --config webpack.config.dev.js --mode development --host 0.0.0.0"
+    "build:prod": "webpack --config webpack.config.prod.js",
+    "build:dev": "webpack --config webpack.config.dev.js",
+    "start:dev": "webpack-dev-server --config webpack.config.dev.js --mode development --open"
   },
   "repository": {
     "type": "git",
