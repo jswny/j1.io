@@ -1,7 +1,7 @@
-export class ProgramNotFoundError extends Error {
+export class ExecutableNotFoundError extends Error {
   constructor(message?: string) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
-    this.name = ProgramNotFoundError.name;
+    this.name = ExecutableNotFoundError.name;
   }
 }

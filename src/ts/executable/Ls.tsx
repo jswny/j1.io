@@ -3,9 +3,9 @@ import { Directory } from "../filesystem/Directory";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
-import { IProgram } from "./IProgram";
+import { IExecutable } from "./IExecutable";
 
-export class Ls implements IProgram {
+export class Ls implements IExecutable {
   public name: string;
 
   constructor() {

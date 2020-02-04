@@ -1,4 +1,4 @@
-import { IProgram } from "../program/IProgram";
+import { IExecutable } from "../executable/IExecutable";
 import { Directory } from "./Directory";
 import { INode } from "./INode";
 
@@ -11,5 +11,5 @@ export interface IFS {
 
   stat(path: string[]): INode;
 
-  getPrograms(): IProgram[];
+  getExecutables(): IExecutable[];
 }

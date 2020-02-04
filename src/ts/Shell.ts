@@ -1,6 +1,6 @@
 import { IFS } from "./filesystem/IFS";
 import { LocalFS } from "./filesystem/LocalFS";
-import { ProgramNotFoundError } from "./program/ProgramNotFoundError";
+import { ExecutableNotFoundError } from "./executable/ExecutableNotFoundError";
 
 export class Shell {
   public currentDirectory: string[];
@@ -24,21 +24,21 @@ export class Shell {
     return parsed;
   }
 
-  private runCommand(programName: string, args: string[]) {
+  private runCommand(executableName: string, args: string[]) {
     let found = false;
-    let program = null;
-    for (program of this.fs.getPrograms()) {
-      if (program.name === programName) {
+    let executable = null;
+    for (executable of this.fs.getExecutables()) {
+      if (executable.name === executableName) {
         found = true;
         break;
       }
     }
 
     if (found) {
-      console.debug(`Found matching program: "${program.name}"`);
-      return program.run(this, this.fs, args);
+      console.debug(`Found matching executable: "${executable.name}"`);
+      return executable.run(this, this.fs, args);
     } else {
-      throw new ProgramNotFoundError(`Could not find program "${programName}"`);
+      throw new ExecutableNotFoundError(`Could not find executable "${executableName}"`);
     }
   }
 }

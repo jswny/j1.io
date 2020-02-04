@@ -4,9 +4,9 @@ import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
-import { IProgram } from "./IProgram";
+import { IExecutable } from "./IExecutable";
 
-export class Cd implements IProgram {
+export class Cd implements IExecutable {
   public name: string;
 
   constructor() {

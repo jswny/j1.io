@@ -1,8 +1,8 @@
 import * as manifest from "../../../dist/LocalFileManifest.json";
-import { Cat } from "../program/Cat";
-import { Cd } from "../program/Cd";
-import { IProgram } from "../program/IProgram";
-import { Ls } from "../program/Ls";
+import { Cat } from "../executable/Cat";
+import { Cd } from "../executable/Cd";
+import { IExecutable } from "../executable/IExecutable";
+import { Ls } from "../executable/Ls";
 import { Directory } from "./Directory";
 import { DirectoryNotFoundError } from "./DirectoryNotFoundError";
 import { File } from "./File";
@@ -15,7 +15,7 @@ import { Path } from "./Path";
 
 export class LocalFS implements IFS {
   public root: Directory;
-  private programs: IProgram[];
+  private executables: IExecutable[];
 
   constructor() {
     console.debug("Loading filesystem manifest:");
@@ -27,15 +27,15 @@ export class LocalFS implements IFS {
     console.debug("Successfully loaded filesystem:");
     console.debug(this.root);
 
-    const programsToLoad = [
+    const executablesToLoad = [
       new Cd(),
       new Ls(),
       new Cat(),
     ];
-    this.loadPrograms(programsToLoad);
+    this.loadExecutables(executablesToLoad);
 
-    console.debug("Loaded programs:");
-    console.debug(this.programs);
+    console.debug("Loaded executables:");
+    console.debug(this.executables);
     console.debug("New filesystem:");
     console.debug(this.root);
   }
@@ -109,8 +109,8 @@ export class LocalFS implements IFS {
     return currNode;
   }
 
-  public getPrograms(): IProgram[] {
-    return this.programs;
+  public getExecutables(): IExecutable[] {
+    return this.executables;
   }
 
   private build(jsonNode: any): Directory {
@@ -128,14 +128,14 @@ export class LocalFS implements IFS {
     return directory;
   }
 
-  private loadPrograms(programs: IProgram[]): void {
-    this.programs = programs;
+  private loadExecutables(executables: IExecutable[]): void {
+    this.executables = executables;
 
     const bin: Directory = new Directory("bin");
 
-    for (const program of programs) {
-      const programFile = new File(program.name, FileType.Executable, "");
-      bin.addChild(programFile);
+    for (const executable of executables) {
+      const executableFile = new File(executable.name, FileType.Executable, "");
+      bin.addChild(executableFile);
     }
 
     this.root.addChild(bin);

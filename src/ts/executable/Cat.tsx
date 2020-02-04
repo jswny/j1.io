@@ -7,11 +7,11 @@ import { FileType } from "../filesystem/FileType";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
-import { IProgram } from "./IProgram";
+import { IExecutable } from "./IExecutable";
 
 import "../../css/cat.css";
 
-export class Cat implements IProgram {
+export class Cat implements IExecutable {
   public name: string;
 
   constructor() {

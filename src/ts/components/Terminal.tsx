@@ -4,7 +4,7 @@ import { DirectoryNotFoundError } from "../filesystem/DirectoryNotFoundError";
 import { FileNotFoundError } from "../filesystem/FileNotFoundError";
 import { InvalidPathError } from "../filesystem/InvalidPathError";
 import { Path } from "../filesystem/Path";
-import { ProgramNotFoundError } from "../program/ProgramNotFoundError";
+import { ExecutableNotFoundError } from "../executable/ExecutableNotFoundError";
 import { Shell } from "../Shell";
 import { TerminalInput } from "./TerminalInput";
 
@@ -68,7 +68,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
       }
     } catch (e) {
       if (
-        e instanceof ProgramNotFoundError
+        e instanceof ExecutableNotFoundError
         || e instanceof DirectoryNotFoundError
         || e instanceof InvalidPathError
         || e instanceof FileNotFoundError
