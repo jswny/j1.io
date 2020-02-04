@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "../../css/terminal-input.css";
 
-interface ITerminalInputProps { handleSubmitFunction: (input: string) => void; autofocus: boolean; }
+export interface ITerminalInputProps { handleSubmitFunction: (input: string) => void; autofocus: boolean; }
 interface ITerminalInputState { readonly: boolean; }
 
 export class TerminalInput extends React.Component<ITerminalInputProps, ITerminalInputState> {

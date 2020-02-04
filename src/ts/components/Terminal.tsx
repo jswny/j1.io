@@ -6,7 +6,7 @@ import { FileNotFoundError } from "../filesystem/FileNotFoundError";
 import { InvalidPathError } from "../filesystem/InvalidPathError";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
-import { TerminalInput } from "./TerminalInput";
+import { TerminalLine } from "./TerminalLine";
 
 import "../../css/terminal.css";
 
@@ -89,14 +89,13 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     for (let i = 0; i < this.state.lines.length; i++) {
       const autofocus = i === this.state.lines.length - 1 ? true : false;
       lines.push(
-        <div key={this.state.keyBase + i} className="terminal-line">
-          <span className="terminal-prompt">{this.state.lines[i].directory} {this.props.prompt}</span>
-          <TerminalInput
-            autofocus={autofocus}
-            handleSubmitFunction={(input: string) => this.handleSubmitInput(input)}
-          />
-          <div className="terminal-output"> { this.state.lines[i].output }</div>
-        </div>
+        <TerminalLine
+          key={ this.state.keyBase + i }
+          directory={ this.state.lines[i].directory }
+          prompt={ this.props.prompt }
+          output={ this.state.lines[i].output }
+          inputProps={{ autofocus, handleSubmitFunction: (input: string) => this.handleSubmitInput(input) }}
+        />
       );
     }
     return lines;
