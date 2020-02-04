@@ -1,6 +1,6 @@
+import { ExecutableNotFoundError } from "./executable/ExecutableNotFoundError";
 import { IFS } from "./filesystem/IFS";
 import { LocalFS } from "./filesystem/LocalFS";
-import { ExecutableNotFoundError } from "./executable/ExecutableNotFoundError";
 
 export class Shell {
   public currentDirectory: string[];
