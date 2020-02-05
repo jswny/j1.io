@@ -126,7 +126,6 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
           inputProps={{
             autofocus,
             handleSubmitFunction: (input: string) => this.handleSubmitInput(input),
-            readonly,
             value
           }}
         />

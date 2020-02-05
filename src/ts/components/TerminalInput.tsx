@@ -5,7 +5,6 @@ import "../../css/terminal-input.css";
 export interface ITerminalInputProps {
   value: string;
   autofocus: boolean;
-  readonly: boolean;
   handleSubmitFunction: (input: string) => void;
 }
 interface ITerminalInputState { readonly: boolean; value: string; }
@@ -13,8 +12,6 @@ interface ITerminalInputState { readonly: boolean; value: string; }
 export class TerminalInput extends React.Component<ITerminalInputProps, ITerminalInputState> {
   constructor(props: ITerminalInputProps) {
     super(props);
-    // console.debug(this.props);
-    // console.debug(this.props.value);
     this.state = { readonly: this.props.value === "" ? false : true, value: this.props.value };
   }
 
@@ -29,7 +26,7 @@ export class TerminalInput extends React.Component<ITerminalInputProps, ITermina
         className="terminal-input"
         onKeyDown={ this.onKeyDown }
         onChange={ this.onChange }
-        // readOnly={ this.state.readonly }
+        readOnly={ this.state.readonly }
         value={ this.state.value }
       />
     );
@@ -43,7 +40,7 @@ export class TerminalInput extends React.Component<ITerminalInputProps, ITermina
   private onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) { // Enter
       e.preventDefault();
-      // this.setState({ readonly: true });
+      this.setState({ readonly: true });
       this.props.handleSubmitFunction(e.currentTarget.value);
     } else {
       console.debug(`Terminal input recieved key "${e.key}"`);

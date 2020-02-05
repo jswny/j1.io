@@ -8,6 +8,6 @@ import { Terminal } from "./Terminal";
 console.log("Yes I wrote this all from scratch. Welcome ;)");
 
 ReactDOM.render(
-  <Terminal prompt="> " initialCommand={"ls"} />,
+  <Terminal prompt="> " initialCommand={null} />,
   document.getElementById("main")
 );

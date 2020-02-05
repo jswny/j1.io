@@ -21,7 +21,6 @@ export class TerminalLine extends React.Component<ITerminalLineProps> {
         <TerminalInput
           value={this.props.inputProps.value}
           autofocus={this.props.inputProps.autofocus}
-          readonly={this.props.inputProps.readonly}
           handleSubmitFunction={(input: string) => this.props.inputProps.handleSubmitFunction(input)}
         />
         <div className="terminal-output"> { this.props.output }</div>
