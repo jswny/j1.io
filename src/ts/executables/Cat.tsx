@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
+import { withRouter } from "react-router-dom";
 
 import { CodeBlock } from "../components/CodeBlock";
 import { File } from "../filesystem/File";
