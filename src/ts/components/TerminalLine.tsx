@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { ITerminalInputProps, TerminalInput } from "./TerminalInput";
 
-interface ITerminalLineProps {
+export interface ITerminalLineProps {
   directory: string;
   prompt: string;
   output: JSX.Element;
@@ -19,7 +19,9 @@ export class TerminalLine extends React.Component<ITerminalLineProps> {
       <div className="terminal-line">
         <span className="terminal-prompt">{this.props.directory} {this.props.prompt}</span>
         <TerminalInput
+          value={this.props.inputProps.value}
           autofocus={this.props.inputProps.autofocus}
+          readonly={this.props.inputProps.readonly}
           handleSubmitFunction={(input: string) => this.props.inputProps.handleSubmitFunction(input)}
         />
         <div className="terminal-output"> { this.props.output }</div>

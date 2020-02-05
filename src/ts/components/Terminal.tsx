@@ -10,8 +10,12 @@ import { TerminalLine } from "./TerminalLine";
 
 import "../../css/terminal.css";
 
-export interface ITerminalProps { prompt: string; }
-interface ILine { output: JSX.Element; directory: string; }
+export interface ITerminalProps { prompt: string; initialCommand: string | null; }
+interface ILine {
+  input: string;
+  output: JSX.Element;
+  directory: string;
+}
 interface ITerminalState { lines: ILine[]; keyBase: number; }
 
 export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
@@ -19,14 +23,25 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
   constructor(props: ITerminalProps) {
     super(props);
+
     this.shell = new Shell();
-    this.state = { lines: [this.newLine()], keyBase: 0 };
+    this.processInitialCommand(this.props.initialCommand);
   }
 
   public render(): JSX.Element {
     return (
       <div id="terminal">{this.renderLines()}</div>
     );
+  }
+
+  private processInitialCommand(initialCommand: string) {
+    let state = { keyBase: 0, lines: [this.newLine()] };
+
+    if (initialCommand !== null) {
+      state = this.updateStateFromInput(initialCommand, state.lines, state.keyBase);
+    }
+
+    this.state = state;
   }
 
   private getCurrentDirectoryCopy(): string {
@@ -36,35 +51,35 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
   private newLine(): ILine {
     const directory = this.getCurrentDirectoryCopy();
-    const line: ILine = { output: <div></div>, directory };
+    const line: ILine = { input: "" , output: <div></div>, directory };
     return line;
   }
 
-  private getCurrentLine(): ILine {
-    const lines = this.state.lines;
+  private getCurrentLine(lines: ILine[]): ILine {
     const currentLine = lines[lines.length - 1];
     return currentLine;
   }
 
-  private clear(): void {
-    console.debug("Clearing terminal...");
-    const lines: ILine[] = [this.newLine()];
-    const keyBase = this.state.keyBase + this.state.lines.length;
-    this.setState({ lines, keyBase });
+  private clearLines(lines: ILine[]): ILine[] {
+    lines = [];
+    return lines;
   }
 
-  private handleSubmitInput(input: string): void {
-    const lines = this.state.lines;
-    const currentLine = this.getCurrentLine();
+  private updateStateFromInput(input: string, lines: ILine[], keyBase: number): ITerminalState {
+    const line = this.getCurrentLine(lines);
+
+    line.input = input;
     console.debug(`Terminal sending input "${input}" for processing`);
+
     try {
       if (input.trim() === "clear") {
-        this.clear();
-        return;
+        console.debug("Clearing terminal...");
+        keyBase = keyBase + lines.length;
+        lines = this.clearLines(lines);
       } else {
         const output = this.shell.command(input);
         const renderedOutput = output;
-        currentLine.output = renderedOutput;
+        line.output = renderedOutput;
       }
     } catch (e) {
       if (
@@ -73,28 +88,47 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         || e instanceof InvalidPathError
         || e instanceof FileNotFoundError
       ) {
-        currentLine.output = <div>{ e.message }</div>;
-        // throw e;
+        line.output = <div>{ e.message }</div>;
       } else {
         throw e;
       }
     }
+
     const newLine = this.newLine();
     lines.push(newLine);
-    this.setState({ lines });
+    return { lines, keyBase };
+  }
+
+  private handleSubmitInput(input: string): void {
+    const lines = this.state.lines;
+    const keyBase = this.state.keyBase;
+    const newState = this.updateStateFromInput(input, lines, keyBase);
+
+    this.setState(newState);
   }
 
   private renderLines(): JSX.Element[] {
     const lines = [];
     for (let i = 0; i < this.state.lines.length; i++) {
-      const autofocus = i === this.state.lines.length - 1 ? true : false;
+      const currentLine = this.state.lines[i];
+      const isLastLine = i === this.state.lines.length - 1 ? true : false;
+
+      const value = currentLine.input;
+      const autofocus = isLastLine;
+      const readonly = !isLastLine;
+
       lines.push(
         <TerminalLine
           key={ this.state.keyBase + i }
-          directory={ this.state.lines[i].directory }
+          directory={ currentLine.directory }
           prompt={ this.props.prompt }
-          output={ this.state.lines[i].output }
-          inputProps={{ autofocus, handleSubmitFunction: (input: string) => this.handleSubmitInput(input) }}
+          output={ currentLine.output }
+          inputProps={{
+            autofocus,
+            handleSubmitFunction: (input: string) => this.handleSubmitInput(input),
+            readonly,
+            value
+          }}
         />
       );
     }
