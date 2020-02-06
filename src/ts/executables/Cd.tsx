@@ -1,4 +1,3 @@
-import { History } from "history";
 import * as React from "react";
 
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
@@ -15,7 +14,7 @@ export class Cd implements IExecutable {
     this.name = "cd";
   }
 
-  public run(history: History, shell: Shell, fs: IFS, args: string[]): JSX.Element {
+  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
     let path: string[] = shell.currentDirectory;
     if (args.length === 0) {
       path = [fs.root.name];

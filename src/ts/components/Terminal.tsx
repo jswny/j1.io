@@ -1,5 +1,4 @@
 import * as React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
 import { ExecutableNotFoundError } from "../errors/ExecutableNotFoundError";
@@ -12,7 +11,7 @@ import { TerminalLine } from "./TerminalLine";
 
 import "../../css/terminal.css";
 
-export interface ITerminalProps extends RouteComponentProps {
+export interface ITerminalProps {
   filesystem: IFS;
   prompt: string;
   initialCommand: string | null;
@@ -24,7 +23,7 @@ interface ILine {
 }
 interface ITerminalState { lines: ILine[]; keyBase: number; }
 
-class Terminal extends React.Component<ITerminalProps, ITerminalState> {
+export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   private shell: Shell;
 
   constructor(props: ITerminalProps) {
@@ -85,7 +84,7 @@ class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         keyBase = keyBase + lines.length;
         lines = this.clearLines(lines);
       } else {
-        const output = this.shell.command(this.props.history, input);
+        const output = this.shell.command(input);
         const renderedOutput = output;
         line.output = renderedOutput;
       }
@@ -139,6 +138,3 @@ class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     return lines;
   }
 }
-
-const wR = withRouter(Terminal);
-export { wR as Terminal };

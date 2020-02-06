@@ -1,4 +1,3 @@
-import { History } from "history";
 import * as React from "react";
 
 import { Directory } from "../filesystem/Directory";
@@ -14,7 +13,7 @@ export class Ls implements IExecutable {
     this.name = "ls";
   }
 
-  public run(history: History, shell: Shell, fs: IFS, args: string[]): JSX.Element {
+  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
     let output: string = "";
 
     let path: string[];

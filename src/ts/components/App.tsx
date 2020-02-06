@@ -1,11 +1,12 @@
 import * as React from "react";
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { Route, Router, Switch } from "react-router-dom";
 
 import { Directory } from "../filesystem/Directory";
 import { File } from "../filesystem/File";
 import { IFS } from "../filesystem/IFS";
 import { LocalFS } from "../filesystem/LocalFS";
 import { Path } from "../filesystem/Path";
+import { history } from "../History";
 import { Terminal } from "./Terminal";
 
 import "../../css/main.css";
@@ -27,14 +28,14 @@ export class App extends React.Component<{}, {}> {
     console.debug(routes);
 
     return (
-      <HashRouter>
+      <Router history={history}>
         <Switch>
           {this.renderRoutes(routes)}
           <Route path="*">
             <Terminal filesystem={this.fs} prompt="> " initialCommand={null} />
           </Route>
         </Switch>
-      </HashRouter>
+      </Router>
     );
   }
 

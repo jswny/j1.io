@@ -1,4 +1,3 @@
-import { History } from "history";
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
 
@@ -7,6 +6,7 @@ import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
+import { history } from "../History";
 import { Shell } from "../Shell";
 import { IExecutable } from "./IExecutable";
 
@@ -19,7 +19,7 @@ export class Open implements IExecutable {
     this.name = "open";
   }
 
-  public run(history: History, shell: Shell, fs: IFS, args: string[]): JSX.Element {
+  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
     const argPath = args[0];
     const path: string[] = Path.parseAndAdd(shell.currentDirectory, argPath);
     const output = fs.read(path);
@@ -42,7 +42,7 @@ export class Open implements IExecutable {
       }
     }
 
-    history.push(Path.render(path));
+    history.replace(Path.render(path));
 
     return result;
   }
