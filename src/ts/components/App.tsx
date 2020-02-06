@@ -10,8 +10,6 @@ import { Terminal } from "./Terminal";
 
 import "../../css/main.css";
 
-console.log("Yes I wrote this all from scratch ;)");
-
 interface IRoute { path: string[]; file: File; }
 
 export class App extends React.Component<{}, {}> {
