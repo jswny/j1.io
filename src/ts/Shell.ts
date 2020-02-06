@@ -1,13 +1,12 @@
 import { ExecutableNotFoundError } from "./errors/ExecutableNotFoundError";
 import { IFS } from "./filesystem/IFS";
-import { LocalFS } from "./filesystem/LocalFS";
 
 export class Shell {
   public currentDirectory: string[];
   private fs: IFS;
 
-  constructor() {
-    this.fs = new LocalFS();
+  constructor(fs: IFS) {
+    this.fs = fs;
     this.currentDirectory = [this.fs.root.name];
   }
 
