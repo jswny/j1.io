@@ -5,6 +5,7 @@ import { Directory } from "../filesystem/Directory";
 import { File } from "../filesystem/File";
 import { IFS } from "../filesystem/IFS";
 import { LocalFS } from "../filesystem/LocalFS";
+import { Path } from "../filesystem/Path";
 import { Terminal } from "./Terminal";
 
 import "../../css/main.css";
@@ -23,12 +24,9 @@ export class App extends React.Component<{}, {}> {
 
   public render(): JSX.Element {
     const routes: IRoute[] = this.buildRoutes(this.fs.root, []);
-    const rootDirectoryName: string = this.fs.root.name === "root" ? "/" : this.fs.root.name;
-    routes.map((route) => {
-      if (route.path[0] === "root") {
-        route.path[0] = "/";
-      }
-    });
+
+    console.debug("Router built routes:");
+    console.debug(routes);
 
     return (
       <HashRouter>
@@ -40,9 +38,6 @@ export class App extends React.Component<{}, {}> {
   }
 
   private renderRoutes(routes: IRoute[]): JSX.Element[] {
-    console.debug("Router rendering routes:");
-    console.debug(routes);
-
     const elements: JSX.Element[] = [];
     let key = 0;
 
@@ -53,8 +48,10 @@ export class App extends React.Component<{}, {}> {
     );
 
     for (const route of routes) {
-      const path = route.path.join("/") + route.file.name;
-      const command = "cat" + " /" + path;
+      const pathParts = route.path.slice(0);
+      pathParts.push(route.file.name);
+      const path = Path.render(pathParts);
+      const command = "cat" + " " + path;
 
       elements.push(
         <Route key={key} exact path={path}>
@@ -64,6 +61,9 @@ export class App extends React.Component<{}, {}> {
 
       key++;
     }
+
+    console.debug("Router rendering routes:");
+    console.debug(elements);
 
     return elements;
   }
