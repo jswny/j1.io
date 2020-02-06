@@ -1,89 +1,33 @@
 import * as React from "react";
 import { Route, Router, Switch } from "react-router-dom";
 
-import { Directory } from "../filesystem/Directory";
-import { File } from "../filesystem/File";
-import { IFS } from "../filesystem/IFS";
-import { LocalFS } from "../filesystem/LocalFS";
-import { Path } from "../filesystem/Path";
 import { history } from "../History";
 import { Terminal } from "./Terminal";
 
 import "../../css/main.css";
 
-interface IRoute { path: string[]; file: File; }
-
 export class App extends React.Component<{}, {}> {
-  private fs: IFS;
-
   public constructor(props: {}) {
     super(props);
-    this.fs = new LocalFS();
   }
 
   public render(): JSX.Element {
-    const routes: IRoute[] = this.buildRoutes(this.fs.root, []);
-
-    console.debug("Router built routes:");
-    console.debug(routes);
-
     return (
       <Router history={history}>
         <Switch>
-          {this.renderRoutes(routes)}
+          <Route path="/:path" render={(props) => <Terminal prompt="> " initialCommand={this.renderCommand(props.match.params.path)} />
+          }/>
           <Route path="*">
-            <Terminal filesystem={this.fs} prompt="> " initialCommand={null} />
+            <Terminal prompt="> " initialCommand={null} />
           </Route>
         </Switch>
       </Router>
     );
   }
 
-  private renderRoutes(routes: IRoute[]): JSX.Element[] {
-    const elements: JSX.Element[] = [];
-    let key = 0;
-
-    elements.push(
-      <Route key={key} exact path="/">
-        <Terminal filesystem={this.fs} prompt="> " initialCommand={null} />
-      </Route>
-    );
-
-    for (const route of routes) {
-      const pathParts = route.path.slice(0);
-      pathParts.push(route.file.name);
-      const path = Path.render(pathParts);
-      const executable = "open";
-      const command = executable + " " + path;
-
-      elements.push(
-        <Route key={key} exact path={path}>
-          <Terminal filesystem={this.fs} prompt="> " initialCommand={command} />
-        </Route>
-      );
-
-      key++;
-    }
-
-    console.debug("Router rendering routes:");
-    console.debug(elements);
-
-    return elements;
-  }
-
-  private buildRoutes(directory: Directory, path: string[]): IRoute[] {
-    path.push(directory.name);
-    let routes: IRoute[] = [];
-
-    for (const node of directory.children) {
-      if (node instanceof File) {
-        routes.push({ path, file: node });
-      } else {
-        const nodeRoutes = this.buildRoutes(node as Directory, path.slice(0));
-        routes = routes.concat(nodeRoutes);
-      }
-    }
-
-    return routes;
+  private renderCommand(path: string) {
+    const executable = "open";
+    const command = executable + " " + path;
+    return command;
   }
 }

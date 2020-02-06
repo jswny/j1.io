@@ -5,6 +5,7 @@ import { ExecutableNotFoundError } from "../errors/ExecutableNotFoundError";
 import { FileNotFoundError } from "../errors/FileNotFoundError";
 import { InvalidPathError } from "../errors/InvalidPathError";
 import { IFS } from "../filesystem/IFS";
+import { LocalFS } from "../filesystem/LocalFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
 import { TerminalLine } from "./TerminalLine";
@@ -12,7 +13,6 @@ import { TerminalLine } from "./TerminalLine";
 import "../../css/terminal.css";
 
 export interface ITerminalProps {
-  filesystem: IFS;
   prompt: string;
   initialCommand: string | null;
 }
@@ -29,7 +29,8 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   constructor(props: ITerminalProps) {
     super(props);
 
-    this.shell = new Shell(this.props.filesystem);
+    const fs: IFS = new LocalFS();
+    this.shell = new Shell(fs);
     this.processInitialCommand(this.props.initialCommand);
   }
 
