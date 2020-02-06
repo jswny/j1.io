@@ -85,7 +85,7 @@ class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         keyBase = keyBase + lines.length;
         lines = this.clearLines(lines);
       } else {
-        const output = this.shell.command(input);
+        const output = this.shell.command(this.props.history, input);
         const renderedOutput = output;
         line.output = renderedOutput;
       }
@@ -121,7 +121,6 @@ class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
       const value = currentLine.input;
       const autofocus = isLastLine;
-      const readonly = !isLastLine;
 
       lines.push(
         <TerminalLine

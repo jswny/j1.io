@@ -1,4 +1,6 @@
+import { History } from "history";
 import * as React from "react";
+
 import { Directory } from "../filesystem/Directory";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
@@ -12,7 +14,7 @@ export class Ls implements IExecutable {
     this.name = "ls";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
+  public run(history: History, shell: Shell, fs: IFS, args: string[]): JSX.Element {
     let output: string = "";
 
     let path: string[];
