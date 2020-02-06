@@ -44,7 +44,7 @@ class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     let state = { keyBase: 0, lines: [this.newLine()] };
 
     if (initialCommand !== null) {
-      state = this.updateStateFromInput(initialCommand, state.lines, state.keyBase);
+      state = this.updateStateFromInput(initialCommand, state);
     }
 
     this.state = state;
@@ -71,7 +71,9 @@ class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     return lines;
   }
 
-  private updateStateFromInput(input: string, lines: ILine[], keyBase: number): ITerminalState {
+  private updateStateFromInput(input: string, state: ITerminalState): ITerminalState {
+    let lines = state.lines;
+    let keyBase = state.keyBase;
     const line = this.getCurrentLine(lines);
 
     line.input = input;
@@ -106,9 +108,7 @@ class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   }
 
   private handleSubmitInput(input: string): void {
-    const lines = this.state.lines;
-    const keyBase = this.state.keyBase;
-    const newState = this.updateStateFromInput(input, lines, keyBase);
+    const newState = this.updateStateFromInput(input, this.state);
 
     this.setState(newState);
   }

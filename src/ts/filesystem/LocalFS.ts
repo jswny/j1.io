@@ -2,7 +2,7 @@ import * as manifest from "../../../dist/LocalFileManifest.json";
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
 import { FileNotFoundError } from "../errors/FileNotFoundError";
 import { InvalidPathError } from "../errors/InvalidPathError";
-import { Cat } from "../executables/Cat";
+import { Open } from "../executables/Open";
 import { Cd } from "../executables/Cd";
 import { IExecutable } from "../executables/IExecutable";
 import { Ls } from "../executables/Ls";
@@ -30,7 +30,7 @@ export class LocalFS implements IFS {
     const executablesToLoad = [
       new Cd(),
       new Ls(),
-      new Cat(),
+      new Open(),
     ];
     this.loadExecutables(executablesToLoad);
 

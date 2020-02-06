@@ -11,11 +11,11 @@ import { IExecutable } from "./IExecutable";
 
 import "../../css/cat.css";
 
-export class Cat implements IExecutable {
+export class Open implements IExecutable {
   public name: string;
 
   constructor() {
-    this.name = "cat";
+    this.name = "open";
   }
 
   public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {

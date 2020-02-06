@@ -51,7 +51,8 @@ export class App extends React.Component<{}, {}> {
       const pathParts = route.path.slice(0);
       pathParts.push(route.file.name);
       const path = Path.render(pathParts);
-      const command = "cat" + " " + path;
+      const executable = "open";
+      const command = executable + " " + path;
 
       elements.push(
         <Route key={key} exact path={path}>
