@@ -89,8 +89,6 @@ export class LocalFS implements IFS {
       let foundPathPart: boolean = false;
 
       for (const searchNode of currNode.children) {
-        console.debug(`Searching for path part ${pathPart} in ${searchNode.name}`);
-
         if (i === path.length - 1 && searchNode.name === pathPart) {
           foundPathPart = true;
           return searchNode;

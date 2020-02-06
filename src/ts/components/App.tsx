@@ -30,6 +30,9 @@ export class App extends React.Component<{}, {}> {
       <HashRouter>
         <Switch>
           {this.renderRoutes(routes)}
+          <Route path="*">
+            <Terminal filesystem={this.fs} prompt="> " initialCommand={null} />
+          </Route>
         </Switch>
       </HashRouter>
     );
