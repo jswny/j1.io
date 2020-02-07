@@ -3,9 +3,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: "./src/ts/components/index.tsx",
+  entry: {
+    app: "./src/ts/components/index.tsx"
+  },
+
   output: {
-    filename: "bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist")
   },
 
@@ -15,11 +18,11 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src", "html", "index.html")
-    })
+    }),
   ],
 
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".json"],
   },
 
   module: {
@@ -34,17 +37,17 @@ module.exports = {
             options: {
               presets: [
                 '@babel/preset-react',
-                '@babel/preset-env'
+                '@babel/preset-env',
               ]
-            }
+            },
           },
           {
             loader: "ts-loader",
             options: {
-              configFile: "tsconfig.dev.json"
-            }
-          }
-        ]
+              configFile: "tsconfig.dev.json",
+            },
+          },
+        ],
       },
 
       // Resolve all imports with css-loader, and apply them to the files that require those styles with the style-loader
@@ -52,9 +55,9 @@ module.exports = {
         test: /\.css$/,
         use: [
           "style-loader",
-          "css-loader"
+          "css-loader",
         ]
-      }
-    ]
+      },
+    ],
   },
 };
