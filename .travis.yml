@@ -1,3 +1,4 @@
+os: linux
 language: node_js
 node_js: "12.1.0"
 script:
@@ -6,8 +7,7 @@ script:
   - "yarn run build:prod"
 deploy:
   provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
+  token: $GITHUB_TOKEN
   keep_history: true
   local_dir: dist
   fqdn: "j1.io"
