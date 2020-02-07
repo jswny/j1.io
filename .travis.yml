@@ -6,6 +6,7 @@ script:
   - "yarn run build:localFileManifest"
   - "yarn run build:prod"
 deploy:
+  edge: true
   provider: pages
   token: $GITHUB_TOKEN
   keep_history: true

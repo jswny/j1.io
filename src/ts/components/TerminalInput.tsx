@@ -42,8 +42,6 @@ export class TerminalInput extends React.Component<ITerminalInputProps, ITermina
       e.preventDefault();
       this.setState({ readonly: true });
       this.props.handleSubmitFunction(e.currentTarget.value);
-    } else {
-      console.debug(`Terminal input recieved key "${e.key}"`);
     }
   }
 }
