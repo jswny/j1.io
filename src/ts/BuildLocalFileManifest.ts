@@ -15,12 +15,37 @@ function parseFileType(fileName: string): FileType {
       type = FileType.Markdown;
       break;
     }
+    case "pdf": {
+      type = FileType.PDF;
+      break;
+    }
     default: {
       throw new Error("Unrecognized file extension: " + extension);
     }
   }
 
   return type;
+}
+
+function getContent(filePath: string, type: FileType) {
+  const buffer: Buffer = fs.readFileSync(filePath);
+  let content: string;
+
+  switch (type) {
+    case FileType.Markdown: {
+      content = buffer.toString();
+      break;
+    }
+    case FileType.PDF: {
+      content = buffer.toString("base64");
+      break;
+    }
+    default: {
+      throw new Error("Unhandled file type for building contents: " + type);
+    }
+  }
+
+  return content;
 }
 
 function readDirRecursive(dirPath: string): Directory {
@@ -38,8 +63,9 @@ function readDirRecursive(dirPath: string): Directory {
       const dirNode: Directory = readDirRecursive(itemPath);
       dir.addChild(dirNode);
     } else {
-      const content: string = fs.readFileSync(itemPath).toString();
-      const file: File = new File(item, parseFileType(item), content);
+      const type: FileType = parseFileType(item);
+      const content: string = getContent(itemPath, type);
+      const file: File = new File(item, type, content);
       dir.addChild(file);
     }
   }

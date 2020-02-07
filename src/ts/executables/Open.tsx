@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
+import { Document } from "react-pdf/dist/entry.webpack";
 
 import { CodeBlock } from "../components/CodeBlock";
 import { File } from "../filesystem/File";
@@ -35,6 +36,10 @@ export class Open implements IExecutable {
             renderers={{code: CodeBlock}}
           />
         );
+        break;
+      }
+      case FileType.PDF: {
+        result = <Document onLoadError={console.error} file={file.content} />;
         break;
       }
       default: {
