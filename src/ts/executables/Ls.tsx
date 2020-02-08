@@ -29,9 +29,6 @@ export class Ls implements IExecutable {
 
     const children = fs.list(path);
     children.forEach((child) => output.push(this.getNodeOuput(child)));
-    // for (const child of children) {
-    //   output.push(getN)
-    // }
 
     return (
       <div>{ output }</div>

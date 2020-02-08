@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { ArgumentError } from "../errors/ArgumentError";
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
 import { ExecutableNotFoundError } from "../errors/ExecutableNotFoundError";
 import { FileNotFoundError } from "../errors/FileNotFoundError";
@@ -95,6 +96,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         || e instanceof DirectoryNotFoundError
         || e instanceof InvalidPathError
         || e instanceof FileNotFoundError
+        || e instanceof ArgumentError
       ) {
         line.output = <div>{ e.message }</div>;
       } else {

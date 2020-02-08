@@ -3,6 +3,7 @@ import * as ReactMarkdown from "react-markdown";
 import { Document, Page } from "react-pdf/dist/entry.webpack";
 
 import { CodeBlock } from "../components/CodeBlock";
+import { ArgumentError } from "../errors/ArgumentError";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
 import { IFS } from "../filesystem/IFS";
@@ -21,6 +22,10 @@ export class Open implements IExecutable {
   }
 
   public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
+    if (args.length === 0) {
+      throw new ArgumentError(`Executable ${this.name} called with ${args.length} arguments, but at least ${1} required`);
+    }
+
     const argPath = args[0];
     const path: string[] = Path.parseAndAdd(shell.currentDirectory, argPath);
     const output = fs.read(path);
