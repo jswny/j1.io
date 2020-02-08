@@ -54,6 +54,7 @@ export class Open implements IExecutable {
             </div>
           </div>
         );
+        history.push(Path.render(path));
         break;
       }
       case FileType.Link: {
@@ -61,11 +62,10 @@ export class Open implements IExecutable {
         break;
       }
       default: {
+        history.push(Path.render(path));
         result = <div>{ output }</div>;
       }
     }
-
-    history.replace(Path.render(path));
 
     return result;
   }
