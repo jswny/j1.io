@@ -1,7 +1,10 @@
 import * as React from "react";
 
 import { Directory } from "../filesystem/Directory";
+import { File } from "../filesystem/File";
+import { FileType } from "../filesystem/FileType";
 import { IFS } from "../filesystem/IFS";
+import { INode } from "../filesystem/INode";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
 import { IExecutable } from "./IExecutable";
@@ -14,7 +17,7 @@ export class Ls implements IExecutable {
   }
 
   public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
-    let output: string = "";
+    const output: JSX.Element[] = [];
 
     let path: string[];
     if (args.length === 0) {
@@ -25,14 +28,37 @@ export class Ls implements IExecutable {
     }
 
     const children = fs.list(path);
-    for (const child of children) {
-      output += " " + (child instanceof Directory ? child.name + "/" : child.name);
-    }
-
-    output = output.trim();
+    children.forEach((child) => output.push(this.getNodeOuput(child)));
+    // for (const child of children) {
+    //   output.push(getN)
+    // }
 
     return (
       <div>{ output }</div>
     );
+  }
+
+  private getNodeOuput(node: INode): JSX.Element {
+    let output: JSX.Element;
+
+    if (node instanceof Directory) {
+      output = <div>{ node.name + "/" }</div>;
+    } else {
+      const file: File = node as File;
+      switch (file.type) {
+        case FileType.Link: {
+          output = (
+            <div>
+              <a href={ file.content }>{ file.name }</a>
+              </div>
+          );
+          break;
+        }
+        default: {
+          output = <div>{ file.name }</div>;
+        }
+      }
+    }
+    return output;
   }
 }

@@ -52,6 +52,7 @@ export class LocalFS implements IFS {
       const readableTypes = [
         FileType.Markdown,
         FileType.PDF,
+        FileType.Link
       ];
       if (readableTypes.includes(file.type)) {
         console.debug("Found compatible file to read: ");

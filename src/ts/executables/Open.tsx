@@ -33,7 +33,7 @@ export class Open implements IExecutable {
           <ReactMarkdown
             className="output-markdown"
             source={ output }
-            renderers={{code: CodeBlock}}
+            renderers={{ code: CodeBlock }}
           />
         );
         break;
@@ -51,6 +51,10 @@ export class Open implements IExecutable {
         );
         break;
       }
+      case FileType.Link: {
+        this.redirectExternal(file.content);
+        break;
+      }
       default: {
         result = <div>{ output }</div>;
       }
@@ -59,6 +63,10 @@ export class Open implements IExecutable {
     history.replace(Path.render(path));
 
     return result;
+  }
+
+  private redirectExternal(url: string) {
+    window.location.href = url;
   }
 
   private buildBase64PDFData(base64Content: string) {

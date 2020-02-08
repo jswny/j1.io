@@ -19,6 +19,10 @@ function parseFileType(fileName: string): FileType {
       type = FileType.PDF;
       break;
     }
+    case "link": {
+      type = FileType.Link;
+      break;
+    }
     default: {
       throw new Error("Unrecognized file extension: " + extension);
     }
@@ -32,6 +36,7 @@ function getContent(filePath: string, type: FileType) {
   let content: string;
 
   switch (type) {
+    case FileType.Link:
     case FileType.Markdown: {
       content = buffer.toString();
       break;
@@ -41,7 +46,7 @@ function getContent(filePath: string, type: FileType) {
       break;
     }
     default: {
-      throw new Error("Unhandled file type for building contents: " + type);
+      throw new Error("Unhandled file type: " + type);
     }
   }
 
