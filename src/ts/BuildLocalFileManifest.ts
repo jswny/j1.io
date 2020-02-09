@@ -23,6 +23,10 @@ function parseFileType(fileName: string): FileType {
       type = FileType.Link;
       break;
     }
+    case "gist": {
+      type = FileType.Gist;
+      break;
+    }
     default: {
       throw new Error("Unrecognized file extension: " + extension);
     }
@@ -37,6 +41,7 @@ function getContent(filePath: string, type: FileType) {
 
   switch (type) {
     case FileType.Link:
+    case FileType.Gist:
     case FileType.Markdown: {
       content = buffer.toString();
       break;

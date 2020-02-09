@@ -28,31 +28,31 @@ export class Ls implements IExecutable {
     }
 
     const children = fs.list(path);
-    children.forEach((child) => output.push(this.getNodeOuput(child)));
+    children.forEach((child, index) => output.push(this.getNodeOuput(child, index)));
 
     return (
       <div>{ output }</div>
     );
   }
 
-  private getNodeOuput(node: INode): JSX.Element {
+  private getNodeOuput(node: INode, key: number): JSX.Element {
     let output: JSX.Element;
 
     if (node instanceof Directory) {
-      output = <div>{ node.name + "/" }</div>;
+      output = <div key={ key }>{ node.name + "/" }</div>;
     } else {
       const file: File = node as File;
       switch (file.type) {
         case FileType.Link: {
           output = (
-            <div>
+            <div key={ key }>
               <a href={ file.content }>{ file.name }</a>
-              </div>
+            </div>
           );
           break;
         }
         default: {
-          output = <div>{ file.name }</div>;
+          output = <div key={ key }>{ file.name }</div>;
         }
       }
     }

@@ -3,6 +3,7 @@ import * as ReactMarkdown from "react-markdown";
 import { Document, Page } from "react-pdf/dist/entry.webpack";
 
 import { CodeBlock } from "../components/CodeBlock";
+import { Gist } from "../components/Gist";
 import { ArgumentError } from "../errors/ArgumentError";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
@@ -23,7 +24,9 @@ export class Open implements IExecutable {
 
   public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
     if (args.length === 0) {
-      throw new ArgumentError(`Executable ${this.name} called with ${args.length} arguments, but at least ${1} required`);
+      throw new ArgumentError(
+        `Executable ${this.name} called with ${args.length} arguments, but at least ${1} required`
+      );
     }
 
     const argPath = args[0];
@@ -41,6 +44,7 @@ export class Open implements IExecutable {
             renderers={{ code: CodeBlock }}
           />
         );
+        this.pushHistory(path);
         break;
       }
       case FileType.PDF: {
@@ -54,20 +58,29 @@ export class Open implements IExecutable {
             </div>
           </div>
         );
-        history.push(Path.render(path));
+        this.pushHistory(path);
         break;
       }
       case FileType.Link: {
         this.redirectExternal(file.content);
         break;
       }
+      case FileType.Gist: {
+        result = <Gist url={file.content} />;
+        this.pushHistory(path);
+        break;
+      }
       default: {
-        history.push(Path.render(path));
         result = <div>{ output }</div>;
+        this.pushHistory(path);
       }
     }
 
     return result;
+  }
+
+  private pushHistory(path: string[]): void {
+    history.push(Path.render(path));
   }
 
   private redirectExternal(url: string) {

@@ -5,6 +5,7 @@ import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
 import { ExecutableNotFoundError } from "../errors/ExecutableNotFoundError";
 import { FileNotFoundError } from "../errors/FileNotFoundError";
 import { InvalidPathError } from "../errors/InvalidPathError";
+import { RetrieveGistError } from "../errors/RetrieveGistError";
 import { IFS } from "../filesystem/IFS";
 import { LocalFS } from "../filesystem/LocalFS";
 import { Path } from "../filesystem/Path";
@@ -17,11 +18,13 @@ export interface ITerminalProps {
   prompt: string;
   initialCommand: string | null;
 }
+
 interface ILine {
   input: string;
   output: JSX.Element;
   directory: string;
 }
+
 interface ITerminalState { lines: ILine[]; keyBase: number; }
 
 export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
@@ -97,6 +100,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         || e instanceof InvalidPathError
         || e instanceof FileNotFoundError
         || e instanceof ArgumentError
+        || e instanceof RetrieveGistError
       ) {
         line.output = <div>{ e.message }</div>;
       } else {

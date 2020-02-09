@@ -3,4 +3,5 @@ export enum FileType {
   Markdown,
   PDF,
   Link,
+  Gist
 }

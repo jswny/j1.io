@@ -15,8 +15,10 @@ export class App extends React.Component<{}, {}> {
     return (
       <Router history={history}>
         <Switch>
-          <Route path="/:path" render={(props) => <Terminal prompt="> " initialCommand={this.renderCommand(props.match.params.path)} />
-          }/>
+          <Route
+            path="/:path"
+            render={ (props) => <Terminal prompt="> " initialCommand={this.renderCommand(props.match.params.path)} /> }
+          />
           <Route path="*">
             <Terminal prompt="> " initialCommand={null} />
           </Route>
@@ -26,6 +28,7 @@ export class App extends React.Component<{}, {}> {
   }
 
   private renderCommand(path: string) {
+    console.debug(`Routing to path from URL: ${path}`);
     const executable = "open";
     const command = executable + " " + path;
     return command;
