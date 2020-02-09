@@ -13,11 +13,11 @@ export class App extends React.Component<{}, {}> {
 
   public render(): JSX.Element {
     return (
-      <Router history={history}>
+      <Router history={ history }>
         <Switch>
           <Route
             path="/:path"
-            render={ (props) => <Terminal prompt="> " initialCommand={this.renderCommand(props.match.params.path)} /> }
+            render={ (props) => <Terminal prompt="> " initialCommand={this.renderCommand(props.location.pathname)} /> }
           />
           <Route path="*">
             <Terminal prompt="> " initialCommand={null} />
