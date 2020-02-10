@@ -7,7 +7,6 @@ import { PDF } from "../components/PDF";
 import { ArgumentError } from "../errors/ArgumentError";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
-import { GistFile } from "../filesystem/GistFile";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
@@ -15,6 +14,11 @@ import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
 import "../../css/open.css";
+
+interface IGistFile {
+  displayFile: string;
+  id: string;
+}
 
 export class Open implements IExecutable {
   public name: string;
@@ -60,7 +64,8 @@ export class Open implements IExecutable {
         break;
       }
       case FileType.Gist: {
-        result = <Gist gistFile={ new GistFile(file.content) } />;
+        const gistFile: IGistFile = this.parseGistFile(file.content);
+        result = <Gist id={ gistFile.id } displayFile={ gistFile.displayFile } />;
         historyPath = path;
         break;
       }
@@ -73,6 +78,17 @@ export class Open implements IExecutable {
     return {
       historyPath,
       output: result
+    };
+  }
+
+  private parseGistFile(jsonString: string): IGistFile {
+    console.debug(`Parsing JSON string into Gist file data:`);
+    console.debug(jsonString);
+
+    const json: any = JSON.parse(jsonString);
+    return {
+      displayFile: json.displayFile,
+      id: json.id
     };
   }
 

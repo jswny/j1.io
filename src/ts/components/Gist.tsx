@@ -4,10 +4,10 @@ import * as ReactMarkdown from "react-markdown";
 import { axios } from "../Axios";
 import { CodeBlock } from "../components/CodeBlock";
 import { RetrieveGistError } from "../errors/RetrieveGistError";
-import { GistFile } from "../filesystem/GistFile";
 
 export interface IGistProps {
-  gistFile: GistFile;
+  displayFile: string;
+  id: string;
 }
 
 export class Gist extends React.Component<IGistProps, { content: string, publicUrl: string }> {
@@ -18,11 +18,11 @@ export class Gist extends React.Component<IGistProps, { content: string, publicU
 
   public componentDidMount(): void {
     this
-    .getGist(this.props.gistFile.id)
+    .getGist(this.props.id)
     .then((gist) => {
       console.debug("Recieved Gist data from API:");
       console.debug(gist);
-      this.populateState(gist, this.props.gistFile.displayFile);
+      this.populateState(gist, this.props.displayFile);
     });
   }
 
