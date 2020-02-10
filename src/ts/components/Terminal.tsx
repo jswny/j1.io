@@ -14,7 +14,6 @@ import { Shell } from "../Shell";
 import { TerminalLine } from "./TerminalLine";
 
 import "../../css/terminal.css";
-import { stat } from "fs";
 
 export interface ITerminalProps {
   prompt: string;

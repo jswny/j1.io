@@ -1,4 +1,6 @@
 import * as React from "react";
+import { generatePath } from "react-router";
+import { Link } from "react-router-dom";
 
 import { Directory } from "../filesystem/Directory";
 import { File } from "../filesystem/File";
@@ -29,7 +31,7 @@ export class Ls implements IExecutable {
     }
 
     const children = fs.list(path);
-    children.forEach((child, index) => output.push(this.getNodeOuput(child, index)));
+    children.forEach((child, index) => output.push(this.getNodeOuput(child, index, shell.currentDirectory)));
 
     return {
       historyPath: null,
@@ -37,7 +39,7 @@ export class Ls implements IExecutable {
     };
   }
 
-  private getNodeOuput(node: INode, key: number): JSX.Element {
+  private getNodeOuput(node: INode, key: number, currentDirectory: string[]): JSX.Element {
     let output: JSX.Element;
 
     if (node instanceof Directory) {
@@ -45,13 +47,18 @@ export class Ls implements IExecutable {
     } else {
       const file: File = node as File;
       switch (file.type) {
-        // case FileType.Gist: {
-        //   output = (
-        //     <div key={ key }>
-        //       <a href={ file.content }>{ file.name }</a>
-        //     </div>
-        //   );
-        // }
+        case FileType.Gist: {
+          const newPath: string[] = currentDirectory.slice(0);
+          newPath.push(file.name);
+          const renderedNewPath: string = Path.render(newPath);
+
+          output = (
+            <div key={ key }>
+              <Link to={ renderedNewPath }>{ file.name }</Link>
+            </div>
+          );
+          break;
+        }
         case FileType.Link: {
           output = (
             <div key={ key }>
