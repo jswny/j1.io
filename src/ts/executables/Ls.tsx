@@ -8,6 +8,7 @@ import { INode } from "../filesystem/INode";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
 import { IExecutable } from "./IExecutable";
+import { IExecutableOutput } from "./IExecutableOutput";
 
 export class Ls implements IExecutable {
   public name: string;
@@ -16,7 +17,7 @@ export class Ls implements IExecutable {
     this.name = "ls";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
+  public run(shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
     const output: JSX.Element[] = [];
 
     let path: string[];
@@ -30,9 +31,10 @@ export class Ls implements IExecutable {
     const children = fs.list(path);
     children.forEach((child, index) => output.push(this.getNodeOuput(child, index)));
 
-    return (
-      <div>{ output }</div>
-    );
+    return {
+      historyPath: null,
+      output: <div>{ output }</div>
+    };
   }
 
   private getNodeOuput(node: INode, key: number): JSX.Element {

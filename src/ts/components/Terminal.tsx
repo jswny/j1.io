@@ -9,10 +9,12 @@ import { RetrieveGistError } from "../errors/RetrieveGistError";
 import { IFS } from "../filesystem/IFS";
 import { LocalFS } from "../filesystem/LocalFS";
 import { Path } from "../filesystem/Path";
+import { history } from "../History";
 import { Shell } from "../Shell";
 import { TerminalLine } from "./TerminalLine";
 
 import "../../css/terminal.css";
+import { stat } from "fs";
 
 export interface ITerminalProps {
   prompt: string;
@@ -25,7 +27,11 @@ interface ILine {
   directory: string;
 }
 
-interface ITerminalState { lines: ILine[]; keyBase: number; }
+interface ITerminalState {
+  lines: ILine[];
+  keyBase: number;
+  initialCommandExecuted: boolean;
+}
 
 export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   private shell: Shell;
@@ -44,13 +50,22 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     );
   }
 
+  private pushHistory(path: string[], initialCommandExecuted: boolean): void {
+    if (path !== null && initialCommandExecuted) {
+      console.debug("Pushing path to history: ");
+      console.debug(path);
+      history.push(Path.render(path));
+    }
+  }
+
   private processInitialCommand(initialCommand: string) {
-    let state = { keyBase: 0, lines: [this.newLine()] };
+    let state = { keyBase: 0, lines: [this.newLine()], initialCommandExecuted: false };
 
     if (initialCommand !== null) {
       state = this.updateStateFromInput(initialCommand, state);
     }
 
+    state.initialCommandExecuted = true;
     this.state = state;
   }
 
@@ -89,7 +104,10 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         keyBase = keyBase + lines.length;
         lines = this.clearLines(lines);
       } else {
-        const output = this.shell.command(input);
+        const { output, historyPath } = this.shell.command(input);
+
+        this.pushHistory(historyPath, state.initialCommandExecuted);
+
         const renderedOutput = output;
         line.output = renderedOutput;
       }
@@ -110,7 +128,10 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
     const newLine = this.newLine();
     lines.push(newLine);
-    return { lines, keyBase };
+
+    state.lines = lines;
+    state.keyBase = keyBase;
+    return state;
   }
 
   private handleSubmitInput(input: string): void {

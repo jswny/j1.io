@@ -6,6 +6,7 @@ import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { Shell } from "../Shell";
 import { IExecutable } from "./IExecutable";
+import { IExecutableOutput } from "./IExecutableOutput";
 
 export class Cd implements IExecutable {
   public name: string;
@@ -14,7 +15,7 @@ export class Cd implements IExecutable {
     this.name = "cd";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
+  public run(shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
     let path: string[] = shell.currentDirectory;
     if (args.length === 0) {
       path = [fs.root.name];
@@ -46,7 +47,10 @@ export class Cd implements IExecutable {
       throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
     }
 
-    return <div></div>;
+    return {
+      historyPath: null,
+      output: <div></div>
+    };
   }
 
   private trimTrailingSlashes(path: string): string {

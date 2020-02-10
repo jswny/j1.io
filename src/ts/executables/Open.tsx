@@ -10,9 +10,9 @@ import { FileType } from "../filesystem/FileType";
 import { GistFile } from "../filesystem/GistFile";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
-import { history } from "../History";
 import { Shell } from "../Shell";
 import { IExecutable } from "./IExecutable";
+import { IExecutableOutput } from "./IExecutableOutput";
 
 import "../../css/open.css";
 
@@ -23,12 +23,14 @@ export class Open implements IExecutable {
     this.name = "open";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): JSX.Element {
+  public run(shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
     if (args.length === 0) {
       throw new ArgumentError(
         `Executable ${this.name} called with ${args.length} arguments, but at least ${1} required`
       );
     }
+
+    let historyPath: string[] = null;
 
     const argPath = args[0];
     const path: string[] = Path.parseAndAdd(shell.currentDirectory, argPath);
@@ -45,7 +47,7 @@ export class Open implements IExecutable {
             renderers={{ code: CodeBlock }}
           />
         );
-        this.pushHistory(path);
+        historyPath = path;
         break;
       }
       case FileType.PDF: {
@@ -59,7 +61,7 @@ export class Open implements IExecutable {
             </div>
           </div>
         );
-        this.pushHistory(path);
+        historyPath = path;
         break;
       }
       case FileType.Link: {
@@ -68,22 +70,19 @@ export class Open implements IExecutable {
       }
       case FileType.Gist: {
         result = <Gist gistFile={ new GistFile(file.content) } />;
-        this.pushHistory(path);
+        historyPath = path;
         break;
       }
       default: {
         result = <div>{ output }</div>;
-        this.pushHistory(path);
+        historyPath = path;
       }
     }
 
-    return result;
-  }
-
-  private pushHistory(path: string[]): void {
-    console.debug("Pushing path to history: ");
-    console.debug(path);
-    history.push(Path.render(path));
+    return {
+      historyPath,
+      output: result
+    };
   }
 
   private redirectExternal(url: string) {

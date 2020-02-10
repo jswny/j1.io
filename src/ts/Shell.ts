@@ -1,4 +1,5 @@
 import { ExecutableNotFoundError } from "./errors/ExecutableNotFoundError";
+import { IExecutableOutput } from "./executables/IExecutableOutput";
 import { IFS } from "./filesystem/IFS";
 
 export class Shell {
@@ -10,7 +11,7 @@ export class Shell {
     this.currentDirectory = [this.fs.root.name];
   }
 
-  public command(command: string): JSX.Element {
+  public command(command: string): IExecutableOutput {
     const parsedCommand = this.parseCommand(command);
     return this.runCommand(parsedCommand[0], parsedCommand.slice(1));
   }
