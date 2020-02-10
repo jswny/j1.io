@@ -43,6 +43,13 @@ export class Ls implements IExecutable {
     } else {
       const file: File = node as File;
       switch (file.type) {
+        // case FileType.Gist: {
+        //   output = (
+        //     <div key={ key }>
+        //       <a href={ file.content }>{ file.name }</a>
+        //     </div>
+        //   );
+        // }
         case FileType.Link: {
           output = (
             <div key={ key }>

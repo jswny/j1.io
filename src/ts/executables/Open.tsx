@@ -7,6 +7,7 @@ import { Gist } from "../components/Gist";
 import { ArgumentError } from "../errors/ArgumentError";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
+import { GistFile } from "../filesystem/GistFile";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
 import { history } from "../History";
@@ -53,7 +54,7 @@ export class Open implements IExecutable {
             <Document file={ this.buildBase64PDFData(file.content) } onLoadSuccess={(pdf) => console.debug(`Loaded PDF file ${file.name}`)}>
               <Page pageNumber={ 1 }/>
             </Document>
-            <div className="output-pdf-link">
+            <div className="output-additional-link output-pdf-link">
               <a href={ this.buildBase64PDFData(file.content) }>Download</a>
             </div>
           </div>
@@ -66,7 +67,7 @@ export class Open implements IExecutable {
         break;
       }
       case FileType.Gist: {
-        result = <Gist url={file.content} />;
+        result = <Gist gistFile={ new GistFile(file.content) } />;
         this.pushHistory(path);
         break;
       }
@@ -80,6 +81,8 @@ export class Open implements IExecutable {
   }
 
   private pushHistory(path: string[]): void {
+    console.debug("Pushing path to history: ");
+    console.debug(path);
     history.push(Path.render(path));
   }
 
