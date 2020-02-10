@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
-import { Document, Page } from "react-pdf/dist/entry.webpack";
 
 import { CodeBlock } from "../components/CodeBlock";
 import { Gist } from "../components/Gist";
+import { PDF } from "../components/PDF";
 import { ArgumentError } from "../errors/ArgumentError";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
@@ -51,16 +51,7 @@ export class Open implements IExecutable {
         break;
       }
       case FileType.PDF: {
-        result = (
-          <div className="output-pdf">
-            <Document file={ this.buildBase64PDFData(file.content) } onLoadSuccess={(pdf) => console.debug(`Loaded PDF file ${file.name}`)}>
-              <Page pageNumber={ 1 }/>
-            </Document>
-            <div className="output-additional-link output-pdf-link">
-              <a href={ this.buildBase64PDFData(file.content) }>Download</a>
-            </div>
-          </div>
-        );
+        result = <PDF name={ file.name } base64={ file.content }/>;
         historyPath = path;
         break;
       }
@@ -87,9 +78,5 @@ export class Open implements IExecutable {
 
   private redirectExternal(url: string) {
     window.location.href = url;
-  }
-
-  private buildBase64PDFData(base64Content: string) {
-    return "data:application/pdf;base64," + base64Content;
   }
 }
