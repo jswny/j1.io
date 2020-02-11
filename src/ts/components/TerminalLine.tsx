@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { ITerminalInputProps, TerminalInput } from "./TerminalInput";
 
+import "../../css/terminal-line.css";
+
 export interface ITerminalLineProps {
   directory: string;
   prompt: string;
