@@ -51,7 +51,7 @@ export class Open implements IExecutable {
       case FileType.Markdown: {
         result = (
           <ReactMarkdown
-            className="output-markdown"
+            className="output-markdown output-boxed"
             source={ output }
             renderers={{ code: CodeBlock }}
           />

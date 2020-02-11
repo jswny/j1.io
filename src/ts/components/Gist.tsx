@@ -30,7 +30,7 @@ export class Gist extends React.Component<IGistProps, { content: string, publicU
     return (
       <div className="output-gist">
         <ReactMarkdown
-          className="output-markdown"
+          className="output-markdown output-boxed"
           source={ this.state.content }
           renderers={{ code: CodeBlock }}
         />

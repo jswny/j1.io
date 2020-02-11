@@ -5,3 +5,8 @@
 .output-additional-link {
   padding: 1rem 0 1rem 0;
 }
+
+.output-boxed { 
+  border: 2px solid white;
+  padding: 0 1rem 0 1rem;
+}
