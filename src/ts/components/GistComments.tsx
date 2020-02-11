@@ -59,7 +59,15 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
     );
   }
 
-  private renderComments() {
+  private renderComments(): JSX.Element | JSX.Element[] {
+    if (this.state.comments.length === 0) {
+      return (
+        <div>
+          No comments!
+        </div>
+      );
+    }
+
     return this.state.comments.map((comment: IRenderedComment, index: number) => {
       return (
         <div key={ index } className="output-gist-comments-comment output-boxed">

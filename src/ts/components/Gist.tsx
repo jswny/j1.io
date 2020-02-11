@@ -14,7 +14,7 @@ export interface IGistProps {
 export class Gist extends React.Component<IGistProps, { content: string, publicUrl: string }> {
   constructor(props: IGistProps) {
     super(props);
-    this.state = { content: "", publicUrl: "" };
+    this.state = { content: "Loading Gist...", publicUrl: "" };
   }
 
   public componentDidMount(): void {
