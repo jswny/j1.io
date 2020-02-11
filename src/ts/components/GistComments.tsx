@@ -42,7 +42,7 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
     return (
       <div className="output-gist-comments">
         {
-          this.state.showComments ? this.renderComments() : this.renderShowCommentsButton
+          this.state.showComments ? this.renderComments() : this.renderShowCommentsButton()
         }
       </div>
     );
@@ -51,8 +51,8 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
   private renderShowCommentsButton() {
     return (
       <button
-        className="show-comments-button" 
-        onClick={ (event) => this.onShowCommentsClick(event)}
+        className="show-comments-button"
+        onClick={ (event) => this.onShowCommentsClick(event) }
       >
         Show Comments
       </button>
