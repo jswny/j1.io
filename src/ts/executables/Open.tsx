@@ -4,6 +4,7 @@ import * as ReactMarkdown from "react-markdown";
 import { CodeBlock } from "../components/CodeBlock";
 import { Gist } from "../components/Gist";
 import { PDF } from "../components/PDF";
+import { Terminal } from "../components/Terminal";
 import { ArgumentError } from "../errors/ArgumentError";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
@@ -27,7 +28,7 @@ export class Open implements IExecutable {
     this.name = "open";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
+  public run(terminal: Terminal, shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
     if (args.length === 0) {
       throw new ArgumentError(
         `Executable ${this.name} called with ${args.length} arguments, but at least ${1} required`
@@ -35,9 +36,10 @@ export class Open implements IExecutable {
     }
 
     let historyPath: string[] = null;
+    const currentDirectory = shell.getCurrentDirectoryCopy();
 
     const argPath = args[0];
-    const path: string[] = Path.parseAndAdd(shell.currentDirectory, argPath);
+    const path: string[] = Path.parseAndAdd(currentDirectory, argPath);
     const output = fs.read(path);
     const file: File = fs.stat(path) as File;
 

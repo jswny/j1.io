@@ -1,7 +1,7 @@
 import * as React from "react";
-import { generatePath } from "react-router";
 import { Link } from "react-router-dom";
 
+import { Terminal } from "../components/Terminal";
 import { Directory } from "../filesystem/Directory";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
@@ -19,19 +19,21 @@ export class Ls implements IExecutable {
     this.name = "ls";
   }
 
-  public run(shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
+  public run(terminal: Terminal, shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
     const output: JSX.Element[] = [];
+
+    const currentDirectory: string[] = shell.getCurrentDirectoryCopy();
 
     let path: string[];
     if (args.length === 0) {
-      path = shell.currentDirectory;
+      path = currentDirectory;
     } else {
       const argPath = args[0];
-      path = Path.parseAndAdd(shell.currentDirectory, argPath);
+      path = Path.parseAndAdd(currentDirectory, argPath);
     }
 
     const children = fs.list(path);
-    children.forEach((child, index) => output.push(this.getNodeOuput(child, index, shell.currentDirectory)));
+    children.forEach((child, index) => output.push(this.getNodeOuput(child, index, path, terminal)));
 
     return {
       historyPath: null,
@@ -39,7 +41,7 @@ export class Ls implements IExecutable {
     };
   }
 
-  private getNodeOuput(node: INode, key: number, currentDirectory: string[]): JSX.Element {
+  private getNodeOuput(node: INode, key: number, path: string[], terminal: Terminal): JSX.Element {
     let output: JSX.Element;
 
     if (node instanceof Directory) {
@@ -48,13 +50,19 @@ export class Ls implements IExecutable {
       const file: File = node as File;
       switch (file.type) {
         case FileType.Gist: {
-          const newPath: string[] = currentDirectory.slice(0);
-          newPath.push(file.name);
-          const renderedNewPath: string = Path.render(newPath);
+          const filePath = path.slice(0);
+          filePath.push(file.name);
+          const renderedNewPath = Path.render(filePath);
+          console.debug(filePath);
 
           output = (
             <div key={ key }>
-              <Link to={ renderedNewPath }>{ file.name }</Link>
+              <Link
+                to={ renderedNewPath }
+                onClick={ (event) => this.onFileClick(event, terminal, renderedNewPath) }
+              >
+                { file.name }
+              </Link>
             </div>
           );
           break;
@@ -73,5 +81,15 @@ export class Ls implements IExecutable {
       }
     }
     return output;
+  }
+
+  private onFileClick(event: React.MouseEvent<HTMLAnchorElement>, terminal: Terminal, renderedFilePath: string): void {
+    event.preventDefault();
+    const command: string = `open ${renderedFilePath}`;
+    console.debug(command)
+    terminal.processCommand(command);
+    // window.location.href = renderedNewPath;
+    // event.preventDefault();
+    // window.location.reload();
   }
 }

@@ -4,43 +4,42 @@ import "../../css/terminal-input.css";
 
 export interface ITerminalInputProps {
   value: string;
-  autofocus: boolean;
+  active: boolean;
   handleSubmitFunction: (input: string) => void;
+  updateValueFunction: (input: string) => void;
 }
-interface ITerminalInputState { readonly: boolean; value: string; }
 
-export class TerminalInput extends React.Component<ITerminalInputProps, ITerminalInputState> {
+export class TerminalInput extends React.Component<ITerminalInputProps> {
   constructor(props: ITerminalInputProps) {
     super(props);
-    this.state = { readonly: this.props.value === "" ? false : true, value: this.props.value };
   }
 
   public render() {
     return (
       <input
-        spellCheck={false}
+        spellCheck={ false }
         autoCapitalize="off"
         autoComplete="off"
         autoCorrect="off"
-        autoFocus={ this.props.autofocus }
+        autoFocus={ this.props.active }
         className="terminal-input"
         onKeyDown={ this.onKeyDown }
         onChange={ this.onChange }
-        readOnly={ this.state.readonly }
-        value={ this.state.value }
+        readOnly={ !this.props.active }
+        value={ this.props.value }
       />
     );
   }
 
   private onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    this.setState({ value });
+    const value: string = e.target.value;
+    // console.debug(`Got input change: ${value}`);
+    this.props.updateValueFunction(value);
   }
 
   private onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) { // Enter
       e.preventDefault();
-      this.setState({ readonly: true });
       this.props.handleSubmitFunction(e.currentTarget.value);
     }
   }

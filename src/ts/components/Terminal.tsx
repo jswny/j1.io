@@ -11,6 +11,7 @@ import { LocalFS } from "../filesystem/LocalFS";
 import { Path } from "../filesystem/Path";
 import { history } from "../History";
 import { Shell } from "../Shell";
+import { Line } from "./Line";
 import { TerminalLine } from "./TerminalLine";
 
 import "../../css/terminal.css";
@@ -20,14 +21,8 @@ export interface ITerminalProps {
   initialCommand: string | null;
 }
 
-interface ILine {
-  input: string;
-  output: JSX.Element;
-  directory: string;
-}
-
 interface ITerminalState {
-  lines: ILine[];
+  lines: Line[];
   keyBase: number;
   initialCommandExecuted: boolean;
 }
@@ -40,75 +35,58 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
     const fs: IFS = new LocalFS();
     this.shell = new Shell(fs);
-    this.processInitialCommand(this.props.initialCommand);
+
+    this.state = {
+      initialCommandExecuted: false,
+      keyBase: 0,
+      lines: [this.newLine()]
+    };
+  }
+
+  public componentDidMount() {
+    const initialCommand: string = this.props.initialCommand;
+    if (initialCommand !== null && !this.state.initialCommandExecuted) {
+      this.processCommand(initialCommand);
+    }
+
+    this.setState({ initialCommandExecuted: true });
   }
 
   public render(): JSX.Element {
     return (
-      <div id="terminal">{this.renderLines()}</div>
+      <div id="terminal">{ this.renderLines() }</div>
     );
   }
 
-  private pushHistory(path: string[], initialCommandExecuted: boolean): void {
-    if (path !== null && initialCommandExecuted) {
-      console.debug("Pushing path to history: ");
-      console.debug(path);
-      history.push(Path.render(path));
-    }
+  public updateCurrentLineInput(input: string) {
+    const lines: Line[] = this.state.lines.map((line, index) => {
+      if (index === this.getCurrentLineIndex()) {
+        return new Line(input, line.getOutput(), line.directory);
+      }
+      return line;
+    });
+    this.setState({ lines });
   }
 
-  private processInitialCommand(initialCommand: string) {
-    let state = { keyBase: 0, lines: [this.newLine()], initialCommandExecuted: false };
-
-    if (initialCommand !== null) {
-      state = this.updateStateFromInput(initialCommand, state);
-    }
-
-    state.initialCommandExecuted = true;
-    this.state = state;
-  }
-
-  private getCurrentDirectoryCopy(): string {
-    const shellCopy = {...this.shell};
-    return Path.render(shellCopy.currentDirectory);
-  }
-
-  private newLine(): ILine {
-    const directory = this.getCurrentDirectoryCopy();
-    const line: ILine = { input: "" , output: <div></div>, directory };
-    return line;
-  }
-
-  private getCurrentLine(lines: ILine[]): ILine {
-    const currentLine = lines[lines.length - 1];
-    return currentLine;
-  }
-
-  private clearLines(lines: ILine[]): ILine[] {
-    lines = [];
-    return lines;
-  }
-
-  private updateStateFromInput(input: string, state: ITerminalState): ITerminalState {
-    let lines = state.lines;
-    let keyBase = state.keyBase;
-    const line = this.getCurrentLine(lines);
-
-    line.input = input;
+  public processCommand(input: string): void {
     console.debug(`Terminal sending input "${input}" for processing`);
+
+    let currentInput: string;
+    let currentOutput: JSX.Element;
+
+    currentInput = input;
 
     try {
       if (input.trim() === "clear") {
-        console.debug("Clearing terminal...");
-        keyBase = keyBase + lines.length;
-        lines = this.clearLines(lines);
+        this.clearLines();
+        return;
       } else {
-        const { output, historyPath } = this.shell.command(input);
+        const { output, historyPath } = this.shell.command(this, input);
 
-        this.pushHistory(historyPath, state.initialCommandExecuted);
+        this.pushHistory(historyPath);
 
         const renderedOutput = output;
-        line.output = renderedOutput;
+        currentOutput = renderedOutput;
       }
     } catch (e) {
       if (
@@ -119,24 +97,48 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         || e instanceof ArgumentError
         || e instanceof RetrieveGistError
       ) {
-        line.output = <div>{ e.message }</div>;
+        currentOutput = <div>{ e.message }</div>;
       } else {
         throw e;
       }
     }
 
-    const newLine = this.newLine();
-    lines.push(newLine);
+    let lines: Line[] = this.state.lines.map((line, index) => {
+      if (index === this.getCurrentLineIndex()) {
+        return new Line(currentInput, currentOutput, line.directory);
+      }
+      return line;
+    });
 
-    state.lines = lines;
-    state.keyBase = keyBase;
-    return state;
+    lines = [...lines, this.newLine()];
+    this.setState({ lines });
   }
 
-  private handleSubmitInput(input: string): void {
-    const newState = this.updateStateFromInput(input, this.state);
+  private pushHistory(path: string[]): void {
+    if (path !== null && this.state.initialCommandExecuted) {
+      console.debug("Pushing path to history: ");
+      console.debug(path);
+      history.push(Path.render(path));
+    }
+  }
 
-    this.setState(newState);
+  private renderCurrentDirectoryCopy(): string {
+    const currentDirectory = this.shell.getCurrentDirectoryCopy();
+    return Path.render(currentDirectory);
+  }
+
+  private getCurrentLineIndex(): number {
+    const lines: Line[] = this.state.lines;
+    return lines.length - 1;
+  }
+
+  private newLine() {
+    return new Line(null, null, this.renderCurrentDirectoryCopy());
+  }
+
+  private clearLines(): void {
+    const keyBase: number = this.state.keyBase + this.state.lines.length;
+    this.setState({ lines: [this.newLine()], keyBase });
   }
 
   private renderLines(): JSX.Element[] {
@@ -146,17 +148,18 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
       const isLastLine = i === this.state.lines.length - 1 ? true : false;
 
       const value = currentLine.input;
-      const autofocus = isLastLine;
+      const active = isLastLine;
 
       lines.push(
         <TerminalLine
           key={ this.state.keyBase + i }
           directory={ currentLine.directory }
           prompt={ this.props.prompt }
-          output={ currentLine.output }
+          output={ currentLine.getOutput() }
           inputProps={{
-            autofocus,
-            handleSubmitFunction: (input: string) => this.handleSubmitInput(input),
+            active,
+            handleSubmitFunction: (input: string) => this.processCommand(input),
+            updateValueFunction: (input: string) => this.updateCurrentLineInput(input),
             value
           }}
         />
