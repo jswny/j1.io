@@ -1,4 +1,3 @@
-import { Terminal } from "./components/Terminal";
 import { ExecutableNotFoundError } from "./errors/ExecutableNotFoundError";
 import { IExecutableOutput } from "./executables/IExecutableOutput";
 import { IFS } from "./filesystem/IFS";
@@ -12,9 +11,9 @@ export class Shell {
     this.currentDirectory = [this.fs.root.name];
   }
 
-  public command(terminal: Terminal, command: string): IExecutableOutput {
+  public command(commandHandler: (command: string) => void, command: string): IExecutableOutput {
     const parsedCommand = this.parseCommand(command);
-    return this.runCommand(terminal, parsedCommand[0], parsedCommand.slice(1));
+    return this.runCommand(commandHandler, parsedCommand[0], parsedCommand.slice(1));
   }
 
   public setCurrentDirectory(path: string[]) {
@@ -33,7 +32,7 @@ export class Shell {
     return parsed;
   }
 
-  private runCommand(terminal: Terminal, executableName: string, args: string[]) {
+  private runCommand(commandHandler: (command: string) => void, executableName: string, args: string[]) {
     let found = false;
     let executable = null;
     for (executable of this.fs.getExecutables()) {
@@ -45,7 +44,8 @@ export class Shell {
 
     if (found) {
       console.debug(`Found matching executable: "${executable.name}"`);
-      return executable.run(terminal, this, this.fs, args);
+      const setCurrentDirectory = (path: string[]) => this.setCurrentDirectory(path);
+      return executable.run(commandHandler, this.getCurrentDirectoryCopy(), setCurrentDirectory, this.fs, args);
     } else {
       throw new ExecutableNotFoundError(`Could not find executable "${executableName}"`);
     }

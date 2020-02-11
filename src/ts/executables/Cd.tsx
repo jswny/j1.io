@@ -1,11 +1,9 @@
 import * as React from "react";
 
-import { Terminal } from "../components/Terminal";
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
 import { Directory } from "../filesystem/Directory";
 import { IFS } from "../filesystem/IFS";
 import { Path } from "../filesystem/Path";
-import { Shell } from "../Shell";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
@@ -16,8 +14,14 @@ export class Cd implements IExecutable {
     this.name = "cd";
   }
 
-  public run(terminal: Terminal, shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
-    let path: string[] = shell.getCurrentDirectoryCopy();
+  public run(
+    commandHandler: (command: string) => void,
+    currentDirectory: string[],
+    setCurrentDirectory: (path: string[]) => void,
+    fs: IFS,
+    args: string[]
+  ): IExecutableOutput {
+    let path: string[] = currentDirectory;
     if (args.length === 0) {
       path = [fs.root.name];
     } else {
@@ -41,7 +45,7 @@ export class Cd implements IExecutable {
     const node = fs.stat(path);
 
     if (node instanceof Directory) {
-      shell.setCurrentDirectory(path);
+      setCurrentDirectory(path);
       console.debug("Changed current directory to:");
       console.debug(path);
     } else {

@@ -1,14 +1,12 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-import { Terminal } from "../components/Terminal";
 import { Directory } from "../filesystem/Directory";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
 import { IFS } from "../filesystem/IFS";
 import { INode } from "../filesystem/INode";
 import { Path } from "../filesystem/Path";
-import { Shell } from "../Shell";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
@@ -19,10 +17,14 @@ export class Ls implements IExecutable {
     this.name = "ls";
   }
 
-  public run(terminal: Terminal, shell: Shell, fs: IFS, args: string[]): IExecutableOutput {
+  public run(
+    commandHandler: (command: string) => void,
+    currentDirectory: string[],
+    setCurrentDirectory: (path: string[]) => void,
+    fs: IFS,
+    args: string[]
+  ): IExecutableOutput {
     const output: JSX.Element[] = [];
-
-    const currentDirectory: string[] = shell.getCurrentDirectoryCopy();
 
     let path: string[];
     if (args.length === 0) {
@@ -33,7 +35,7 @@ export class Ls implements IExecutable {
     }
 
     const children = fs.list(path);
-    children.forEach((child, index) => output.push(this.getNodeOuput(child, index, path, terminal)));
+    children.forEach((child, index) => output.push(this.getNodeOuput(child, index, path, commandHandler)));
 
     return {
       historyPath: null,
@@ -41,7 +43,12 @@ export class Ls implements IExecutable {
     };
   }
 
-  private getNodeOuput(node: INode, key: number, path: string[], terminal: Terminal): JSX.Element {
+  private getNodeOuput(
+    node: INode,
+    key: number,
+    path: string[],
+    commandHandler: (command: string) => void
+  ): JSX.Element {
     let output: JSX.Element;
 
     if (node instanceof Directory) {
@@ -59,7 +66,7 @@ export class Ls implements IExecutable {
             <div key={ key }>
               <Link
                 to={ renderedNewPath }
-                onClick={ (event) => this.onFileClick(event, terminal, renderedNewPath) }
+                onClick={ (event) => this.onFileClick(event, commandHandler, renderedNewPath) }
               >
                 { file.name }
               </Link>
@@ -83,13 +90,13 @@ export class Ls implements IExecutable {
     return output;
   }
 
-  private onFileClick(event: React.MouseEvent<HTMLAnchorElement>, terminal: Terminal, renderedFilePath: string): void {
+  private onFileClick(
+    event: React.MouseEvent<HTMLAnchorElement>,
+    commandHandler: (command: string) => void,
+    renderedFilePath: string
+  ): void {
     event.preventDefault();
     const command: string = `open ${renderedFilePath}`;
-    console.debug(command)
-    terminal.processCommand(command);
-    // window.location.href = renderedNewPath;
-    // event.preventDefault();
-    // window.location.reload();
+    commandHandler(command);
   }
 }

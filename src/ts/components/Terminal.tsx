@@ -81,7 +81,8 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         this.clearLines();
         return;
       } else {
-        const { output, historyPath } = this.shell.command(this, input);
+        const commandHandler = (command: string) => this.processCommand(command);
+        const { output, historyPath } = this.shell.command(commandHandler, input);
 
         this.pushHistory(historyPath);
 
