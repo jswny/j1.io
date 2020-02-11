@@ -4,6 +4,7 @@ import * as ReactMarkdown from "react-markdown";
 import { axios } from "../Axios";
 import { CodeBlock } from "../components/CodeBlock";
 import { RetrieveGistError } from "../errors/RetrieveGistError";
+import { GistComments } from "./GistComments";
 
 export interface IGistProps {
   displayFile: string;
@@ -35,8 +36,10 @@ export class Gist extends React.Component<IGistProps, { content: string, publicU
           renderers={{ code: CodeBlock }}
         />
 
+        <GistComments id={ this.props.id } />
+
         <div className="output-additional-link output-gist-link">
-          <a href={ this.state.publicUrl }>Comment on Gist</a>
+          <a href={ this.state.publicUrl }>Comment/Star on Gist</a>
         </div>
       </div>
     );

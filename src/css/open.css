@@ -3,12 +3,13 @@
 }
 
 .output-additional-link {
-  padding: 1rem 0 1rem 0;
+  margin: 1rem 0 1rem 0;
 }
 
 .output-boxed { 
   border: 2px solid white;
   padding: 0 1rem 0 1rem;
+  margin: 1rem 0 1rem 0;
 }
 
 @media only screen and (max-width: 767px) {
@@ -20,4 +21,9 @@
 
 .output-markdown img {
   background: white;
+}
+
+.output-gist-comments-comment {
+  margin: 1rem 0 0 0;
+  padding: 0.5rem 0.5rem 0 0.5rem;
 }

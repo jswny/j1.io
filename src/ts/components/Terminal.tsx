@@ -15,6 +15,7 @@ import { Line } from "./Line";
 import { TerminalLine } from "./TerminalLine";
 
 import "../../css/terminal.css";
+import { RetrieveGistCommentsError } from "../errors/RetrieveGistCommentsError";
 
 export interface ITerminalProps {
   prompt: string;
@@ -97,6 +98,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         || e instanceof FileNotFoundError
         || e instanceof ArgumentError
         || e instanceof RetrieveGistError
+        || e instanceof RetrieveGistCommentsError
       ) {
         currentOutput = <div>{ e.message }</div>;
       } else {
