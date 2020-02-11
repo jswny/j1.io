@@ -17,8 +17,13 @@ a:hover {
 }
 
 button {
-  border: 2px solid white;
   font-size: 2rem;
   font-family: inherit;
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+  background: white;
+  border: none;
+}
+
+button:active {
+  color: black;
 }
