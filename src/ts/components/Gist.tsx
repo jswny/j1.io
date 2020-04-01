@@ -3,6 +3,7 @@ import * as ReactMarkdown from "react-markdown";
 
 import { axios } from "../Axios";
 import { CodeBlock } from "../components/CodeBlock";
+import { DisplayGistError } from "../errors/DisplayGistError";
 import { RetrieveGistError } from "../errors/RetrieveGistError";
 import { GistComments } from "./GistComments";
 
@@ -11,38 +12,62 @@ export interface IGistProps {
   id: string;
 }
 
-export class Gist extends React.Component<IGistProps, { content: string, publicUrl: string }> {
+interface IGistState {
+  content: string;
+  language: string;
+  publicUrl: string;
+}
+
+export class Gist extends React.Component<IGistProps, IGistState> {
   constructor(props: IGistProps) {
     super(props);
-    this.state = { content: "Loading Gist...", publicUrl: "" };
+    this.state = {
+      content: "Loading Gist...",
+      language: "",
+      publicUrl: ""
+    };
   }
 
   public componentDidMount(): void {
     this
     .getGist(this.props.id)
     .then((gist) => {
-      console.debug("Recieved Gist data from API:");
+      console.debug("Received Gist data from API:");
       console.debug(gist);
       this.populateState(gist, this.props.displayFile);
     });
   }
 
   public render(): JSX.Element {
-    return (
-      <div className="output-gist">
-        <ReactMarkdown
-          className="output-markdown output-boxed"
-          source={ this.state.content }
-          renderers={{ code: CodeBlock }}
-        />
+    let result: JSX.Element;
+    switch (this.state.language) {
+      case "": {
+        result = <div></div>;
+      }
+      case "Markdown": {
+        result = (
+          <div className="output-gist">
+            <ReactMarkdown
+              className="output-markdown output-boxed"
+              source={ this.state.content }
+              renderers={{ code: CodeBlock }}
+            />
 
-        <GistComments id={ this.props.id } />
+            <GistComments id={ this.props.id } />
 
-        <div className="output-additional-link output-gist-link">
-          <a href={ this.state.publicUrl }>Comment/Star on Gist</a>
-        </div>
-      </div>
-    );
+            <div className="output-additional-link output-gist-link">
+              <a href={ this.state.publicUrl }>Comment/Star on Gist</a>
+            </div>
+          </div>
+        );
+        break;
+      }
+      default: {
+        throw new DisplayGistError(`Rendering not supported for Gist with language ${this.state.language}`);
+      }
+    }
+
+    return result;
   }
 
   private async getGist(id: string): Promise<any> {
@@ -56,10 +81,13 @@ export class Gist extends React.Component<IGistProps, { content: string, publicU
   }
 
   private populateState(gist: any, displayFile: string): void {
+    const displayFileObject: any = gist.files[displayFile];
     const publicUrl: string = gist.html_url;
-    const content = gist.files[displayFile].content;
+    const content: string = displayFileObject.content;
+    const language: string = displayFileObject.language;
     this.setState({
       content,
+      language,
       publicUrl
     });
   }
