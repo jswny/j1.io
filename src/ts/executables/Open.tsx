@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import * as ReactMarkdown from "react-markdown";
 
 import { CodeBlock } from "../components/CodeBlock";
@@ -80,9 +81,18 @@ export class Open implements IExecutable {
       }
     }
 
+    const resultWithTitle: JSX.Element = (
+      <>
+        <Helmet>
+          <title>{ file.name } - Joe Sweeney</title>
+        </Helmet>
+        { result }
+      </>
+    );
+
     return {
       historyPath,
-      output: result
+      output: resultWithTitle
     };
   }
 
