@@ -52,26 +52,14 @@ export class Ls implements IExecutable {
     let output: JSX.Element;
 
     if (node instanceof Directory) {
-      output = <div key={ key }>{ node.name + "/" }</div>;
+      output = this.getClickableOutput(node, key, path, commandHandler, (n: INode) => n.name + "/");
     } else {
       const file: File = node as File;
       switch (file.type) {
+        case FileType.PDF:
+        case FileType.Markdown:
         case FileType.Gist: {
-          const filePath = path.slice(0);
-          filePath.push(file.name);
-          const renderedNewPath = Path.render(filePath);
-          console.debug(filePath);
-
-          output = (
-            <div key={ key }>
-              <Link
-                to={ renderedNewPath }
-                onClick={ (event) => this.onFileClick(event, commandHandler, renderedNewPath) }
-              >
-                { file.name }
-              </Link>
-            </div>
-          );
+          output = this.getClickableOutput(node, key, path, commandHandler, (n: INode) => n.name);
           break;
         }
         case FileType.Link: {
@@ -90,13 +78,44 @@ export class Ls implements IExecutable {
     return output;
   }
 
-  private onFileClick(
+  private getClickableOutput(
+    node: INode,
+    key: number,
+    path: string[],
+    commandHandler: (command: string) => void,
+    outputContent: (node: INode) => string
+  ): JSX.Element {
+    const nodePath = path.slice(0);
+    nodePath.push(node.name);
+    const renderedNewPath = Path.render(nodePath);
+
+    let baseCommand: string;
+    if (node instanceof Directory) {
+      baseCommand = "cd";
+    } else {
+      baseCommand = "open";
+    }
+
+    return (
+      <div key={ key }>
+        <Link
+          to={ renderedNewPath }
+          onClick={ (event) => this.onNodeClick(event, commandHandler, renderedNewPath, baseCommand) }
+        >
+          { outputContent(node) }
+        </Link>
+      </div>
+    );
+  }
+
+  private onNodeClick(
     event: React.MouseEvent<HTMLAnchorElement>,
     commandHandler: (command: string) => void,
-    renderedFilePath: string
+    renderedFilePath: string,
+    baseCommand: string
   ): void {
     event.preventDefault();
-    const command: string = `open ${renderedFilePath}`;
+    const command: string = `${baseCommand} ${renderedFilePath}`;
     commandHandler(command);
   }
 }
