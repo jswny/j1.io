@@ -32,6 +32,11 @@
       ]
     },
     {
+      "name": "projects.md",
+      "type": 1,
+      "content": "# Projects\n\n## [AAUStats](https://aaustats.com) ![Elixir](https://img.shields.io/badge/-Elixir-blueviolet) ![React](https://img.shields.io/badge/-React-9cf)\n\nAAU basketball analytics platform.\n\n## [j1.io](https://j1.io) ![GitHub](https://img.shields.io/github/stars/jswny/j1.io?style=flat) ![React](https://img.shields.io/badge/-React-9cf) \n\nPersonal website which emulates a Linux terminal.\n"
+    },
+    {
       "name": "reading-list.link",
       "type": 3,
       "content": "https://trello.com/b/XrtK8FLE"
