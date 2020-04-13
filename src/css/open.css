@@ -19,7 +19,7 @@
 /* Phones */
 @media only screen and (max-width: 767px) {
   .output-markdown img {
-    width: 100%;
+    max-width: 100%;
   }
 
   .output-markdown.output-boxed { 
@@ -27,8 +27,18 @@
   }
 }
 
-.output-markdown img {
+/* .output-markdown img {
   background: white;
+} */
+
+/* Align badges etc. within headers for Markdown */
+.output-markdown h1 > img,
+.output-markdown h2 > img,
+.output-markdown h3 > img,
+.output-markdown h4 > img,
+.output-markdown h5 > img,
+.output-markdown h6 > img {
+  vertical-align: middle;
 }
 
 .output-gist-comments-comment {
