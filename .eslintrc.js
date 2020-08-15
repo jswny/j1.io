@@ -17,14 +17,6 @@ module.exports = {
     browser: true,
     node: true,
   },
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    tsConfigRootDir: __dirname,
-    project: ['./tsconfig.eslint.json'],
-  },
-  plugins: [
-    '@typescript-eslint',
-  ],
   extends: baseExtends,
   settings: {
     react: {
@@ -40,6 +32,14 @@ module.exports = {
     },
     {
       files: ['src/**/*.ts', 'src/**/*.tsx'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        tsConfigRootDir: __dirname,
+        project: ['./tsconfig.dev.json'],
+      },
+      plugins: [
+        '@typescript-eslint',
+      ],
       extends: tsExtends
     },
   ]
