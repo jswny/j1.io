@@ -1,12 +1,15 @@
 const baseExtends = [
   'eslint:recommended',
-  'plugin:@typescript-eslint/recommended',
-  'plugin:@typescript-eslint/recommended-requiring-type-checking',
   'plugin:react/recommended',
   'plugin:import/errors',
   'plugin:import/warnings',
-  'plugin:import/typescript',
 ]
+
+const tsExtends = baseExtends.concat([
+  'plugin:@typescript-eslint/recommended',
+  'plugin:@typescript-eslint/recommended-requiring-type-checking',
+  'plugin:import/typescript',
+])
 
 module.exports = {
   root: true,
@@ -30,8 +33,14 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.js', 'src/ts/BuildLocalManifest.ts'],
-      extends: baseExtends.concat(['plugin:node/recommended']),
-    }
+      files: ['*.js'],
+      extends: baseExtends.concat([
+        'plugin:node/recommended'
+      ]),
+    },
+    {
+      files: ['src/**/*.ts', 'src/**/*.tsx'],
+      extends: tsExtends
+    },
   ]
 };
