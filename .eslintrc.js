@@ -17,4 +17,9 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:import/typescript',
   ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 };
