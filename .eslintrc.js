@@ -29,6 +29,9 @@ module.exports = {
       extends: baseExtends.concat([
         'plugin:node/recommended'
       ]),
+      rules: {
+        'node/no-unpublished-require': 'off'
+      },
     },
     {
       files: ['src/**/*.ts', 'src/**/*.tsx'],
