@@ -10,6 +10,10 @@ const baseExtends = [
 
 module.exports = {
   root: true,
+  env: {
+    browser: true,
+    node: true,
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     tsConfigRootDir: __dirname,
