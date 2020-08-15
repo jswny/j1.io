@@ -2,8 +2,8 @@ name: CI
 on: [push]
 
 jobs:
-  tslint:
-    name: TSLint
+  eslint:
+    name: ESLint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
