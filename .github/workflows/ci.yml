@@ -12,3 +12,21 @@ jobs:
           node-version: '14'
       - run: yarn install
       - run: yarn run lint
+  github-pages:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    # if: ${{ github.ref == 'refs/heads/master' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - run: yarn install
+      - run: yarn run build:localFileManifest
+      - run: yarn run build:prod
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3.6.4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: j1.io
