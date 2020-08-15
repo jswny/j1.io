@@ -1,4 +1,4 @@
-# J1.IO [![Build Status](https://travis-ci.com/jswny/j1.io.svg?branch=master)](https://travis-ci.com/jswny/j1.io)
+# J1.IO ![CI](https://github.com/jswny/j1.io/workflows/CI/badge.svg)
 My website, but it's a terminal.
 
 ![Demo GIF](demo.gif)
