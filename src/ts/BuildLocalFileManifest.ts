@@ -51,7 +51,7 @@ function getContent(filePath: string, type: FileType) {
       break;
     }
     default: {
-      throw new Error("Unhandled file type: " + type);
+      throw new Error(`Unhandled file type: ${type}`);
     }
   }
 

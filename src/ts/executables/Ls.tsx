@@ -115,7 +115,7 @@ export class Ls implements IExecutable {
     baseCommand: string
   ): void {
     event.preventDefault();
-    const command: string = `${baseCommand} ${renderedFilePath}`;
+    const command = `${baseCommand} ${renderedFilePath}`;
     commandHandler(command);
   }
 }

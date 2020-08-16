@@ -77,7 +77,7 @@ export class LocalFS implements IFS {
     const node: INode = this.stat(path);
 
     if (node instanceof Directory) {
-      return (node as Directory).children;
+      return node.children;
     } else {
       throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
     }
@@ -92,7 +92,7 @@ export class LocalFS implements IFS {
 
     for (let i = 0; i < path.length; i++) {
       const pathPart = path[i];
-      let foundPathPart: boolean = false;
+      let foundPathPart = false;
 
       for (const searchNode of currNode.children) {
         if (i === path.length - 1 && searchNode.name === pathPart) {

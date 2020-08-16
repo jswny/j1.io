@@ -44,7 +44,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     const initialCommand: string = this.props.initialCommand;
     if (initialCommand !== null && !this.state.initialCommandExecuted) {
       this.processCommand(initialCommand);
@@ -59,7 +59,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     );
   }
 
-  public updateCurrentLineInput(input: string) {
+  public updateCurrentLineInput(input: string): void {
     const lines: Line[] = this.state.lines.map((line, index) => {
       if (index === this.getCurrentLineIndex()) {
         return new Line(input, line.getOutput(), line.directory);
@@ -72,10 +72,8 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   public processCommand(input: string): void {
     console.debug(`Terminal sending input "${input}" for processing`);
 
-    let currentInput: string;
+    const currentInput = input;
     let currentOutput: JSX.Element;
-
-    currentInput = input;
 
     try {
       if (input.trim() === "clear") {

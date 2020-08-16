@@ -14,7 +14,7 @@ export class TerminalInput extends React.Component<ITerminalInputProps> {
     super(props);
   }
 
-  public render() {
+  public render(): JSX.Element {
     return (
       <input
         spellCheck={ false }

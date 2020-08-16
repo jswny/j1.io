@@ -16,11 +16,11 @@ export class Shell {
     return this.runCommand(commandHandler, parsedCommand[0], parsedCommand.slice(1));
   }
 
-  public setCurrentDirectory(path: string[]) {
+  public setCurrentDirectory(path: string[]): void {
     this.currentDirectory = path.slice();
   }
 
-  public getCurrentDirectoryCopy() {
+  public getCurrentDirectoryCopy(): string[] {
     return this.currentDirectory.slice();
   }
 

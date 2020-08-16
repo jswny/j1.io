@@ -83,7 +83,7 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
   }
 
   private async getGistComments(id: string): Promise<any> {
-    const url: string = `https://api.github.com/gists/${id}/comments`;
+    const url = `https://api.github.com/gists/${id}/comments`;
     try {
       const response = await axios.get(url);
       return response.data;

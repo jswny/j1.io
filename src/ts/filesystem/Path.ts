@@ -22,7 +22,7 @@ export class Path {
     return result;
   }
 
-  public static render(path: string[]) {
+  public static render(path: string[]): string {
     const result = path
       .join("/")
       .replace("root", "/")
