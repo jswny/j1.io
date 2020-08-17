@@ -1,15 +1,20 @@
-import { INode } from "./INode";
+import { Node, INode } from "./Node";
 
-export class Directory implements INode {
+export interface IDirectory {
+  name: string;
+  children: INode[];
+}
+
+export class Directory {
   public name: string;
-  public children: INode[];
+  public children: Node[];
 
   constructor(name: string) {
     this.name = name;
     this.children = [];
   }
 
-  public addChild(child: INode): number {
+  public addChild(child: Node): number {
     return this.children.push(child);
   }
 }

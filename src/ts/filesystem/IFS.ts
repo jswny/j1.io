@@ -1,15 +1,15 @@
 import { IExecutable } from "../executables/IExecutable";
 import { Directory } from "./Directory";
-import { INode } from "./INode";
+import { Node } from "./Node";
 
 export interface IFS {
   root: Directory;
 
   read(path: string[]): string;
 
-  list(path: string[]): INode[];
+  list(path: string[]): Node[];
 
-  stat(path: string[]): INode;
+  stat(path: string[]): Node;
 
   getExecutables(): IExecutable[];
 }

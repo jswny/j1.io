@@ -5,7 +5,7 @@ import { Directory } from "../filesystem/Directory";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
 import { IFS } from "../filesystem/IFS";
-import { INode } from "../filesystem/INode";
+import { Node } from "../filesystem/Node";
 import { Path } from "../filesystem/Path";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
@@ -44,7 +44,7 @@ export class Ls implements IExecutable {
   }
 
   private getNodeOuput(
-    node: INode,
+    node: Node,
     key: number,
     path: string[],
     commandHandler: (command: string) => void
@@ -52,14 +52,14 @@ export class Ls implements IExecutable {
     let output: JSX.Element;
 
     if (node instanceof Directory) {
-      output = this.getClickableOutput(node, key, path, commandHandler, (n: INode) => n.name + "/");
+      output = this.getClickableOutput(node, key, path, commandHandler, (n: Node) => n.name + "/");
     } else {
-      const file: File = node as File;
+      const file: File = node;
       switch (file.type) {
         case FileType.PDF:
         case FileType.Markdown:
         case FileType.Gist: {
-          output = this.getClickableOutput(node, key, path, commandHandler, (n: INode) => n.name);
+          output = this.getClickableOutput(node, key, path, commandHandler, (n: Node) => n.name);
           break;
         }
         case FileType.Link: {
@@ -79,11 +79,11 @@ export class Ls implements IExecutable {
   }
 
   private getClickableOutput(
-    node: INode,
+    node: Node,
     key: number,
     path: string[],
     commandHandler: (command: string) => void,
-    outputContent: (node: INode) => string
+    outputContent: (node: Node) => string
   ): JSX.Element {
     const nodePath = path.slice(0);
     nodePath.push(node.name);
