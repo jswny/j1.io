@@ -1,9 +1,12 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
+import { Endpoints } from "@octokit/types";
 
 import { axios } from "../Axios";
 import { CodeBlock } from "../components/CodeBlock";
 import { RetrieveGistCommentsError } from "../errors/RetrieveGistCommentsError";
+
+type ListGistCommentsResponse = Endpoints["GET /gists/:gist_id/comments"]["response"];
 
 export interface IGistCommentsProps {
   id: string;
@@ -82,11 +85,11 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
     });
   }
 
-  private async getGistComments(id: string): Promise<any> {
+  private async getGistComments(id: string): Promise<ListGistCommentsResponse> {
     const url = `https://api.github.com/gists/${id}/comments`;
     try {
       const response = await axios.get(url);
-      return response.data;
+      return response.data as ListGistCommentsResponse;
     } catch (e) {
       throw new RetrieveGistCommentsError(`Could not retrieve Gist at ${url}`);
     }

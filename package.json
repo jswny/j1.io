@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/jswny/j1.io-v2#readme",
   "dependencies": {
+    "@octokit/types": "^5.4.0",
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
     "@types/react-helmet": "^6.1.0",
