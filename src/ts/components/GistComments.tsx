@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
-import { Endpoints } from "@octokit/types";
+import { Endpoints, GistsListCommentsResponseData } from "@octokit/types";
 
 import { axios } from "../Axios";
 import { CodeBlock } from "../components/CodeBlock";
@@ -38,7 +38,8 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
       console.debug("Recieved Gist comments data from API:");
       console.debug(gistComments);
       this.populateState(gistComments);
-    });
+    })
+    .catch(() => console.debug(`Could not retrive Gist comments for Gist ID ${this.props.id}`));
   }
 
   public render(): JSX.Element {
@@ -85,18 +86,18 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
     });
   }
 
-  private async getGistComments(id: string): Promise<ListGistCommentsResponse> {
+  private async getGistComments(id: string): Promise<GistsListCommentsResponseData> {
     const url = `https://api.github.com/gists/${id}/comments`;
     try {
-      const response = await axios.get(url);
-      return response.data as ListGistCommentsResponse;
+      const response: ListGistCommentsResponse = await axios.get(url);
+      return response.data;
     } catch (e) {
       throw new RetrieveGistCommentsError(`Could not retrieve Gist at ${url}`);
     }
   }
 
-  private populateState(gistComments: any): void {
-    const comments: IRenderedComment[] = gistComments.map((comment: any) => {
+  private populateState(gistComments: GistsListCommentsResponseData): void {
+    const comments: IRenderedComment[] = gistComments.map((comment: GistsListCommentsResponseData[0]) => {
       const username: string = comment.user.login;
       const content: string = comment.body;
       return {
