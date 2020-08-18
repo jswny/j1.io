@@ -7,7 +7,7 @@ import { FileNotFoundError } from "../errors/FileNotFoundError";
 import { InvalidPathError } from "../errors/InvalidPathError";
 import { RetrieveGistError } from "../errors/RetrieveGistError";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
-import { LocalFS } from "../filesystem/LocalFS";
+import { ManifestVirtualFS } from "../filesystem/ManifestVirtualFS";
 import { Path } from "../filesystem/Path";
 import { history } from "../History";
 import { Shell } from "../Shell";
@@ -34,7 +34,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   constructor(props: ITerminalProps) {
     super(props);
 
-    const fs: IVirtualFS = new LocalFS();
+    const fs: IVirtualFS = new ManifestVirtualFS();
     this.shell = new Shell(fs);
 
     this.state = {

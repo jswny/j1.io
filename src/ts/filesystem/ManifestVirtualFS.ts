@@ -13,7 +13,7 @@ import { IVirtualFS } from "./IVirtualFS";
 import { Node } from "./Node";
 import { Path } from "./Path";
 
-export class LocalFS implements IVirtualFS {
+export class ManifestVirtualFS implements IVirtualFS {
   public root: Directory;
   private executables: IExecutable[];
 
