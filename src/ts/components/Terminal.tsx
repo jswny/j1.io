@@ -6,9 +6,9 @@ import { ExecutableNotFoundError } from "../errors/ExecutableNotFoundError";
 import { FileNotFoundError } from "../errors/FileNotFoundError";
 import { InvalidPathError } from "../errors/InvalidPathError";
 import { RetrieveGistError } from "../errors/RetrieveGistError";
-import { IFS } from "../filesystem/IFS";
-import { LocalFS } from "../filesystem/LocalFS";
-import { Path } from "../filesystem/Path";
+import { IVirtualFS } from "../filesystem/IVirtualFS";
+import { ManifestVirtualFS } from "../filesystem/ManifestVirtualFS";
+import { VirtualPath } from "../filesystem/VirtualPath";
 import { history } from "../History";
 import { Shell } from "../Shell";
 import { Line } from "./Line";
@@ -34,7 +34,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   constructor(props: ITerminalProps) {
     super(props);
 
-    const fs: IFS = new LocalFS();
+    const fs: IVirtualFS = new ManifestVirtualFS();
     this.shell = new Shell(fs);
 
     this.state = {
@@ -119,13 +119,13 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     if (path !== null && this.state.initialCommandExecuted) {
       console.debug("Pushing path to history: ");
       console.debug(path);
-      history.push(Path.render(path));
+      history.push(VirtualPath.render(path));
     }
   }
 
   private renderCurrentDirectoryCopy(): string {
     const currentDirectory = this.shell.getCurrentDirectoryCopy();
-    return Path.render(currentDirectory);
+    return VirtualPath.render(currentDirectory);
   }
 
   private getCurrentLineIndex(): number {

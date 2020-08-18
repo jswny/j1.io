@@ -6,10 +6,10 @@ import { CodeBlock } from "../components/CodeBlock";
 import { Gist } from "../components/Gist";
 import { PDF } from "../components/PDF";
 import { ArgumentError } from "../errors/ArgumentError";
-import { File } from "../filesystem/File";
-import { FileType } from "../filesystem/FileType";
-import { IFS } from "../filesystem/IFS";
-import { Path } from "../filesystem/Path";
+import { VirtualFile } from "../filesystem/VirtualFile";
+import { VirtualFileType } from "../filesystem/VirtualFileType";
+import { IVirtualFS } from "../filesystem/IVirtualFS";
+import { VirtualPath } from "../filesystem/VirtualPath";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
@@ -31,7 +31,7 @@ export class Open implements IExecutable {
     commandHandler: (command: string) => void,
     currentDirectory: string[],
     setCurrentDirectory: (path: string[]) => void,
-    fs: IFS,
+    fs: IVirtualFS,
     args: string[]
   ): IExecutableOutput {
     if (args.length === 0) {
@@ -43,13 +43,13 @@ export class Open implements IExecutable {
     let historyPath: string[] = null;
 
     const argPath = args[0];
-    const path: string[] = Path.parseAndAdd(currentDirectory, argPath);
+    const path: string[] = VirtualPath.parseAndAdd(currentDirectory, argPath);
     const output = fs.read(path);
-    const file: File = fs.stat(path) as File;
+    const file: VirtualFile = fs.stat(path) as VirtualFile;
 
     let result: JSX.Element;
     switch (file.type) {
-      case FileType.Markdown: {
+      case VirtualFileType.Markdown: {
         result = (
           <ReactMarkdown
             className="output-markdown output-boxed"
@@ -60,16 +60,16 @@ export class Open implements IExecutable {
         historyPath = path;
         break;
       }
-      case FileType.PDF: {
+      case VirtualFileType.PDF: {
         result = <PDF name={ file.name } base64={ file.content }/>;
         historyPath = path;
         break;
       }
-      case FileType.Link: {
+      case VirtualFileType.Link: {
         this.redirectExternal(file.content);
         break;
       }
-      case FileType.Gist: {
+      case VirtualFileType.Gist: {
         const gistFile: IGistFile = this.parseGistFile(file.content);
         result = <Gist id={ gistFile.id } displayFile={ gistFile.displayFile } />;
         historyPath = path;

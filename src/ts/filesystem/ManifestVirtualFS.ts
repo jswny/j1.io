@@ -6,22 +6,22 @@ import { Cd } from "../executables/Cd";
 import { IExecutable } from "../executables/IExecutable";
 import { Ls } from "../executables/Ls";
 import { Open } from "../executables/Open";
-import { Directory, IDirectory } from "./Directory";
-import { File } from "./File";
-import { FileType } from "./FileType";
-import { IFS } from "./IFS";
-import { Node } from "./Node";
-import { Path } from "./Path";
+import { VirtualDirectory, IVirtualDirectory } from "./VirtualDirectory";
+import { VirtualFile } from "./VirtualFile";
+import { VirtualFileType } from "./VirtualFileType";
+import { IVirtualFS } from "./IVirtualFS";
+import { VirtualNode } from "./VirtualNode";
+import { VirtualPath } from "./VirtualPath";
 
-export class LocalFS implements IFS {
-  public root: Directory;
+export class ManifestVirtualFS implements IVirtualFS {
+  public root: VirtualDirectory;
   private executables: IExecutable[];
 
   constructor() {
     console.debug("Loading filesystem manifest:");
     console.debug(manifest);
 
-    this.root = this.build(manifest as IDirectory);
+    this.root = this.build(manifest as IVirtualDirectory);
     this.root.name = "root";
 
     console.debug(`Root type: ${this.root.constructor.name}`)
@@ -46,16 +46,16 @@ export class LocalFS implements IFS {
     console.debug("Read requested for path:");
     console.debug(path);
 
-    const node = this.stat(path);
+    const node: VirtualNode = this.stat(path);
     let output: string;
 
-    if (node instanceof File) {
-      const file: File = node;
+    if (node instanceof VirtualFile) {
+      const file: VirtualFile = node;
       const readableTypes = [
-        FileType.Markdown,
-        FileType.PDF,
-        FileType.Link,
-        FileType.Gist,
+        VirtualFileType.Markdown,
+        VirtualFileType.PDF,
+        VirtualFileType.Link,
+        VirtualFileType.Gist,
       ];
       if (readableTypes.includes(file.type)) {
         console.debug("Found compatible file to read: ");
@@ -63,30 +63,30 @@ export class LocalFS implements IFS {
 
         output = file.content;
       } else {
-        throw new FileNotFoundError(`The node at "${Path.render(path)}" is not a readable file`);
+        throw new FileNotFoundError(`The node at "${VirtualPath.render(path)}" is not a readable file`);
       }
     } else {
-      throw new FileNotFoundError(`The node at "${Path.render(path)}" is not a file`);
+      throw new FileNotFoundError(`The node at "${VirtualPath.render(path)}" is not a file`);
     }
 
     return output;
   }
 
-  public list(path: string[]): Node[] {
+  public list(path: string[]): VirtualNode[] {
     console.debug("List requested for path:");
     console.debug(path);
 
-    const node: Node = this.stat(path);
+    const node: VirtualNode = this.stat(path);
 
-    if (node instanceof Directory) {
+    if (node instanceof VirtualDirectory) {
       return node.children;
     } else {
-      throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
+      throw new DirectoryNotFoundError(`The node at "${VirtualPath.render(path)}" is not a directory`);
     }
   }
 
-  public stat(path: string[]): Node {
-    let currNode: Directory = this.root;
+  public stat(path: string[]): VirtualNode {
+    let currNode: VirtualDirectory = this.root;
     path = path.slice(1, path.length);
 
     console.debug("Stat requested for path:");
@@ -100,7 +100,7 @@ export class LocalFS implements IFS {
         if (i === path.length - 1 && searchNode.name === pathPart) {
           foundPathPart = true;
           return searchNode;
-        } else if (searchNode instanceof Directory && searchNode.name === pathPart) {
+        } else if (searchNode instanceof VirtualDirectory && searchNode.name === pathPart) {
           foundPathPart = true;
           currNode = searchNode;
         }
@@ -108,7 +108,7 @@ export class LocalFS implements IFS {
 
       if (!foundPathPart) {
         path.unshift("root");
-        throw new InvalidPathError(`The path "${Path.render(path)}" is invalid`);
+        throw new InvalidPathError(`The path "${VirtualPath.render(path)}" is invalid`);
       }
     }
 
@@ -119,14 +119,14 @@ export class LocalFS implements IFS {
     return this.executables;
   }
 
-  private build(jsonNode: IDirectory): Directory {
-    const directory: Directory = new Directory(jsonNode.name);
+  private build(jsonNode: IVirtualDirectory): VirtualDirectory {
+    const directory: VirtualDirectory = new VirtualDirectory(jsonNode.name);
 
     for (const child of jsonNode.children) {
       if ("children" in child) {
         directory.addChild(this.build(child));
       } else {
-        const file: File = new File(child.name, child.type, child.content);
+        const file: VirtualFile = new VirtualFile(child.name, child.type, child.content);
         directory.addChild(file);
       }
     }
@@ -137,10 +137,10 @@ export class LocalFS implements IFS {
   private loadExecutables(executables: IExecutable[]): void {
     this.executables = executables;
 
-    const bin: Directory = new Directory("bin");
+    const bin: VirtualDirectory = new VirtualDirectory("bin");
 
     for (const executable of executables) {
-      const executableFile = new File(executable.name, FileType.Executable, "");
+      const executableFile = new VirtualFile(executable.name, VirtualFileType.Executable, "");
       bin.addChild(executableFile);
     }
 

@@ -1,30 +1,30 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Directory } from "./filesystem/Directory";
-import { File } from "./filesystem/File";
-import { FileType } from "./filesystem/FileType";
+import { VirtualDirectory } from "./filesystem/VirtualDirectory";
+import { VirtualFile } from "./filesystem/VirtualFile";
+import { VirtualFileType } from "./filesystem/VirtualFileType";
 
-function parseFileType(fileName: string): FileType {
+function parseVirtualFileType(fileName: string): VirtualFileType {
   const split = fileName.split(".");
   const extension = split[split.length - 1];
 
-  let type: FileType;
+  let type: VirtualFileType;
 
   switch (extension) {
     case "md": {
-      type = FileType.Markdown;
+      type = VirtualFileType.Markdown;
       break;
     }
     case "pdf": {
-      type = FileType.PDF;
+      type = VirtualFileType.PDF;
       break;
     }
     case "link": {
-      type = FileType.Link;
+      type = VirtualFileType.Link;
       break;
     }
     case "gist": {
-      type = FileType.Gist;
+      type = VirtualFileType.Gist;
       break;
     }
     default: {
@@ -35,18 +35,18 @@ function parseFileType(fileName: string): FileType {
   return type;
 }
 
-function getContent(filePath: string, type: FileType) {
+function getContent(filePath: string, type: VirtualFileType) {
   const buffer: Buffer = fs.readFileSync(filePath);
   let content: string;
 
   switch (type) {
-    case FileType.Link:
-    case FileType.Gist:
-    case FileType.Markdown: {
+    case VirtualFileType.Link:
+    case VirtualFileType.Gist:
+    case VirtualFileType.Markdown: {
       content = buffer.toString();
       break;
     }
-    case FileType.PDF: {
+    case VirtualFileType.PDF: {
       content = buffer.toString("base64");
       break;
     }
@@ -58,11 +58,11 @@ function getContent(filePath: string, type: FileType) {
   return content;
 }
 
-function readDirRecursive(dirPath: string): Directory {
+function readDirRecursive(dirPath: string): VirtualDirectory {
   const splitPath = dirPath.split("/");
   const name = splitPath[splitPath.length - 1];
 
-  const dir = new Directory(name);
+  const dir = new VirtualDirectory(name);
   const items = fs.readdirSync(dirPath);
 
   for (const item of items) {
@@ -70,12 +70,12 @@ function readDirRecursive(dirPath: string): Directory {
     const stats: fs.Stats = fs.statSync(itemPath);
 
     if (stats.isDirectory()) {
-      const dirNode: Directory = readDirRecursive(itemPath);
+      const dirNode: VirtualDirectory = readDirRecursive(itemPath);
       dir.addChild(dirNode);
     } else {
-      const type: FileType = parseFileType(item);
+      const type: VirtualFileType = parseVirtualFileType(item);
       const content: string = getContent(itemPath, type);
-      const file: File = new File(item, type, content);
+      const file: VirtualFile = new VirtualFile(item, type, content);
       dir.addChild(file);
     }
   }
@@ -85,7 +85,7 @@ function readDirRecursive(dirPath: string): Directory {
 
 const root = path.join(__dirname, "../../files");
 
-const result: Directory = readDirRecursive(root);
+const result: VirtualDirectory = readDirRecursive(root);
 
 const json: string = JSON.stringify(result, null, 2);
 

@@ -1,9 +1,9 @@
 import * as React from "react";
 
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
-import { Directory } from "../filesystem/Directory";
-import { IFS } from "../filesystem/IFS";
-import { Path } from "../filesystem/Path";
+import { VirtualDirectory } from "../filesystem/VirtualDirectory";
+import { IVirtualFS } from "../filesystem/IVirtualFS";
+import { VirtualPath } from "../filesystem/VirtualPath";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
@@ -18,7 +18,7 @@ export class Cd implements IExecutable {
     commandHandler: (command: string) => void,
     currentDirectory: string[],
     setCurrentDirectory: (path: string[]) => void,
-    fs: IFS,
+    fs: IVirtualFS,
     args: string[]
   ): IExecutableOutput {
     let path: string[] = currentDirectory;
@@ -35,7 +35,7 @@ export class Cd implements IExecutable {
           path = [fs.root.name];
         }
       } else {
-        path = Path.parseAndAdd(path, newDirectory);
+        path = VirtualPath.parseAndAdd(path, newDirectory);
       }
     }
 
@@ -44,12 +44,12 @@ export class Cd implements IExecutable {
 
     const node = fs.stat(path);
 
-    if (node instanceof Directory) {
+    if (node instanceof VirtualDirectory) {
       setCurrentDirectory(path);
       console.debug("Changed current directory to:");
       console.debug(path);
     } else {
-      throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
+      throw new DirectoryNotFoundError(`The node at "${VirtualPath.render(path)}" is not a directory`);
     }
 
     return {

@@ -1,4 +1,4 @@
-export enum FileType {
+export enum VirtualFileType {
   Executable,
   Markdown,
   PDF,
