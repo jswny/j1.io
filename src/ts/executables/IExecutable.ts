@@ -8,6 +8,7 @@ export interface IExecutable {
     commandHandler: (command: string) => void,
     currentDirectory: string[],
     setCurrentDirectory: (path: string[]) => void,
-    fs: IVirtualFS, args: string[]
+    fs: IVirtualFS,
+    args: string[]
   ): IExecutableOutput;
 }

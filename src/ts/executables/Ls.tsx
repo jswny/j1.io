@@ -35,11 +35,13 @@ export class Ls implements IExecutable {
     }
 
     const children = fs.list(path);
-    children.forEach((child, index) => output.push(this.getNodeOuput(child, index, path, commandHandler)));
+    children.forEach((child, index) =>
+      output.push(this.getNodeOuput(child, index, path, commandHandler))
+    );
 
     return {
       historyPath: null,
-      output: <div>{ output }</div>
+      output: <div>{output}</div>,
     };
   }
 
@@ -52,26 +54,38 @@ export class Ls implements IExecutable {
     let output: JSX.Element;
 
     if (node instanceof VirtualDirectory) {
-      output = this.getClickableOutput(node, key, path, commandHandler, (n: VirtualNode) => n.name + "/");
+      output = this.getClickableOutput(
+        node,
+        key,
+        path,
+        commandHandler,
+        (n: VirtualNode) => n.name + "/"
+      );
     } else {
       const file: VirtualFile = node;
       switch (file.type) {
         case VirtualFileType.PDF:
         case VirtualFileType.Markdown:
         case VirtualFileType.Gist: {
-          output = this.getClickableOutput(node, key, path, commandHandler, (n: VirtualNode) => n.name);
+          output = this.getClickableOutput(
+            node,
+            key,
+            path,
+            commandHandler,
+            (n: VirtualNode) => n.name
+          );
           break;
         }
         case VirtualFileType.Link: {
           output = (
-            <div key={ key }>
-              <a href={ file.content }>{ file.name }</a>
+            <div key={key}>
+              <a href={file.content}>{file.name}</a>
             </div>
           );
           break;
         }
         default: {
-          output = <div key={ key }>{ file.name }</div>;
+          output = <div key={key}>{file.name}</div>;
         }
       }
     }
@@ -97,12 +111,19 @@ export class Ls implements IExecutable {
     }
 
     return (
-      <div key={ key }>
+      <div key={key}>
         <Link
-          to={ renderedNewPath }
-          onClick={ (event) => this.onNodeClick(event, commandHandler, renderedNewPath, baseCommand) }
+          to={renderedNewPath}
+          onClick={(event) =>
+            this.onNodeClick(
+              event,
+              commandHandler,
+              renderedNewPath,
+              baseCommand
+            )
+          }
         >
-          { outputContent(node) }
+          {outputContent(node)}
         </Link>
       </div>
     );

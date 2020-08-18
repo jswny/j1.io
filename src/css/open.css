@@ -6,13 +6,13 @@
   margin: 1rem 0 1rem 0;
 }
 
-.output-boxed { 
+.output-boxed {
   border: 2px solid white;
   padding: 0 1rem 0 1rem;
   margin: 1rem 0 1rem 0;
 }
 
-.output-markdown.output-boxed { 
+.output-markdown.output-boxed {
   padding: 1rem 5rem 1rem 5rem;
 }
 
@@ -22,7 +22,7 @@
     max-width: 100%;
   }
 
-  .output-markdown.output-boxed { 
+  .output-markdown.output-boxed {
     padding: 0 1.25rem 0 1.25rem;
   }
 }
@@ -49,5 +49,5 @@
 /* Only apply to inline code */
 :not(pre) > code {
   background: rgb(68, 68, 68);
-  padding: 0 .3rem 0 .3rem;
+  padding: 0 0.3rem 0 0.3rem;
 }

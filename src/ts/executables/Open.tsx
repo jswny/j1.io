@@ -36,7 +36,9 @@ export class Open implements IExecutable {
   ): IExecutableOutput {
     if (args.length === 0) {
       throw new ArgumentError(
-        `Executable ${this.name} called with ${args.length} arguments, but at least ${1} required`
+        `Executable ${this.name} called with ${
+          args.length
+        } arguments, but at least ${1} required`
       );
     }
 
@@ -53,7 +55,7 @@ export class Open implements IExecutable {
         result = (
           <ReactMarkdown
             className="output-markdown output-boxed"
-            source={ output }
+            source={output}
             renderers={{ code: CodeBlock }}
           />
         );
@@ -61,7 +63,7 @@ export class Open implements IExecutable {
         break;
       }
       case VirtualFileType.PDF: {
-        result = <PDF name={ file.name } base64={ file.content }/>;
+        result = <PDF name={file.name} base64={file.content} />;
         historyPath = path;
         break;
       }
@@ -71,12 +73,12 @@ export class Open implements IExecutable {
       }
       case VirtualFileType.Gist: {
         const gistFile: IGistFile = this.parseGistFile(file.content);
-        result = <Gist id={ gistFile.id } displayFile={ gistFile.displayFile } />;
+        result = <Gist id={gistFile.id} displayFile={gistFile.displayFile} />;
         historyPath = path;
         break;
       }
       default: {
-        result = <div>{ output }</div>;
+        result = <div>{output}</div>;
         historyPath = path;
       }
     }
@@ -84,15 +86,15 @@ export class Open implements IExecutable {
     const resultWithTitle: JSX.Element = (
       <>
         <Helmet>
-          <title>{ file.name } - Joe Sweeney</title>
+          <title>{file.name} - Joe Sweeney</title>
         </Helmet>
-        { result }
+        {result}
       </>
     );
 
     return {
       historyPath,
-      output: resultWithTitle
+      output: resultWithTitle,
     };
   }
 
@@ -103,7 +105,7 @@ export class Open implements IExecutable {
     const json = JSON.parse(jsonString) as IGistFile;
     return {
       displayFile: json.displayFile,
-      id: json.id
+      id: json.id,
     };
   }
 

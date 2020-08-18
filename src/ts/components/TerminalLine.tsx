@@ -19,14 +19,20 @@ export class TerminalLine extends React.Component<ITerminalLineProps> {
   public render(): JSX.Element {
     return (
       <div className="terminal-line">
-        <span className="terminal-prompt">{this.props.directory} {this.props.prompt}</span>
+        <span className="terminal-prompt">
+          {this.props.directory} {this.props.prompt}
+        </span>
         <TerminalInput
-          value={ this.props.inputProps.value }
-          active={ this.props.inputProps.active }
-          handleSubmitFunction={ (input: string) => this.props.inputProps.handleSubmitFunction(input) }
-          updateValueFunction={ (input: string) => this.props.inputProps.updateValueFunction(input) }
+          value={this.props.inputProps.value}
+          active={this.props.inputProps.active}
+          handleSubmitFunction={(input: string) =>
+            this.props.inputProps.handleSubmitFunction(input)
+          }
+          updateValueFunction={(input: string) =>
+            this.props.inputProps.updateValueFunction(input)
+          }
         />
-        <div className="terminal-output"> { this.props.output }</div>
+        <div className="terminal-output"> {this.props.output}</div>
       </div>
     );
   }

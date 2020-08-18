@@ -17,16 +17,16 @@ export class TerminalInput extends React.Component<ITerminalInputProps> {
   public render(): JSX.Element {
     return (
       <input
-        spellCheck={ false }
+        spellCheck={false}
         autoCapitalize="off"
         autoComplete="off"
         autoCorrect="off"
-        autoFocus={ this.props.active }
+        autoFocus={this.props.active}
         className="terminal-input"
-        onKeyDown={ this.onKeyDown }
-        onChange={ this.onChange }
-        readOnly={ !this.props.active }
-        value={ this.props.value }
+        onKeyDown={this.onKeyDown}
+        onChange={this.onChange}
+        readOnly={!this.props.active}
+        value={this.props.value}
       />
     );
   }
@@ -35,12 +35,13 @@ export class TerminalInput extends React.Component<ITerminalInputProps> {
     const value: string = e.target.value;
     // console.debug(`Got input change: ${value}`);
     this.props.updateValueFunction(value);
-  }
+  };
 
   private onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === 13) { // Enter
+    if (e.keyCode === 13) {
+      // Enter
       e.preventDefault();
       this.props.handleSubmitFunction(e.currentTarget.value);
     }
-  }
+  };
 }

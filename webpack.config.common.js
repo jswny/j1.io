@@ -1,23 +1,23 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
   entry: {
-    app: "./src/ts/components/index.tsx"
+    app: "./src/ts/components/index.tsx",
   },
 
   output: {
     filename: "[name].bundle.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "dist"),
   },
 
   plugins: [
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!LocalFileManifest.json'],
+      cleanOnceBeforeBuildPatterns: ["**/*", "!LocalFileManifest.json"],
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "src", "html", "index.html")
+      template: path.resolve(__dirname, "src", "html", "index.html"),
     }),
   ],
 
@@ -28,17 +28,14 @@ module.exports = {
   module: {
     rules: [
       // Handle Typescript files with Babel first, then ts-loader
-      { 
+      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: [
-                '@babel/preset-react',
-                '@babel/preset-env',
-              ]
+              presets: ["@babel/preset-react", "@babel/preset-env"],
             },
           },
           {
@@ -53,10 +50,7 @@ module.exports = {
       // Resolve all imports with css-loader, and apply them to the files that require those styles with the style-loader
       {
         test: /\.css$/,
-        use: [
-          "style-loader",
-          "css-loader",
-        ]
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

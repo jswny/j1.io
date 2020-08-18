@@ -23,10 +23,7 @@ export class VirtualPath {
   }
 
   public static render(path: string[]): string {
-    const result = path
-      .join("/")
-      .replace("root", "/")
-      .replace("//", "/");
+    const result = path.join("/").replace("root", "/").replace("//", "/");
     return result;
   }
 }
