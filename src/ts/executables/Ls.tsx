@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { VirtualDirectory } from "../filesystem/VirtualDirectory";
 import { VirtualFile } from "../filesystem/VirtualFile";
-import { FileType } from "../filesystem/FileType";
+import { VirtualFileType } from "../filesystem/VirtualFileType";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { VirtualNode } from "../filesystem/VirtualNode";
 import { VirtualPath } from "../filesystem/VirtualPath";
@@ -56,13 +56,13 @@ export class Ls implements IExecutable {
     } else {
       const file: VirtualFile = node;
       switch (file.type) {
-        case FileType.PDF:
-        case FileType.Markdown:
-        case FileType.Gist: {
+        case VirtualFileType.PDF:
+        case VirtualFileType.Markdown:
+        case VirtualFileType.Gist: {
           output = this.getClickableOutput(node, key, path, commandHandler, (n: VirtualNode) => n.name);
           break;
         }
-        case FileType.Link: {
+        case VirtualFileType.Link: {
           output = (
             <div key={ key }>
               <a href={ file.content }>{ file.name }</a>

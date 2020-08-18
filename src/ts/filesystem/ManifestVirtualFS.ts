@@ -8,7 +8,7 @@ import { Ls } from "../executables/Ls";
 import { Open } from "../executables/Open";
 import { VirtualDirectory, IVirtualDirectory } from "./VirtualDirectory";
 import { VirtualFile } from "./VirtualFile";
-import { FileType } from "./FileType";
+import { VirtualFileType } from "./VirtualFileType";
 import { IVirtualFS } from "./IVirtualFS";
 import { VirtualNode } from "./VirtualNode";
 import { VirtualPath } from "./VirtualPath";
@@ -52,10 +52,10 @@ export class ManifestVirtualFS implements IVirtualFS {
     if (node instanceof VirtualFile) {
       const file: VirtualFile = node;
       const readableTypes = [
-        FileType.Markdown,
-        FileType.PDF,
-        FileType.Link,
-        FileType.Gist,
+        VirtualFileType.Markdown,
+        VirtualFileType.PDF,
+        VirtualFileType.Link,
+        VirtualFileType.Gist,
       ];
       if (readableTypes.includes(file.type)) {
         console.debug("Found compatible file to read: ");
@@ -140,7 +140,7 @@ export class ManifestVirtualFS implements IVirtualFS {
     const bin: VirtualDirectory = new VirtualDirectory("bin");
 
     for (const executable of executables) {
-      const executableFile = new VirtualFile(executable.name, FileType.Executable, "");
+      const executableFile = new VirtualFile(executable.name, VirtualFileType.Executable, "");
       bin.addChild(executableFile);
     }
 

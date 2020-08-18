@@ -1,17 +1,17 @@
-import { FileType } from "./FileType";
+import { VirtualFileType } from "./VirtualFileType";
 
 export interface IVirtualFile {
   name: string;
-  type: FileType;
+  type: VirtualFileType;
   content: string;
 }
 
 export class VirtualFile {
   public name: string;
-  public type: FileType;
+  public type: VirtualFileType;
   public content: string;
 
-  constructor(name: string, type: FileType, content: string) {
+  constructor(name: string, type: VirtualFileType, content: string) {
     this.name = name;
     this.type = type;
     this.content = content;

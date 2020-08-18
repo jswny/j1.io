@@ -7,7 +7,7 @@ import { Gist } from "../components/Gist";
 import { PDF } from "../components/PDF";
 import { ArgumentError } from "../errors/ArgumentError";
 import { VirtualFile } from "../filesystem/VirtualFile";
-import { FileType } from "../filesystem/FileType";
+import { VirtualFileType } from "../filesystem/VirtualFileType";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { VirtualPath } from "../filesystem/VirtualPath";
 import { IExecutable } from "./IExecutable";
@@ -49,7 +49,7 @@ export class Open implements IExecutable {
 
     let result: JSX.Element;
     switch (file.type) {
-      case FileType.Markdown: {
+      case VirtualFileType.Markdown: {
         result = (
           <ReactMarkdown
             className="output-markdown output-boxed"
@@ -60,16 +60,16 @@ export class Open implements IExecutable {
         historyPath = path;
         break;
       }
-      case FileType.PDF: {
+      case VirtualFileType.PDF: {
         result = <PDF name={ file.name } base64={ file.content }/>;
         historyPath = path;
         break;
       }
-      case FileType.Link: {
+      case VirtualFileType.Link: {
         this.redirectExternal(file.content);
         break;
       }
-      case FileType.Gist: {
+      case VirtualFileType.Gist: {
         const gistFile: IGistFile = this.parseGistFile(file.content);
         result = <Gist id={ gistFile.id } displayFile={ gistFile.displayFile } />;
         historyPath = path;

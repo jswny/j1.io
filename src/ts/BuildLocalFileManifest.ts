@@ -2,29 +2,29 @@ import * as fs from "fs";
 import * as path from "path";
 import { VirtualDirectory } from "./filesystem/VirtualDirectory";
 import { VirtualFile } from "./filesystem/VirtualFile";
-import { FileType } from "./filesystem/FileType";
+import { VirtualFileType } from "./filesystem/VirtualFileType";
 
-function parseFileType(fileName: string): FileType {
+function parseVirtualFileType(fileName: string): VirtualFileType {
   const split = fileName.split(".");
   const extension = split[split.length - 1];
 
-  let type: FileType;
+  let type: VirtualFileType;
 
   switch (extension) {
     case "md": {
-      type = FileType.Markdown;
+      type = VirtualFileType.Markdown;
       break;
     }
     case "pdf": {
-      type = FileType.PDF;
+      type = VirtualFileType.PDF;
       break;
     }
     case "link": {
-      type = FileType.Link;
+      type = VirtualFileType.Link;
       break;
     }
     case "gist": {
-      type = FileType.Gist;
+      type = VirtualFileType.Gist;
       break;
     }
     default: {
@@ -35,18 +35,18 @@ function parseFileType(fileName: string): FileType {
   return type;
 }
 
-function getContent(filePath: string, type: FileType) {
+function getContent(filePath: string, type: VirtualFileType) {
   const buffer: Buffer = fs.readFileSync(filePath);
   let content: string;
 
   switch (type) {
-    case FileType.Link:
-    case FileType.Gist:
-    case FileType.Markdown: {
+    case VirtualFileType.Link:
+    case VirtualFileType.Gist:
+    case VirtualFileType.Markdown: {
       content = buffer.toString();
       break;
     }
-    case FileType.PDF: {
+    case VirtualFileType.PDF: {
       content = buffer.toString("base64");
       break;
     }
@@ -73,7 +73,7 @@ function readDirRecursive(dirPath: string): VirtualDirectory {
       const dirNode: VirtualDirectory = readDirRecursive(itemPath);
       dir.addChild(dirNode);
     } else {
-      const type: FileType = parseFileType(item);
+      const type: VirtualFileType = parseVirtualFileType(item);
       const content: string = getContent(itemPath, type);
       const file: VirtualFile = new VirtualFile(item, type, content);
       dir.addChild(file);
