@@ -6,11 +6,11 @@ import { Cd } from "../executables/Cd";
 import { IExecutable } from "../executables/IExecutable";
 import { Ls } from "../executables/Ls";
 import { Open } from "../executables/Open";
-import { Directory } from "./Directory";
+import { Directory, IDirectory } from "./Directory";
 import { File } from "./File";
 import { FileType } from "./FileType";
 import { IFS } from "./IFS";
-import { INode } from "./INode";
+import { Node } from "./Node";
 import { Path } from "./Path";
 
 export class LocalFS implements IFS {
@@ -21,8 +21,10 @@ export class LocalFS implements IFS {
     console.debug("Loading filesystem manifest:");
     console.debug(manifest);
 
-    this.root = this.build(manifest);
+    this.root = this.build(manifest as IDirectory);
     this.root.name = "root";
+
+    console.debug(`Root type: ${this.root.constructor.name}`)
 
     console.debug("Successfully loaded filesystem:");
     console.debug(this.root);
@@ -70,20 +72,20 @@ export class LocalFS implements IFS {
     return output;
   }
 
-  public list(path: string[]): INode[] {
+  public list(path: string[]): Node[] {
     console.debug("List requested for path:");
     console.debug(path);
 
-    const node: INode = this.stat(path);
+    const node: Node = this.stat(path);
 
     if (node instanceof Directory) {
-      return (node as Directory).children;
+      return node.children;
     } else {
       throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
     }
   }
 
-  public stat(path: string[]): INode {
+  public stat(path: string[]): Node {
     let currNode: Directory = this.root;
     path = path.slice(1, path.length);
 
@@ -92,7 +94,7 @@ export class LocalFS implements IFS {
 
     for (let i = 0; i < path.length; i++) {
       const pathPart = path[i];
-      let foundPathPart: boolean = false;
+      let foundPathPart = false;
 
       for (const searchNode of currNode.children) {
         if (i === path.length - 1 && searchNode.name === pathPart) {
@@ -117,7 +119,7 @@ export class LocalFS implements IFS {
     return this.executables;
   }
 
-  private build(jsonNode: any): Directory {
+  private build(jsonNode: IDirectory): Directory {
     const directory: Directory = new Directory(jsonNode.name);
 
     for (const child of jsonNode.children) {

@@ -100,7 +100,7 @@ export class Open implements IExecutable {
     console.debug(`Parsing JSON string into Gist file data:`);
     console.debug(jsonString);
 
-    const json: any = JSON.parse(jsonString);
+    const json = JSON.parse(jsonString) as IGistFile;
     return {
       displayFile: json.displayFile,
       id: json.id

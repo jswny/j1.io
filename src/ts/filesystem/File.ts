@@ -1,7 +1,12 @@
 import { FileType } from "./FileType";
-import { INode } from "./INode";
 
-export class File implements INode {
+export interface IFile {
+  name: string;
+  type: FileType;
+  content: string;
+}
+
+export class File {
   public name: string;
   public type: FileType;
   public content: string;

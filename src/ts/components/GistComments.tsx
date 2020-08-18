@@ -1,9 +1,12 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
+import { Endpoints, GistsListCommentsResponseData } from "@octokit/types";
 
 import { axios } from "../Axios";
 import { CodeBlock } from "../components/CodeBlock";
 import { RetrieveGistCommentsError } from "../errors/RetrieveGistCommentsError";
+
+type ListGistCommentsResponse = Endpoints["GET /gists/:gist_id/comments"]["response"];
 
 export interface IGistCommentsProps {
   id: string;
@@ -35,6 +38,9 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
       console.debug("Recieved Gist comments data from API:");
       console.debug(gistComments);
       this.populateState(gistComments);
+    })
+    .catch(() => {
+      throw new RetrieveGistCommentsError(`Could not retrieve Gist comments from Gist ID ${this.props.id}`);
     });
   }
 
@@ -82,18 +88,18 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
     });
   }
 
-  private async getGistComments(id: string): Promise<any> {
-    const url: string = `https://api.github.com/gists/${id}/comments`;
+  private async getGistComments(id: string): Promise<GistsListCommentsResponseData> {
+    const url = `https://api.github.com/gists/${id}/comments`;
     try {
-      const response = await axios.get(url);
+      const response: ListGistCommentsResponse = await axios.get(url);
       return response.data;
     } catch (e) {
-      throw new RetrieveGistCommentsError(`Could not retrieve Gist at ${url}`);
+      throw new RetrieveGistCommentsError(`Could not retrieve Gist comments from ${url}`);
     }
   }
 
-  private populateState(gistComments: any): void {
-    const comments: IRenderedComment[] = gistComments.map((comment: any) => {
+  private populateState(gistComments: GistsListCommentsResponseData): void {
+    const comments: IRenderedComment[] = gistComments.map((comment: GistsListCommentsResponseData[0]) => {
       const username: string = comment.user.login;
       const content: string = comment.body;
       return {

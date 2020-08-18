@@ -6,8 +6,8 @@ import { Terminal } from "./Terminal";
 
 import "../../css/main.css";
 
-export class App extends React.Component<{}, {}> {
-  public constructor(props: {}) {
+export class App extends React.Component<unknown, unknown> {
+  public constructor(props: unknown) {
     super(props);
   }
 

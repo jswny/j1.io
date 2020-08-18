@@ -6,3 +6,6 @@ dist/
 
 # Some tools (VSCode linting) need this file, so ignore it if we need to generate it locally somehow (symlink)
 tsconfig.json
+
+# MacOS
+.DS_Store

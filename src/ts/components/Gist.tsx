@@ -1,11 +1,14 @@
 import * as React from "react";
 import * as ReactMarkdown from "react-markdown";
+import { Endpoints, GistsGetResponseData } from "@octokit/types";
 
 import { axios } from "../Axios";
 import { CodeBlock } from "../components/CodeBlock";
 import { DisplayGistError } from "../errors/DisplayGistError";
 import { RetrieveGistError } from "../errors/RetrieveGistError";
 import { GistComments } from "./GistComments";
+
+type GetGistResponse = Endpoints["GET /gists/:gist_id"]["response"];
 
 export interface IGistProps {
   displayFile: string;
@@ -35,7 +38,8 @@ export class Gist extends React.Component<IGistProps, IGistState> {
       console.debug("Received Gist data from API:");
       console.debug(gist);
       this.populateState(gist, this.props.displayFile);
-    });
+    })
+    .catch(() => console.debug(`Could not retrive Gist ID ${this.props.id}`));
   }
 
   public render(): JSX.Element {
@@ -43,6 +47,7 @@ export class Gist extends React.Component<IGistProps, IGistState> {
     switch (this.state.language) {
       case "": {
         result = <div></div>;
+        break;
       }
       case "Markdown": {
         result = (
@@ -70,18 +75,18 @@ export class Gist extends React.Component<IGistProps, IGistState> {
     return result;
   }
 
-  private async getGist(id: string): Promise<any> {
-    const url: string = `https://api.github.com/gists/${id}`;
+  private async getGist(id: string): Promise<GistsGetResponseData> {
+    const url = `https://api.github.com/gists/${id}`;
     try {
-      const response = await axios.get(url);
+      const response: GetGistResponse = await axios.get(url);
       return response.data;
     } catch (e) {
       throw new RetrieveGistError(`Could not retrieve Gist at ${url}`);
     }
   }
 
-  private populateState(gist: any, displayFile: string): void {
-    const displayFileObject: any = gist.files[displayFile];
+  private populateState(gist: GistsGetResponseData, displayFile: string): void {
+    const displayFileObject = gist.files[displayFile];
     const publicUrl: string = gist.html_url;
     const content: string = displayFileObject.content;
     const language: string = displayFileObject.language;
