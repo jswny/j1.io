@@ -6,7 +6,7 @@ import { VirtualFile } from "../filesystem/VirtualFile";
 import { FileType } from "../filesystem/FileType";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { VirtualNode } from "../filesystem/VirtualNode";
-import { Path } from "../filesystem/Path";
+import { VirtualPath } from "../filesystem/VirtualPath";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
@@ -31,7 +31,7 @@ export class Ls implements IExecutable {
       path = currentDirectory;
     } else {
       const argPath = args[0];
-      path = Path.parseAndAdd(currentDirectory, argPath);
+      path = VirtualPath.parseAndAdd(currentDirectory, argPath);
     }
 
     const children = fs.list(path);
@@ -87,7 +87,7 @@ export class Ls implements IExecutable {
   ): JSX.Element {
     const nodePath = path.slice(0);
     nodePath.push(node.name);
-    const renderedNewPath = Path.render(nodePath);
+    const renderedNewPath = VirtualPath.render(nodePath);
 
     let baseCommand: string;
     if (node instanceof VirtualDirectory) {

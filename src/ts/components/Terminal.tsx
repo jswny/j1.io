@@ -8,7 +8,7 @@ import { InvalidPathError } from "../errors/InvalidPathError";
 import { RetrieveGistError } from "../errors/RetrieveGistError";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { ManifestVirtualFS } from "../filesystem/ManifestVirtualFS";
-import { Path } from "../filesystem/Path";
+import { VirtualPath } from "../filesystem/VirtualPath";
 import { history } from "../History";
 import { Shell } from "../Shell";
 import { Line } from "./Line";
@@ -119,13 +119,13 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     if (path !== null && this.state.initialCommandExecuted) {
       console.debug("Pushing path to history: ");
       console.debug(path);
-      history.push(Path.render(path));
+      history.push(VirtualPath.render(path));
     }
   }
 
   private renderCurrentDirectoryCopy(): string {
     const currentDirectory = this.shell.getCurrentDirectoryCopy();
-    return Path.render(currentDirectory);
+    return VirtualPath.render(currentDirectory);
   }
 
   private getCurrentLineIndex(): number {

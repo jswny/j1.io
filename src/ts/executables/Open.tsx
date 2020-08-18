@@ -9,7 +9,7 @@ import { ArgumentError } from "../errors/ArgumentError";
 import { VirtualFile } from "../filesystem/VirtualFile";
 import { FileType } from "../filesystem/FileType";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
-import { Path } from "../filesystem/Path";
+import { VirtualPath } from "../filesystem/VirtualPath";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
@@ -43,7 +43,7 @@ export class Open implements IExecutable {
     let historyPath: string[] = null;
 
     const argPath = args[0];
-    const path: string[] = Path.parseAndAdd(currentDirectory, argPath);
+    const path: string[] = VirtualPath.parseAndAdd(currentDirectory, argPath);
     const output = fs.read(path);
     const file: VirtualFile = fs.stat(path) as VirtualFile;
 

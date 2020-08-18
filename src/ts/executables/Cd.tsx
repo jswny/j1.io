@@ -3,7 +3,7 @@ import * as React from "react";
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
 import { VirtualDirectory } from "../filesystem/VirtualDirectory";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
-import { Path } from "../filesystem/Path";
+import { VirtualPath } from "../filesystem/VirtualPath";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
@@ -35,7 +35,7 @@ export class Cd implements IExecutable {
           path = [fs.root.name];
         }
       } else {
-        path = Path.parseAndAdd(path, newDirectory);
+        path = VirtualPath.parseAndAdd(path, newDirectory);
       }
     }
 
@@ -49,7 +49,7 @@ export class Cd implements IExecutable {
       console.debug("Changed current directory to:");
       console.debug(path);
     } else {
-      throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
+      throw new DirectoryNotFoundError(`The node at "${VirtualPath.render(path)}" is not a directory`);
     }
 
     return {

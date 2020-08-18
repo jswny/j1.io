@@ -1,4 +1,4 @@
-export class Path {
+export class VirtualPath {
   public static parse(path: string): string[] {
     const result = this.parseAndAdd([], path);
     return result;

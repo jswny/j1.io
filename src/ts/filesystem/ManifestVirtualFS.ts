@@ -11,7 +11,7 @@ import { VirtualFile } from "./VirtualFile";
 import { FileType } from "./FileType";
 import { IVirtualFS } from "./IVirtualFS";
 import { VirtualNode } from "./VirtualNode";
-import { Path } from "./Path";
+import { VirtualPath } from "./VirtualPath";
 
 export class ManifestVirtualFS implements IVirtualFS {
   public root: VirtualDirectory;
@@ -63,10 +63,10 @@ export class ManifestVirtualFS implements IVirtualFS {
 
         output = file.content;
       } else {
-        throw new FileNotFoundError(`The node at "${Path.render(path)}" is not a readable file`);
+        throw new FileNotFoundError(`The node at "${VirtualPath.render(path)}" is not a readable file`);
       }
     } else {
-      throw new FileNotFoundError(`The node at "${Path.render(path)}" is not a file`);
+      throw new FileNotFoundError(`The node at "${VirtualPath.render(path)}" is not a file`);
     }
 
     return output;
@@ -81,7 +81,7 @@ export class ManifestVirtualFS implements IVirtualFS {
     if (node instanceof VirtualDirectory) {
       return node.children;
     } else {
-      throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
+      throw new DirectoryNotFoundError(`The node at "${VirtualPath.render(path)}" is not a directory`);
     }
   }
 
@@ -108,7 +108,7 @@ export class ManifestVirtualFS implements IVirtualFS {
 
       if (!foundPathPart) {
         path.unshift("root");
-        throw new InvalidPathError(`The path "${Path.render(path)}" is invalid`);
+        throw new InvalidPathError(`The path "${VirtualPath.render(path)}" is invalid`);
       }
     }
 
