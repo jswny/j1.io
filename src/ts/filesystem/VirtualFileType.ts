@@ -3,5 +3,5 @@ export enum VirtualFileType {
   Markdown,
   PDF,
   Link,
-  Gist
+  Gist,
 }

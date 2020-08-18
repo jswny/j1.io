@@ -21,11 +21,11 @@ export class PDF extends React.Component<IPDFProps, { numPages: number }> {
 
     return (
       <div className="output-pdf">
-        <Document file={ base64Data } onLoadSuccess={ (pdf) => this.onLoad(pdf) }>
-          { this.buildPages() }
+        <Document file={base64Data} onLoadSuccess={(pdf) => this.onLoad(pdf)}>
+          {this.buildPages()}
         </Document>
         <div className="output-additional-link output-pdf-link">
-          <a href={ this.buildBase64PDFData(this.props.base64) }>Download</a>
+          <a href={this.buildBase64PDFData(this.props.base64)}>Download</a>
         </div>
       </div>
     );
@@ -43,7 +43,7 @@ export class PDF extends React.Component<IPDFProps, { numPages: number }> {
   private buildPages(): JSX.Element[] {
     const pages: JSX.Element[] = [];
     for (let i = 1; i < this.state.numPages + 1; i++) {
-      pages.push(<Page key={ i } pageNumber={ i }/>);
+      pages.push(<Page key={i} pageNumber={i} />);
     }
     return pages;
   }

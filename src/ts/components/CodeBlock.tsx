@@ -3,106 +3,106 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { dark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 interface HLJSStyle {
-  "hljs": {
-    "display": string,
-    "overflowX": string,
-    "padding": string,
-    "background": string,
-    "color": string
-  },
+  hljs: {
+    display: string;
+    overflowX: string;
+    padding: string;
+    background: string;
+    color: string;
+  };
   "hljs-keyword": {
-    "color": string,
-    "fontWeight": string
-  },
+    color: string;
+    fontWeight: string;
+  };
   "hljs-selector-tag": {
-    "color": string,
-    "fontWeight": string
-  },
+    color: string;
+    fontWeight: string;
+  };
   "hljs-literal": {
-    "color": string,
-    "fontWeight": string
-  },
+    color: string;
+    fontWeight: string;
+  };
   "hljs-section": {
-    "color": string,
-    "fontWeight": string
-  },
+    color: string;
+    fontWeight: string;
+  };
   "hljs-link": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-subst": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-string": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-title": {
-    "color": string,
-    "fontWeight": string
-  },
+    color: string;
+    fontWeight: string;
+  };
   "hljs-name": {
-    "color": string,
-    "fontWeight": string
-  },
+    color: string;
+    fontWeight: string;
+  };
   "hljs-type": {
-    "color": string,
-    "fontWeight": string
-  },
+    color: string;
+    fontWeight: string;
+  };
   "hljs-attribute": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-symbol": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-bullet": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-built_in": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-addition": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-variable": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-template-tag": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-template-variable": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-comment": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-quote": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-deletion": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-meta": {
-    "color": string
-  },
+    color: string;
+  };
   "hljs-doctag": {
-    "fontWeight": string
-  },
+    fontWeight: string;
+  };
   "hljs-strong": {
-    "fontWeight": string
-  },
+    fontWeight: string;
+  };
   "hljs-emphasis": {
-    "fontStyle": string
-  }
+    fontStyle: string;
+  };
 }
 
-export interface ICodeBlockProps { value: string; language: string; }
+export interface ICodeBlockProps {
+  value: string;
+  language: string;
+}
 export class CodeBlock extends React.Component<ICodeBlockProps> {
   public render(): JSX.Element {
     const style = dark as HLJSStyle;
     return (
-      <SyntaxHighlighter
-        language={this.props.language}
-        style={ style }
-      >
+      <SyntaxHighlighter language={this.props.language} style={style}>
         {this.props.value}
       </SyntaxHighlighter>
     );

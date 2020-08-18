@@ -24,16 +24,12 @@ export class ManifestVirtualFS implements IVirtualFS {
     this.root = this.build(manifest as IVirtualDirectory);
     this.root.name = "root";
 
-    console.debug(`Root type: ${this.root.constructor.name}`)
+    console.debug(`Root type: ${this.root.constructor.name}`);
 
     console.debug("Successfully loaded filesystem:");
     console.debug(this.root);
 
-    const executablesToLoad = [
-      new Cd(),
-      new Ls(),
-      new Open(),
-    ];
+    const executablesToLoad = [new Cd(), new Ls(), new Open()];
     this.loadExecutables(executablesToLoad);
 
     console.debug("Loaded executables:");
@@ -63,10 +59,14 @@ export class ManifestVirtualFS implements IVirtualFS {
 
         output = file.content;
       } else {
-        throw new FileNotFoundError(`The node at "${VirtualPath.render(path)}" is not a readable file`);
+        throw new FileNotFoundError(
+          `The node at "${VirtualPath.render(path)}" is not a readable file`
+        );
       }
     } else {
-      throw new FileNotFoundError(`The node at "${VirtualPath.render(path)}" is not a file`);
+      throw new FileNotFoundError(
+        `The node at "${VirtualPath.render(path)}" is not a file`
+      );
     }
 
     return output;
@@ -81,7 +81,9 @@ export class ManifestVirtualFS implements IVirtualFS {
     if (node instanceof VirtualDirectory) {
       return node.children;
     } else {
-      throw new DirectoryNotFoundError(`The node at "${VirtualPath.render(path)}" is not a directory`);
+      throw new DirectoryNotFoundError(
+        `The node at "${VirtualPath.render(path)}" is not a directory`
+      );
     }
   }
 
@@ -100,7 +102,10 @@ export class ManifestVirtualFS implements IVirtualFS {
         if (i === path.length - 1 && searchNode.name === pathPart) {
           foundPathPart = true;
           return searchNode;
-        } else if (searchNode instanceof VirtualDirectory && searchNode.name === pathPart) {
+        } else if (
+          searchNode instanceof VirtualDirectory &&
+          searchNode.name === pathPart
+        ) {
           foundPathPart = true;
           currNode = searchNode;
         }
@@ -108,7 +113,9 @@ export class ManifestVirtualFS implements IVirtualFS {
 
       if (!foundPathPart) {
         path.unshift("root");
-        throw new InvalidPathError(`The path "${VirtualPath.render(path)}" is invalid`);
+        throw new InvalidPathError(
+          `The path "${VirtualPath.render(path)}" is invalid`
+        );
       }
     }
 
@@ -126,7 +133,11 @@ export class ManifestVirtualFS implements IVirtualFS {
       if ("children" in child) {
         directory.addChild(this.build(child));
       } else {
-        const file: VirtualFile = new VirtualFile(child.name, child.type, child.content);
+        const file: VirtualFile = new VirtualFile(
+          child.name,
+          child.type,
+          child.content
+        );
         directory.addChild(file);
       }
     }
@@ -140,7 +151,11 @@ export class ManifestVirtualFS implements IVirtualFS {
     const bin: VirtualDirectory = new VirtualDirectory("bin");
 
     for (const executable of executables) {
-      const executableFile = new VirtualFile(executable.name, VirtualFileType.Executable, "");
+      const executableFile = new VirtualFile(
+        executable.name,
+        VirtualFileType.Executable,
+        ""
+      );
       bin.addChild(executableFile);
     }
 

@@ -40,7 +40,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
     this.state = {
       initialCommandExecuted: false,
       keyBase: 0,
-      lines: [this.newLine()]
+      lines: [this.newLine()],
     };
   }
 
@@ -54,9 +54,7 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
   }
 
   public render(): JSX.Element {
-    return (
-      <div id="terminal">{ this.renderLines() }</div>
-    );
+    return <div id="terminal">{this.renderLines()}</div>;
   }
 
   public updateCurrentLineInput(input: string): void {
@@ -80,8 +78,12 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
         this.clearLines();
         return;
       } else {
-        const commandHandler = (command: string) => this.processCommand(command);
-        const { output, historyPath } = this.shell.command(commandHandler, input);
+        const commandHandler = (command: string) =>
+          this.processCommand(command);
+        const { output, historyPath } = this.shell.command(
+          commandHandler,
+          input
+        );
 
         this.pushHistory(historyPath);
 
@@ -90,15 +92,15 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
       }
     } catch (e) {
       if (
-        e instanceof ExecutableNotFoundError
-        || e instanceof DirectoryNotFoundError
-        || e instanceof InvalidPathError
-        || e instanceof FileNotFoundError
-        || e instanceof ArgumentError
-        || e instanceof RetrieveGistError
-        || e instanceof RetrieveGistCommentsError
+        e instanceof ExecutableNotFoundError ||
+        e instanceof DirectoryNotFoundError ||
+        e instanceof InvalidPathError ||
+        e instanceof FileNotFoundError ||
+        e instanceof ArgumentError ||
+        e instanceof RetrieveGistError ||
+        e instanceof RetrieveGistCommentsError
       ) {
-        currentOutput = <div>{ e.message }</div>;
+        currentOutput = <div>{e.message}</div>;
       } else {
         throw e;
       }
@@ -153,15 +155,16 @@ export class Terminal extends React.Component<ITerminalProps, ITerminalState> {
 
       lines.push(
         <TerminalLine
-          key={ this.state.keyBase + i }
-          directory={ currentLine.directory }
-          prompt={ this.props.prompt }
-          output={ currentLine.getOutput() }
+          key={this.state.keyBase + i}
+          directory={currentLine.directory}
+          prompt={this.props.prompt}
+          output={currentLine.getOutput()}
           inputProps={{
             active,
             handleSubmitFunction: (input: string) => this.processCommand(input),
-            updateValueFunction: (input: string) => this.updateCurrentLineInput(input),
-            value
+            updateValueFunction: (input: string) =>
+              this.updateCurrentLineInput(input),
+            value,
           }}
         />
       );

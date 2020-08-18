@@ -27,19 +27,18 @@ export class Gist extends React.Component<IGistProps, IGistState> {
     this.state = {
       content: "Loading Gist...",
       language: "",
-      publicUrl: ""
+      publicUrl: "",
     };
   }
 
   public componentDidMount(): void {
-    this
-    .getGist(this.props.id)
-    .then((gist) => {
-      console.debug("Received Gist data from API:");
-      console.debug(gist);
-      this.populateState(gist, this.props.displayFile);
-    })
-    .catch(() => console.debug(`Could not retrive Gist ID ${this.props.id}`));
+    this.getGist(this.props.id)
+      .then((gist) => {
+        console.debug("Received Gist data from API:");
+        console.debug(gist);
+        this.populateState(gist, this.props.displayFile);
+      })
+      .catch(() => console.debug(`Could not retrive Gist ID ${this.props.id}`));
   }
 
   public render(): JSX.Element {
@@ -54,21 +53,23 @@ export class Gist extends React.Component<IGistProps, IGistState> {
           <div className="output-gist">
             <ReactMarkdown
               className="output-markdown output-boxed"
-              source={ this.state.content }
+              source={this.state.content}
               renderers={{ code: CodeBlock }}
             />
 
-            <GistComments id={ this.props.id } />
+            <GistComments id={this.props.id} />
 
             <div className="output-additional-link output-gist-link">
-              <a href={ this.state.publicUrl }>Comment/Star on Gist</a>
+              <a href={this.state.publicUrl}>Comment/Star on Gist</a>
             </div>
           </div>
         );
         break;
       }
       default: {
-        throw new DisplayGistError(`Rendering not supported for Gist with language ${this.state.language}`);
+        throw new DisplayGistError(
+          `Rendering not supported for Gist with language ${this.state.language}`
+        );
       }
     }
 
@@ -93,7 +94,7 @@ export class Gist extends React.Component<IGistProps, IGistState> {
     this.setState({
       content,
       language,
-      publicUrl
+      publicUrl,
     });
   }
 }

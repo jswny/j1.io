@@ -49,12 +49,14 @@ export class Cd implements IExecutable {
       console.debug("Changed current directory to:");
       console.debug(path);
     } else {
-      throw new DirectoryNotFoundError(`The node at "${VirtualPath.render(path)}" is not a directory`);
+      throw new DirectoryNotFoundError(
+        `The node at "${VirtualPath.render(path)}" is not a directory`
+      );
     }
 
     return {
       historyPath: null,
-      output: <div></div>
+      output: <div></div>,
     };
   }
 

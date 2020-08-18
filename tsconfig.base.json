@@ -5,9 +5,7 @@
     "module": "commonjs",
     "target": "es6",
     "jsx": "react",
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
-  "include": [
-    "./src/**/*",
-  ],
+  "include": ["./src/**/*"]
 }
