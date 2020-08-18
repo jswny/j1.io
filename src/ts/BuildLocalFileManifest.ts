@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Directory } from "./filesystem/Directory";
-import { File } from "./filesystem/File";
+import { VirtualFile } from "./filesystem/VirtualFile";
 import { FileType } from "./filesystem/FileType";
 
 function parseFileType(fileName: string): FileType {
@@ -75,7 +75,7 @@ function readDirRecursive(dirPath: string): Directory {
     } else {
       const type: FileType = parseFileType(item);
       const content: string = getContent(itemPath, type);
-      const file: File = new File(item, type, content);
+      const file: VirtualFile = new VirtualFile(item, type, content);
       dir.addChild(file);
     }
   }

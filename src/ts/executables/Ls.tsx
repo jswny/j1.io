@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 
 import { Directory } from "../filesystem/Directory";
-import { File } from "../filesystem/File";
+import { VirtualFile } from "../filesystem/VirtualFile";
 import { FileType } from "../filesystem/FileType";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { Node } from "../filesystem/Node";
@@ -54,7 +54,7 @@ export class Ls implements IExecutable {
     if (node instanceof Directory) {
       output = this.getClickableOutput(node, key, path, commandHandler, (n: Node) => n.name + "/");
     } else {
-      const file: File = node;
+      const file: VirtualFile = node;
       switch (file.type) {
         case FileType.PDF:
         case FileType.Markdown:

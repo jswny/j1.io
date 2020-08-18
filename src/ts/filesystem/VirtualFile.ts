@@ -1,12 +1,12 @@
 import { FileType } from "./FileType";
 
-export interface IFile {
+export interface IVirtualFile {
   name: string;
   type: FileType;
   content: string;
 }
 
-export class File {
+export class VirtualFile {
   public name: string;
   public type: FileType;
   public content: string;

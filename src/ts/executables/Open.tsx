@@ -6,7 +6,7 @@ import { CodeBlock } from "../components/CodeBlock";
 import { Gist } from "../components/Gist";
 import { PDF } from "../components/PDF";
 import { ArgumentError } from "../errors/ArgumentError";
-import { File } from "../filesystem/File";
+import { VirtualFile } from "../filesystem/VirtualFile";
 import { FileType } from "../filesystem/FileType";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { Path } from "../filesystem/Path";
@@ -45,7 +45,7 @@ export class Open implements IExecutable {
     const argPath = args[0];
     const path: string[] = Path.parseAndAdd(currentDirectory, argPath);
     const output = fs.read(path);
-    const file: File = fs.stat(path) as File;
+    const file: VirtualFile = fs.stat(path) as VirtualFile;
 
     let result: JSX.Element;
     switch (file.type) {

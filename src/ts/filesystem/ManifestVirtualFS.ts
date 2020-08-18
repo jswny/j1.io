@@ -7,7 +7,7 @@ import { IExecutable } from "../executables/IExecutable";
 import { Ls } from "../executables/Ls";
 import { Open } from "../executables/Open";
 import { Directory, IDirectory } from "./Directory";
-import { File } from "./File";
+import { VirtualFile } from "./VirtualFile";
 import { FileType } from "./FileType";
 import { IVirtualFS } from "./IVirtualFS";
 import { Node } from "./Node";
@@ -46,11 +46,11 @@ export class ManifestVirtualFS implements IVirtualFS {
     console.debug("Read requested for path:");
     console.debug(path);
 
-    const node = this.stat(path);
+    const node: Node = this.stat(path);
     let output: string;
 
-    if (node instanceof File) {
-      const file: File = node;
+    if (node instanceof VirtualFile) {
+      const file: VirtualFile = node;
       const readableTypes = [
         FileType.Markdown,
         FileType.PDF,
@@ -126,7 +126,7 @@ export class ManifestVirtualFS implements IVirtualFS {
       if ("children" in child) {
         directory.addChild(this.build(child));
       } else {
-        const file: File = new File(child.name, child.type, child.content);
+        const file: VirtualFile = new VirtualFile(child.name, child.type, child.content);
         directory.addChild(file);
       }
     }
@@ -140,7 +140,7 @@ export class ManifestVirtualFS implements IVirtualFS {
     const bin: Directory = new Directory("bin");
 
     for (const executable of executables) {
-      const executableFile = new File(executable.name, FileType.Executable, "");
+      const executableFile = new VirtualFile(executable.name, FileType.Executable, "");
       bin.addChild(executableFile);
     }
 

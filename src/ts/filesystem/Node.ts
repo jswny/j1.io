@@ -1,6 +1,6 @@
 import { Directory, IDirectory } from "./Directory";
-import { File, IFile } from "./File";
+import { VirtualFile, IVirtualFile } from "./VirtualFile";
 
-export type INode = IDirectory | IFile;
+export type INode = IDirectory | IVirtualFile;
 
-export type Node = Directory | File;
+export type Node = Directory | VirtualFile;
