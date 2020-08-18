@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --write .",
     "format:check": "prettier --check .",
     "build:localFileManifest": "tsc src/ts/BuildLocalFileManifest.ts --outDir dist/localFileManifest && node dist/localFileManifest/BuildLocalFileManifest.js",
     "build:prod": "webpack --config webpack.config.prod.js",
