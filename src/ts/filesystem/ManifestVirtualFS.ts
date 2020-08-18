@@ -10,7 +10,7 @@ import { VirtualDirectory, IVirtualDirectory } from "./VirtualDirectory";
 import { VirtualFile } from "./VirtualFile";
 import { FileType } from "./FileType";
 import { IVirtualFS } from "./IVirtualFS";
-import { Node } from "./Node";
+import { VirtualNode } from "./VirtualNode";
 import { Path } from "./Path";
 
 export class ManifestVirtualFS implements IVirtualFS {
@@ -46,7 +46,7 @@ export class ManifestVirtualFS implements IVirtualFS {
     console.debug("Read requested for path:");
     console.debug(path);
 
-    const node: Node = this.stat(path);
+    const node: VirtualNode = this.stat(path);
     let output: string;
 
     if (node instanceof VirtualFile) {
@@ -72,11 +72,11 @@ export class ManifestVirtualFS implements IVirtualFS {
     return output;
   }
 
-  public list(path: string[]): Node[] {
+  public list(path: string[]): VirtualNode[] {
     console.debug("List requested for path:");
     console.debug(path);
 
-    const node: Node = this.stat(path);
+    const node: VirtualNode = this.stat(path);
 
     if (node instanceof VirtualDirectory) {
       return node.children;
@@ -85,7 +85,7 @@ export class ManifestVirtualFS implements IVirtualFS {
     }
   }
 
-  public stat(path: string[]): Node {
+  public stat(path: string[]): VirtualNode {
     let currNode: VirtualDirectory = this.root;
     path = path.slice(1, path.length);
 

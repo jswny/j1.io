@@ -1,6 +1,6 @@
 import { VirtualDirectory, IVirtualDirectory } from "./VirtualDirectory";
 import { VirtualFile, IVirtualFile } from "./VirtualFile";
 
-export type INode = IVirtualDirectory | IVirtualFile;
+export type IVirtualNode = IVirtualDirectory | IVirtualFile;
 
-export type Node = VirtualDirectory | VirtualFile;
+export type VirtualNode = VirtualDirectory | VirtualFile;

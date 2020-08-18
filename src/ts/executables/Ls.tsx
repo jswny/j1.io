@@ -5,7 +5,7 @@ import { VirtualDirectory } from "../filesystem/VirtualDirectory";
 import { VirtualFile } from "../filesystem/VirtualFile";
 import { FileType } from "../filesystem/FileType";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
-import { Node } from "../filesystem/Node";
+import { VirtualNode } from "../filesystem/VirtualNode";
 import { Path } from "../filesystem/Path";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
@@ -44,7 +44,7 @@ export class Ls implements IExecutable {
   }
 
   private getNodeOuput(
-    node: Node,
+    node: VirtualNode,
     key: number,
     path: string[],
     commandHandler: (command: string) => void
@@ -52,14 +52,14 @@ export class Ls implements IExecutable {
     let output: JSX.Element;
 
     if (node instanceof VirtualDirectory) {
-      output = this.getClickableOutput(node, key, path, commandHandler, (n: Node) => n.name + "/");
+      output = this.getClickableOutput(node, key, path, commandHandler, (n: VirtualNode) => n.name + "/");
     } else {
       const file: VirtualFile = node;
       switch (file.type) {
         case FileType.PDF:
         case FileType.Markdown:
         case FileType.Gist: {
-          output = this.getClickableOutput(node, key, path, commandHandler, (n: Node) => n.name);
+          output = this.getClickableOutput(node, key, path, commandHandler, (n: VirtualNode) => n.name);
           break;
         }
         case FileType.Link: {
@@ -79,11 +79,11 @@ export class Ls implements IExecutable {
   }
 
   private getClickableOutput(
-    node: Node,
+    node: VirtualNode,
     key: number,
     path: string[],
     commandHandler: (command: string) => void,
-    outputContent: (node: Node) => string
+    outputContent: (node: VirtualNode) => string
   ): JSX.Element {
     const nodePath = path.slice(0);
     nodePath.push(node.name);

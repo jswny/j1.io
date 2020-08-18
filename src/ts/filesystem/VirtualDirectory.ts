@@ -1,20 +1,20 @@
-import { Node, INode } from "./Node";
+import { VirtualNode, IVirtualNode } from "./VirtualNode";
 
 export interface IVirtualDirectory {
   name: string;
-  children: INode[];
+  children: IVirtualNode[];
 }
 
 export class VirtualDirectory {
   public name: string;
-  public children: Node[];
+  public children: VirtualNode[];
 
   constructor(name: string) {
     this.name = name;
     this.children = [];
   }
 
-  public addChild(child: Node): number {
+  public addChild(child: VirtualNode): number {
     return this.children.push(child);
   }
 }
