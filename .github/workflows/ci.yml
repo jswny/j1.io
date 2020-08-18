@@ -1,9 +1,6 @@
 name: CI
 on: [push]
 
-defaults:
-  node-version: '14'
-
 jobs:
   eslint:
     name: ESLint
@@ -11,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
       - run: yarn install
       - run: yarn build:localFileManifest
       - run: yarn lint
@@ -20,6 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
       - run: yarn install
       - run: yarn format:check
   github-pages:
@@ -30,6 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
       - run: yarn install
       - run: yarn build:localFileManifest
       - run: yarn build:prod
