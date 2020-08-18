@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jswny/j1.io-v2.git"
+    "url": "git+https://github.com/jswny/j1.io.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jswny/j1.io-v2/issues"
+    "url": "https://github.com/jswny/j1.io/issues"
   },
-  "homepage": "https://github.com/jswny/j1.io-v2#readme",
+  "homepage": "https://github.com/jswny/j1.io#readme",
   "dependencies": {
     "@octokit/types": "^5.4.0",
     "@types/react": "^16.8.19",
