@@ -13,10 +13,21 @@ jobs:
       - run: yarn install
       - run: yarn build:localFileManifest
       - run: yarn lint
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - run: yarn install
+      - run: yarn format:check
   github-pages:
     name: GitHub Pages
     runs-on: ubuntu-latest
     if: ${{ contains(github.ref, 'refs/tags') }}
+    needs: [eslint, prettier]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
