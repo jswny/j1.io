@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
-import { Directory } from "../filesystem/Directory";
+import { VirtualDirectory } from "../filesystem/VirtualDirectory";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { Path } from "../filesystem/Path";
 import { IExecutable } from "./IExecutable";
@@ -44,7 +44,7 @@ export class Cd implements IExecutable {
 
     const node = fs.stat(path);
 
-    if (node instanceof Directory) {
+    if (node instanceof VirtualDirectory) {
       setCurrentDirectory(path);
       console.debug("Changed current directory to:");
       console.debug(path);

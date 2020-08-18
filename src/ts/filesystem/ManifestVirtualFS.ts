@@ -6,7 +6,7 @@ import { Cd } from "../executables/Cd";
 import { IExecutable } from "../executables/IExecutable";
 import { Ls } from "../executables/Ls";
 import { Open } from "../executables/Open";
-import { Directory, IDirectory } from "./Directory";
+import { VirtualDirectory, IVirtualDirectory } from "./VirtualDirectory";
 import { VirtualFile } from "./VirtualFile";
 import { FileType } from "./FileType";
 import { IVirtualFS } from "./IVirtualFS";
@@ -14,14 +14,14 @@ import { Node } from "./Node";
 import { Path } from "./Path";
 
 export class ManifestVirtualFS implements IVirtualFS {
-  public root: Directory;
+  public root: VirtualDirectory;
   private executables: IExecutable[];
 
   constructor() {
     console.debug("Loading filesystem manifest:");
     console.debug(manifest);
 
-    this.root = this.build(manifest as IDirectory);
+    this.root = this.build(manifest as IVirtualDirectory);
     this.root.name = "root";
 
     console.debug(`Root type: ${this.root.constructor.name}`)
@@ -78,7 +78,7 @@ export class ManifestVirtualFS implements IVirtualFS {
 
     const node: Node = this.stat(path);
 
-    if (node instanceof Directory) {
+    if (node instanceof VirtualDirectory) {
       return node.children;
     } else {
       throw new DirectoryNotFoundError(`The node at "${Path.render(path)}" is not a directory`);
@@ -86,7 +86,7 @@ export class ManifestVirtualFS implements IVirtualFS {
   }
 
   public stat(path: string[]): Node {
-    let currNode: Directory = this.root;
+    let currNode: VirtualDirectory = this.root;
     path = path.slice(1, path.length);
 
     console.debug("Stat requested for path:");
@@ -100,7 +100,7 @@ export class ManifestVirtualFS implements IVirtualFS {
         if (i === path.length - 1 && searchNode.name === pathPart) {
           foundPathPart = true;
           return searchNode;
-        } else if (searchNode instanceof Directory && searchNode.name === pathPart) {
+        } else if (searchNode instanceof VirtualDirectory && searchNode.name === pathPart) {
           foundPathPart = true;
           currNode = searchNode;
         }
@@ -119,8 +119,8 @@ export class ManifestVirtualFS implements IVirtualFS {
     return this.executables;
   }
 
-  private build(jsonNode: IDirectory): Directory {
-    const directory: Directory = new Directory(jsonNode.name);
+  private build(jsonNode: IVirtualDirectory): VirtualDirectory {
+    const directory: VirtualDirectory = new VirtualDirectory(jsonNode.name);
 
     for (const child of jsonNode.children) {
       if ("children" in child) {
@@ -137,7 +137,7 @@ export class ManifestVirtualFS implements IVirtualFS {
   private loadExecutables(executables: IExecutable[]): void {
     this.executables = executables;
 
-    const bin: Directory = new Directory("bin");
+    const bin: VirtualDirectory = new VirtualDirectory("bin");
 
     for (const executable of executables) {
       const executableFile = new VirtualFile(executable.name, FileType.Executable, "");

@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Directory } from "./filesystem/Directory";
+import { VirtualDirectory } from "./filesystem/VirtualDirectory";
 import { VirtualFile } from "./filesystem/VirtualFile";
 import { FileType } from "./filesystem/FileType";
 
@@ -58,11 +58,11 @@ function getContent(filePath: string, type: FileType) {
   return content;
 }
 
-function readDirRecursive(dirPath: string): Directory {
+function readDirRecursive(dirPath: string): VirtualDirectory {
   const splitPath = dirPath.split("/");
   const name = splitPath[splitPath.length - 1];
 
-  const dir = new Directory(name);
+  const dir = new VirtualDirectory(name);
   const items = fs.readdirSync(dirPath);
 
   for (const item of items) {
@@ -70,7 +70,7 @@ function readDirRecursive(dirPath: string): Directory {
     const stats: fs.Stats = fs.statSync(itemPath);
 
     if (stats.isDirectory()) {
-      const dirNode: Directory = readDirRecursive(itemPath);
+      const dirNode: VirtualDirectory = readDirRecursive(itemPath);
       dir.addChild(dirNode);
     } else {
       const type: FileType = parseFileType(item);
@@ -85,7 +85,7 @@ function readDirRecursive(dirPath: string): Directory {
 
 const root = path.join(__dirname, "../../files");
 
-const result: Directory = readDirRecursive(root);
+const result: VirtualDirectory = readDirRecursive(root);
 
 const json: string = JSON.stringify(result, null, 2);
 

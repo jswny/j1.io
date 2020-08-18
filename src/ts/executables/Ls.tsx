@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-import { Directory } from "../filesystem/Directory";
+import { VirtualDirectory } from "../filesystem/VirtualDirectory";
 import { VirtualFile } from "../filesystem/VirtualFile";
 import { FileType } from "../filesystem/FileType";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
@@ -51,7 +51,7 @@ export class Ls implements IExecutable {
   ): JSX.Element {
     let output: JSX.Element;
 
-    if (node instanceof Directory) {
+    if (node instanceof VirtualDirectory) {
       output = this.getClickableOutput(node, key, path, commandHandler, (n: Node) => n.name + "/");
     } else {
       const file: VirtualFile = node;
@@ -90,7 +90,7 @@ export class Ls implements IExecutable {
     const renderedNewPath = Path.render(nodePath);
 
     let baseCommand: string;
-    if (node instanceof Directory) {
+    if (node instanceof VirtualDirectory) {
       baseCommand = "cd";
     } else {
       baseCommand = "open";

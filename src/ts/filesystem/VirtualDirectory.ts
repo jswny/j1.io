@@ -1,11 +1,11 @@
 import { Node, INode } from "./Node";
 
-export interface IDirectory {
+export interface IVirtualDirectory {
   name: string;
   children: INode[];
 }
 
-export class Directory {
+export class VirtualDirectory {
   public name: string;
   public children: Node[];
 

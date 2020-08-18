@@ -1,9 +1,9 @@
 import { IExecutable } from "../executables/IExecutable";
-import { Directory } from "./Directory";
+import { VirtualDirectory } from "./VirtualDirectory";
 import { Node } from "./Node";
 
 export interface IVirtualFS {
-  root: Directory;
+  root: VirtualDirectory;
 
   read(path: string[]): string;
 
