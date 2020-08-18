@@ -39,7 +39,9 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
       console.debug(gistComments);
       this.populateState(gistComments);
     })
-    .catch(() => console.debug(`Could not retrive Gist comments for Gist ID ${this.props.id}`));
+    .catch(() => {
+      throw new RetrieveGistCommentsError(`Could not retrieve Gist comments from Gist ID ${this.props.id}`);
+    });
   }
 
   public render(): JSX.Element {
@@ -92,7 +94,7 @@ export class GistComments extends React.Component<IGistCommentsProps, IGistComme
       const response: ListGistCommentsResponse = await axios.get(url);
       return response.data;
     } catch (e) {
-      throw new RetrieveGistCommentsError(`Could not retrieve Gist at ${url}`);
+      throw new RetrieveGistCommentsError(`Could not retrieve Gist comments from ${url}`);
     }
   }
 
