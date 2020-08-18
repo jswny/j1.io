@@ -1,4 +1,4 @@
-import { IFS } from "../filesystem/IFS";
+import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { IExecutableOutput } from "./IExecutableOutput";
 
 export interface IExecutable {
@@ -8,6 +8,6 @@ export interface IExecutable {
     commandHandler: (command: string) => void,
     currentDirectory: string[],
     setCurrentDirectory: (path: string[]) => void,
-    fs: IFS, args: string[]
+    fs: IVirtualFS, args: string[]
   ): IExecutableOutput;
 }

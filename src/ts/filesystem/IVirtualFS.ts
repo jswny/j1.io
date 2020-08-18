@@ -2,7 +2,7 @@ import { IExecutable } from "../executables/IExecutable";
 import { Directory } from "./Directory";
 import { Node } from "./Node";
 
-export interface IFS {
+export interface IVirtualFS {
   root: Directory;
 
   read(path: string[]): string;

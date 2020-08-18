@@ -8,7 +8,7 @@ import { PDF } from "../components/PDF";
 import { ArgumentError } from "../errors/ArgumentError";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
-import { IFS } from "../filesystem/IFS";
+import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { Path } from "../filesystem/Path";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
@@ -31,7 +31,7 @@ export class Open implements IExecutable {
     commandHandler: (command: string) => void,
     currentDirectory: string[],
     setCurrentDirectory: (path: string[]) => void,
-    fs: IFS,
+    fs: IVirtualFS,
     args: string[]
   ): IExecutableOutput {
     if (args.length === 0) {

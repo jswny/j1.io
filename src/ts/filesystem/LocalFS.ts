@@ -9,11 +9,11 @@ import { Open } from "../executables/Open";
 import { Directory, IDirectory } from "./Directory";
 import { File } from "./File";
 import { FileType } from "./FileType";
-import { IFS } from "./IFS";
+import { IVirtualFS } from "./IVirtualFS";
 import { Node } from "./Node";
 import { Path } from "./Path";
 
-export class LocalFS implements IFS {
+export class LocalFS implements IVirtualFS {
   public root: Directory;
   private executables: IExecutable[];
 

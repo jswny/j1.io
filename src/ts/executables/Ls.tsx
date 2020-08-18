@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Directory } from "../filesystem/Directory";
 import { File } from "../filesystem/File";
 import { FileType } from "../filesystem/FileType";
-import { IFS } from "../filesystem/IFS";
+import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { Node } from "../filesystem/Node";
 import { Path } from "../filesystem/Path";
 import { IExecutable } from "./IExecutable";
@@ -21,7 +21,7 @@ export class Ls implements IExecutable {
     commandHandler: (command: string) => void,
     currentDirectory: string[],
     setCurrentDirectory: (path: string[]) => void,
-    fs: IFS,
+    fs: IVirtualFS,
     args: string[]
   ): IExecutableOutput {
     const output: JSX.Element[] = [];

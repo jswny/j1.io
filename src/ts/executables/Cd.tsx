@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { DirectoryNotFoundError } from "../errors/DirectoryNotFoundError";
 import { Directory } from "../filesystem/Directory";
-import { IFS } from "../filesystem/IFS";
+import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { Path } from "../filesystem/Path";
 import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
@@ -18,7 +18,7 @@ export class Cd implements IExecutable {
     commandHandler: (command: string) => void,
     currentDirectory: string[],
     setCurrentDirectory: (path: string[]) => void,
-    fs: IFS,
+    fs: IVirtualFS,
     args: string[]
   ): IExecutableOutput {
     let path: string[] = currentDirectory;
