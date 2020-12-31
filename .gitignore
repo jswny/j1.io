@@ -4,6 +4,9 @@ node_modules/
 # Deployment artifacts
 dist/
 
+# ESLint
+.eslintcache
+
 # Some tools (VSCode linting) need this file, so ignore it if we need to generate it locally somehow (symlink)
 tsconfig.json
 
