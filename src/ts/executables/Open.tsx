@@ -1,13 +1,10 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import * as ReactMarkdown from "react-markdown";
 
-import { CodeBlock } from "../components/CodeBlock";
 import { Gist } from "../components/Gist";
 import { PDF } from "../components/PDF";
 import { ArgumentError } from "../errors/ArgumentError";
-import { VirtualFile } from "../filesystem/VirtualFile";
-import { VirtualFileType } from "../filesystem/VirtualFileType";
+import { IVirtualFile } from "../filesystem/IVirtualFile";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
 import { VirtualPath } from "../filesystem/VirtualPath";
 import { IExecutable } from "./IExecutable";
@@ -36,8 +33,7 @@ export class Open implements IExecutable {
   ): IExecutableOutput {
     if (args.length === 0) {
       throw new ArgumentError(
-        `Executable ${this.name} called with ${
-          args.length
+        `Executable ${this.name} called with ${args.length
         } arguments, but at least ${1} required`
       );
     }
@@ -47,21 +43,10 @@ export class Open implements IExecutable {
     const argPath = args[0];
     const path: string[] = VirtualPath.parseAndAdd(currentDirectory, argPath);
     const output = fs.read(path);
-    const file: VirtualFile = fs.stat(path) as VirtualFile;
+    const file: IVirtualFile = fs.stat(path) as IVirtualFile;
 
     let result: JSX.Element;
     switch (file.type) {
-      case VirtualFileType.Markdown: {
-        result = (
-          <ReactMarkdown
-            className="output-markdown output-boxed"
-            source={output}
-            renderers={{ code: CodeBlock }}
-          />
-        );
-        historyPath = path;
-        break;
-      }
       case VirtualFileType.PDF: {
         result = <PDF name={file.name} base64={file.content} />;
         historyPath = path;
