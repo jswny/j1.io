@@ -1,4 +1,6 @@
 export interface IVirtualFile {
-  name: string;
-  content: string;
+  readonly name: string;
+  readonly content: string;
+
+  open(): JSX.Element;
 }
