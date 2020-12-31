@@ -2,7 +2,6 @@ import * as React from "react";
 import { Helmet } from "react-helmet";
 
 import { Gist } from "../components/Gist";
-import { PDF } from "../components/PDF";
 import { ArgumentError } from "../errors/ArgumentError";
 import { IVirtualFile } from "../filesystem/IVirtualFile";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
@@ -47,11 +46,6 @@ export class Open implements IExecutable {
 
     let result: JSX.Element;
     switch (file.type) {
-      case VirtualFileType.PDF: {
-        result = <PDF name={file.name} base64={file.content} />;
-        historyPath = path;
-        break;
-      }
       case VirtualFileType.Link: {
         this.redirectExternal(file.content);
         break;
