@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
 
-import { Gist } from "../components/Gist";
 import { ArgumentError } from "../errors/ArgumentError";
 import { IVirtualFile } from "../filesystem/IVirtualFile";
 import { IVirtualFS } from "../filesystem/IVirtualFS";
@@ -10,11 +9,6 @@ import { IExecutable } from "./IExecutable";
 import { IExecutableOutput } from "./IExecutableOutput";
 
 import "../../css/open.css";
-
-interface IGistFile {
-  displayFile: string;
-  id: string;
-}
 
 export class Open implements IExecutable {
   public name: string;
@@ -32,7 +26,8 @@ export class Open implements IExecutable {
   ): IExecutableOutput {
     if (args.length === 0) {
       throw new ArgumentError(
-        `Executable ${this.name} called with ${args.length
+        `Executable ${this.name} called with ${
+          args.length
         } arguments, but at least ${1} required`
       );
     }
@@ -44,19 +39,8 @@ export class Open implements IExecutable {
     const output = fs.read(path);
     const file: IVirtualFile = fs.stat(path) as IVirtualFile;
 
-    let result: JSX.Element;
-    switch (file.type) {
-      case VirtualFileType.Gist: {
-        const gistFile: IGistFile = this.parseGistFile(file.content);
-        result = <Gist id={gistFile.id} displayFile={gistFile.displayFile} />;
-        historyPath = path;
-        break;
-      }
-      default: {
-        result = <div>{output}</div>;
-        historyPath = path;
-      }
-    }
+    const result: JSX.Element = file.open();
+    historyPath = path;
 
     const resultWithTitle: JSX.Element = (
       <>
@@ -70,17 +54,6 @@ export class Open implements IExecutable {
     return {
       historyPath,
       output: resultWithTitle,
-    };
-  }
-
-  private parseGistFile(jsonString: string): IGistFile {
-    console.debug(`Parsing JSON string into Gist file data:`);
-    console.debug(jsonString);
-
-    const json = JSON.parse(jsonString) as IGistFile;
-    return {
-      displayFile: json.displayFile,
-      id: json.id,
     };
   }
 }
