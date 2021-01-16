@@ -46,10 +46,6 @@ export class Open implements IExecutable {
 
     let result: JSX.Element;
     switch (file.type) {
-      case VirtualFileType.Link: {
-        this.redirectExternal(file.content);
-        break;
-      }
       case VirtualFileType.Gist: {
         const gistFile: IGistFile = this.parseGistFile(file.content);
         result = <Gist id={gistFile.id} displayFile={gistFile.displayFile} />;
@@ -86,9 +82,5 @@ export class Open implements IExecutable {
       displayFile: json.displayFile,
       id: json.id,
     };
-  }
-
-  private redirectExternal(url: string) {
-    window.location.href = url;
   }
 }
